@@ -1,0 +1,272 @@
+{
+  "maya": {
+    "fingerprint": "70664ae56b93f0c56b7da013ef1e760df95909f268d1fd7078faddf0f43d6583",
+    "voice": "Kore",
+    "introduction": "Hi, I'm Maya! I love good stories and a little creative spark.",
+    "transcript": "Hi, I'm Maya! I love good stories and a little creative spark.",
+    "seconds": 5.150041666666667,
+    "generatedAt": "2026-09-12T01:36:25.752Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "leo": {
+    "fingerprint": "6a707495372d800e00d7f4e2b5dcab55984feaa6bb1ce716a8c808685871dd40",
+    "voice": "Puck",
+    "introduction": "Hey, I'm Leo! Usually chasing good photos, live music, or a laugh.",
+    "transcript": "Hey, I'm Leo! Usually chasing good photos, live music, or a laugh.",
+    "seconds": 5.550041666666667,
+    "generatedAt": "2026-09-12T01:36:32.609Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "sam": {
+    "fingerprint": "4a76f6f73581893bfd8fb04532e562103e7602033834e72a2137a7b1ff33840d",
+    "voice": "Charon",
+    "introduction": "Hi, I'm Sam. Books, coffee, and a quiet conversation suit me well.",
+    "transcript": "Hi, I'm Sam. Books, coffee, and a quiet conversation suit me well.",
+    "seconds": 5.9900416666666665,
+    "generatedAt": "2026-09-12T01:36:39.925Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "zoe": {
+    "fingerprint": "dea380225d4e908f857245353609a0faa799736ba5e0736dcd94719ef6ea4c4b",
+    "voice": "Zephyr",
+    "introduction": "Hey, I'm Zoe! New places, good music, count me in.",
+    "transcript": "Hey, I'm Zoe. New places, good music, count me in.",
+    "seconds": 4.450625,
+    "generatedAt": "2026-09-12T01:36:45.886Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "lily": {
+    "fingerprint": "36c12fa305df6751de67f8a43642fcf7d076b43116d5a7676d54dd7d034ea187",
+    "voice": "Leda",
+    "introduction": "Hi, I'm Lily! I'm always curious what people are creating.",
+    "transcript": "Hi, I'm Lily! I'm always curious what people are creating.",
+    "seconds": 4.210625,
+    "generatedAt": "2026-09-12T01:36:51.319Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "nora": {
+    "fingerprint": "a5157c9d6e5835887b8974a5e3d063af54af715596e0b0eccb885730985ae943",
+    "voice": "Aoede",
+    "introduction": "Hello, I'm Nora. I love discovering the ideas behind everyday things.",
+    "transcript": "Hello, I'm Nora. I love discovering the ideas behind everyday things.",
+    "seconds": 5.440625,
+    "generatedAt": "2026-09-12T01:36:57.964Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "chloe": {
+    "fingerprint": "ed951fc9ef4676adad6743b9b36d6217373827a40382e6750e4667c6d26ad6bb",
+    "voice": "Callirrhoe",
+    "introduction": "Hi, I'm Chloe! Good company and something freshly baked make my day.",
+    "transcript": "Hi, I'm Chloe! Good company and something freshly baked make my day.",
+    "seconds": 5.440625,
+    "generatedAt": "2026-09-12T01:37:04.794Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "amara": {
+    "fingerprint": "c11b4d883b29c47e2044391957df3a5f2aa3aaaa103af158a4c9dcb65906e565",
+    "voice": "Autonoe",
+    "introduction": "Hi, I'm Amara. I enjoy helping things grow, gardens and ideas alike.",
+    "transcript": "Hi, I'm Amara. I enjoy helping things grow, gardens and ideas alike.",
+    "seconds": 5.630041666666667,
+    "generatedAt": "2026-09-12T01:37:11.644Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "dani": {
+    "fingerprint": "cdb30fd3cae6d2d62265d07ca561d203a97182b1c905efbbdd37df28ad7d93a7",
+    "voice": "Despina",
+    "introduction": "Hey, I'm Dani! A bike ride and a new food spot? Perfect afternoon.",
+    "transcript": "Hey, I'm Dani! A bike ride and a new food spot? Perfect afternoon!",
+    "seconds": 5.460625,
+    "generatedAt": "2026-09-12T01:37:18.207Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "elena": {
+    "fingerprint": "99c9871a3bd51aaafe8325b1b0c329f4fa3697929063fb2bd5b58e356d161d2e",
+    "voice": "Erinome",
+    "introduction": "Hello, I'm Elena. Design, travel, and a thoughtful conversation always interest me.",
+    "transcript": "Hello, I'm Elena. Design, travel, and a thoughtful conversation always interest me.",
+    "seconds": 6.480041666666667,
+    "generatedAt": "2026-09-12T01:37:26.348Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "lucy": {
+    "fingerprint": "dfd1fe7cb551e89d2a3dd3c91328c12a6cf11a6e753fd232038da83956b989f5",
+    "voice": "Laomedeia",
+    "introduction": "Hi, I'm Lucy! Found a lovely bookshop lately? I'd love to hear.",
+    "transcript": "Hi, I'm Lucy! Found a lovely bookshop lately? I'd love to hear.",
+    "seconds": 4.720041666666667,
+    "generatedAt": "2026-09-12T01:37:32.186Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "aisha": {
+    "fingerprint": "7ab15cbfa5518b3543e133bb3a53be02a6efcd7decaa89f622aa0ad8132ba39a",
+    "voice": "Achernar",
+    "introduction": "Hi, I'm Aisha. There's always room for one more at my table.",
+    "transcript": "Hi, I'm Aisha. There's always room for one more at my table.",
+    "seconds": 4.2000416666666665,
+    "generatedAt": "2026-09-12T01:37:37.469Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "grace": {
+    "fingerprint": "28af2ad1415b3406ca53b3f929bae10faa51e7a5845aef5774d7c8dcc18398c5",
+    "voice": "Gacrux",
+    "introduction": "Hi, I'm Grace! I love making things and hearing what inspires people.",
+    "transcript": "Hi, I'm Grace! I love making things and hearing what inspires people.",
+    "seconds": 5.120625,
+    "generatedAt": "2026-09-12T01:37:43.642Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "vera": {
+    "fingerprint": "d9ab3956c0e66c83b676bafa68ebd81d822af13c5c83a177d0abb8ea85712e23",
+    "voice": "Vindemiatrix",
+    "introduction": "Hi, I'm Vera. A quiet café and a good story feel like home.",
+    "transcript": "Hi, I'm Vera. A quiet café and a good story feel like home.",
+    "seconds": 5.680625,
+    "generatedAt": "2026-09-12T01:37:50.435Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "sofia": {
+    "fingerprint": "268a66a49a0467a47f44c851ec7bbf309cfab37a84d3bb5313605426a4327194",
+    "voice": "Sulafat",
+    "introduction": "Hi, I'm Sofia! I love a little theater and a kitchen experiment.",
+    "transcript": "Hi, I'm Sofia! I love a little theater and a kitchen experiment.",
+    "seconds": 4.680041666666667,
+    "generatedAt": "2026-09-12T01:37:56.228Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "owen": {
+    "fingerprint": "d7e108b3851b96d2f8f092cc779bb8d3d4c429d7fca1d21dabe317dec0cc3b0b",
+    "voice": "Orus",
+    "introduction": "Hey, I'm Owen. I'm always looking for a good local spot.",
+    "transcript": "Hey, I'm Owen. I'm always looking for a good local spot.",
+    "seconds": 3.300625,
+    "generatedAt": "2026-09-12T01:38:00.863Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "ethan": {
+    "fingerprint": "55027bc94ec896bcf6ef32d67466b08f4ffb5728558d3ff62d945a235451120a",
+    "voice": "Enceladus",
+    "introduction": "Hey, I'm Ethan! Fresh air and a little challenge get me going.",
+    "transcript": "Hey, I'm Ethan! Fresh air and a little challenge get me going.",
+    "seconds": 4.190041666666667,
+    "generatedAt": "2026-09-12T01:38:06.136Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "isaac": {
+    "fingerprint": "d34b5cc614db3d0383afdf7ff97ef4559b41369057ad4ec1aeb43201d17a5c0e",
+    "voice": "Iapetus",
+    "introduction": "Hello, I'm Isaac. I enjoy a good story, especially the history behind it.",
+    "transcript": "Hello, I'm Isaac. I enjoy a good story, especially the history behind it.",
+    "seconds": 5.000041666666666,
+    "generatedAt": "2026-09-12T01:38:12.316Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "julian": {
+    "fingerprint": "5e785907f7d03f1baffd7468ea848c5bdfbec8cbe4cc47d475ee34dcea6364e4",
+    "voice": "Umbriel",
+    "introduction": "Hi, I'm Julian. I'm curious about how things work, and what makes people tick.",
+    "transcript": "Hi, I'm Julian. I'm curious about how things work, and what makes people tick.",
+    "seconds": 5.720041666666667,
+    "generatedAt": "2026-09-12T01:38:19.365Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "alex": {
+    "fingerprint": "3de488b866bd91cbb623192d99d9f17b53312699e6c2f3ea2a1ced717a747fe1",
+    "voice": "Algieba",
+    "introduction": "Hey, I'm Alex! Good food, live music, and friends around the table. That's me.",
+    "transcript": "Hey, I'm Alex! Good food, live music, and friends around the table. That's me.",
+    "seconds": 5.290041666666666,
+    "generatedAt": "2026-09-12T01:38:25.826Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "adrian": {
+    "fingerprint": "ef2df249201922eddeac4f254ec0549ad538808c4e85fb619d8505d49eda3377",
+    "voice": "Algenib",
+    "introduction": "Hi, I'm Adrian. I like making things by hand and taking life slowly.",
+    "transcript": "Hi, I'm Adrian. I like making things by hand and taking life slowly.",
+    "seconds": 5.540625,
+    "generatedAt": "2026-09-12T01:38:32.566Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "ryan": {
+    "fingerprint": "b0edba8f891af6f3b2a6d95a599ca409e07e979d79ab00ad42b7226f6bd35fe4",
+    "voice": "Rasalgethi",
+    "introduction": "Hey, I'm Ryan! I'm happiest trying something new and figuring it out.",
+    "transcript": "Hey, I'm Ryan! I'm happiest trying something new and figuring it out.",
+    "seconds": 4.400041666666667,
+    "generatedAt": "2026-09-12T01:38:38.144Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "felix": {
+    "fingerprint": "01e9d5fcc8b989f1db7390f982b59b0c1554646d9ff37bd8752fe3599d9f950d",
+    "voice": "Fenrir",
+    "introduction": "Hi, I'm Felix. I love a weekend getaway and a good travel story.",
+    "transcript": "Hi, I'm Felix. I love a weekend getaway and a good travel story.",
+    "seconds": 4.730041666666667,
+    "generatedAt": "2026-09-12T01:38:44.158Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "noah": {
+    "fingerprint": "d707948ec54b9759e190e19da8a6348d3d430e526438f3cbd9a4104cc3985dde",
+    "voice": "Alnilam",
+    "introduction": "Hey, I'm Noah! There's always another trail or something new to try.",
+    "transcript": "Hey, I'm Noah! There's always another trail or something new to try.",
+    "seconds": 4.320041666666667,
+    "generatedAt": "2026-09-12T01:38:49.701Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "ben": {
+    "fingerprint": "92afdb11b510e4d51b641bdc4dc61dc4361765ea1c769f7e9c721ebb138db887",
+    "voice": "Schedar",
+    "introduction": "Hey, I'm Ben! Board games, local gigs, I'm pretty easy to please.",
+    "transcript": "Hey, I'm Ben! Board games, local gigs, I'm pretty easy to please.",
+    "seconds": 4.720625,
+    "generatedAt": "2026-09-12T01:38:55.541Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "jamie": {
+    "fingerprint": "5f1a3696d0517bb3303240ad6d724fe963804095467d20e495fae3b224829bd3",
+    "voice": "Pulcherrima",
+    "introduction": "Hey, I'm Jamie! I love a little improv and a spontaneous adventure.",
+    "transcript": "Hey, I'm Jamie! I love a little improv and a spontaneous adventure.",
+    "seconds": 4.840625,
+    "generatedAt": "2026-09-12T01:39:01.452Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "arun": {
+    "fingerprint": "a43c9e8f3c189356215906df2c1c2421bccbbbc2752bcffd445aaff1c980b5f6",
+    "voice": "Achird",
+    "introduction": "Hi, I'm Arun. Good books and home cooking give us plenty to talk about.",
+    "transcript": "Hi, I'm Arun. Good books and home cooking give us plenty to talk about.",
+    "seconds": 4.920041666666667,
+    "generatedAt": "2026-09-12T01:39:07.784Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "marcus": {
+    "fingerprint": "bcf692318841eae6c81b48695a216a8c4e6c7e16665abc54f62693504e85c281",
+    "voice": "Zubenelgenubi",
+    "introduction": "Hello, I'm Marcus. I appreciate good jazz and places with a story.",
+    "transcript": "Hello, I'm Marcus. I appreciate good jazz and places with a story.",
+    "seconds": 5.4900416666666665,
+    "generatedAt": "2026-09-12T01:39:14.630Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "daniel": {
+    "fingerprint": "195a03449208f76c2fab58792ca45d2d9aea2b1ce76faa2be3b640d8af8ae5ef",
+    "voice": "Sadachbia",
+    "introduction": "Hi, I'm Daniel. I enjoy a good question as much as a good answer.",
+    "transcript": "Hi, I'm Daniel. I enjoy a good question as much as a good answer.",
+    "seconds": 4.570041666666667,
+    "generatedAt": "2026-09-12T01:39:20.380Z",
+    "model": "gemini-3.1-flash-live-preview"
+  },
+  "theo": {
+    "fingerprint": "e06f81e427f97899ff324bd3a2a26423f801bde7d7dca54e1de952ee739fb4b3",
+    "voice": "Sadaltager",
+    "introduction": "Hi, I'm Theo. Coffee and a thoughtful conversation are a fine place to start.",
+    "transcript": "Hi, I'm Theo. Coffee and a thoughtful conversation are a fine place to start.",
+    "seconds": 5.540041666666666,
+    "generatedAt": "2026-09-12T01:39:27.098Z",
+    "model": "gemini-3.1-flash-live-preview"
+  }
+}

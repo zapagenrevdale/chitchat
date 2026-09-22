@@ -1,0 +1,16 @@
+node_modules/
+.scratch/
+THOUGHTS.md
+.env
+.env.*
+!.env.example
+.dev.vars
+.turbo/
+dist/
+.wrangler/
+.tanstack/
+coverage/
+*.tsbuildinfo
+packages/db/src/generated/
+.DS_Store
+.worktree/

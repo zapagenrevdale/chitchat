@@ -1,0 +1,17 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "dev": {
+      "passThroughEnv": [
+        "DATABASE_URL",
+        "BETTER_AUTH_SECRET",
+        "BETTER_AUTH_URL",
+        "WEB_ORIGIN",
+        "PORT",
+        "GEMINI_API_KEY",
+        "GEMINI_API_KEY_LIVE",
+        "NODE_ENV"
+      ]
+    }
+  }
+}

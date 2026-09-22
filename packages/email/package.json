@@ -1,0 +1,31 @@
+{
+  "name": "@chitchat/email",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "dev": "cc-worktree dev email",
+    "dev:app": "email dev --dir emails --port ${PORT:-3001}",
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "lint": "ultracite check",
+    "format": "ultracite fix"
+  },
+  "dependencies": {
+    "@react-email/components": "1.0.12",
+    "@react-email/render": "2.1.0",
+    "react": "19.3.0"
+  },
+  "devDependencies": {
+    "@chitchat/worktree": "workspace:*",
+    "@react-email/ui": "6.9.5",
+    "@types/react": "19.3.0",
+    "react-email": "6.9.5"
+  },
+  "portless": {
+    "name": "email.chitchat",
+    "script": "dev:app"
+  }
+}

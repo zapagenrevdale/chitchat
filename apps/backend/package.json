@@ -1,0 +1,44 @@
+{
+  "name": "@chitchat/backend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "cc-worktree dev backend",
+    "dev:app": "bun --watch src/index.ts",
+    "build": "bun build src/index.ts --target bun --packages external --outdir dist",
+    "start": "bun dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "ultracite check",
+    "format": "ultracite fix",
+    "generate:introductions": "bun src/practice/generate-introductions.ts",
+    "generate:avatars": "bun src/practice/generate-avatars.ts",
+    "generate:places": "bun src/practice/generate-places.ts"
+  },
+  "dependencies": {
+    "@better-auth/prisma-adapter": "1.7.4",
+    "@chitchat/contracts": "workspace:*",
+    "@chitchat/db": "workspace:*",
+    "@chitchat/email": "workspace:*",
+    "@dicebear/core": "9.4.3",
+    "@dicebear/lorelei": "9.4.2",
+    "@google/genai": "2.22.0",
+    "@hono/zod-validator": "0.9.1",
+    "@langfuse/otel": "5.11.1",
+    "@langfuse/tracing": "5.11.1",
+    "@opentelemetry/sdk-trace-node": "2.11.0",
+    "better-auth": "1.7.4",
+    "hono": "4.13.7",
+    "sharp": "0.35.4",
+    "zod": "4.6.2"
+  },
+  "devDependencies": {
+    "@chitchat/worktree": "workspace:*",
+    "@types/bun": "1.4.2",
+    "vitest": "5.0.0"
+  },
+  "portless": {
+    "name": "api.chitchat",
+    "script": "dev:app"
+  }
+}

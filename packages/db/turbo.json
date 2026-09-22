@@ -1,0 +1,9 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "build": { "outputs": ["src/generated/**"] },
+    "typecheck": { "dependsOn": ["build"] },
+    "migrate": { "passThroughEnv": ["DATABASE_URL"] },
+    "migrate:deploy": { "passThroughEnv": ["DATABASE_URL"] }
+  }
+}

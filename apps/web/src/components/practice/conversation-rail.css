@@ -1,0 +1,67 @@
+.conversation-rail-item {
+  --line-progress: 0;
+  display: flex;
+  align-items: center;
+  width: 36px;
+  height: 10px;
+  padding: 0 4px;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.conversation-rail-item span {
+  width: 26px;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.4;
+  transform-origin: left;
+  transform: scaleX(calc((6 + 20 * var(--line-progress)) / 26));
+  transition:
+    transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1.08),
+    opacity 160ms;
+}
+
+.conversation-rail-item[aria-current] span {
+  color: var(--foreground);
+  opacity: 0.75;
+}
+
+.conversation-rail-item:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+
+.conversation-rail:has(button:is(:hover, :focus-visible)) {
+  :is(
+    button:has(+ button:is(:hover, :focus-visible)),
+    button:is(:hover, :focus-visible) + button
+  ) {
+    --line-progress: 0.7;
+  }
+  :is(
+    button:has(+ button + button:is(:hover, :focus-visible)),
+    button:is(:hover, :focus-visible) + button + button
+  ) {
+    --line-progress: 0.4;
+  }
+  :is(
+    button:has(+ button + button + button:is(:hover, :focus-visible)),
+    button:is(:hover, :focus-visible) + button + button + button
+  ) {
+    --line-progress: 0.2;
+  }
+  button:is(:hover, :focus-visible) {
+    --line-progress: 1;
+    color: var(--foreground);
+  }
+  button:is(:hover, :focus-visible) span {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .conversation-rail-item span {
+    transition: none;
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "globalDependencies": [
+    "tsconfig.base.json",
+    "oxlint.config.ts",
+    "oxfmt.config.ts"
+  ],
+  "globalPassThroughEnv": [
+    "PORTLESS",
+    "PORTLESS_*",
+    "NODE_EXTRA_CA_CERTS",
+    "CHITCHAT_WORKTREE_HOME",
+    "XDG_STATE_HOME",
+    "DOCKER_*",
+    "SSH_AUTH_SOCK"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "generate": {
+      "outputs": ["src/generated/**"]
+    },
+    "dev": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    },
+    "typecheck": {
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      "dependsOn": ["^build"]
+    },
+    "lint": {},
+    "format": {
+      "cache": false
+    },
+    "migrate": {
+      "cache": false
+    },
+    "migrate:deploy": {
+      "cache": false
+    },
+    "worktree:setup": {
+      "cache": false
+    },
+    "worktree:status": {
+      "cache": false
+    },
+    "worktree:teardown": {
+      "cache": false
+    },
+    "worktree:smoke": {
+      "cache": false
+    },
+    "generate:introductions": {
+      "cache": false
+    },
+    "generate:avatars": {
+      "cache": false
+    },
+    "generate:places": {
+      "cache": false
+    }
+  }
+}

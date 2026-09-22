@@ -1,0 +1,37 @@
+{
+  "name": "chitchat",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "format": "turbo run format",
+    "db:generate": "turbo run generate --filter=@chitchat/db",
+    "db:migrate": "turbo run migrate --filter=@chitchat/db",
+    "db:deploy": "turbo run migrate:deploy --filter=@chitchat/db",
+    "worktree:setup": "turbo run worktree:setup --filter=@chitchat/worktree --ui=stream --",
+    "worktree:status": "turbo run worktree:status --filter=@chitchat/worktree --ui=stream --log-prefix=none --",
+    "worktree:teardown": "turbo run worktree:teardown --filter=@chitchat/worktree --ui=stream --",
+    "worktree:check": "turbo run typecheck lint test build worktree:smoke --ui=stream",
+    "generate:introductions": "turbo run generate:introductions --filter=@chitchat/backend",
+    "generate:avatars": "turbo run generate:avatars --filter=@chitchat/backend",
+    "generate:places": "turbo run generate:places --filter=@chitchat/backend"
+  },
+  "devDependencies": {
+    "oxfmt": "0.67.0",
+    "oxlint": "1.82.0",
+    "oxlint-tsgolint": "7.0.2001",
+    "portless": "0.15.6",
+    "turbo": "2.10.12",
+    "typescript": "7.0.2",
+    "ultracite": "7.11.1"
+  },
+  "packageManager": "bun@1.4.2"
+}

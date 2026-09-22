@@ -1,0 +1,9 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "worktree:setup": { "cache": false },
+    "worktree:status": { "cache": false },
+    "worktree:teardown": { "cache": false },
+    "worktree:smoke": { "cache": false }
+  }
+}
