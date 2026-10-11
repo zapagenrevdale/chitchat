@@ -1,0 +1,42 @@
+$ turbo run typecheck
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/backend, @chitchat/contracts, @chitchat/db, @chitchat/email, @chitchat/web, @chitchat/worktree
+   • Running typecheck in 6 packages
+   • Remote caching disabled
+
+@chitchat/db:build: cache hit, replaying logs 85a4960c281bb37a
+@chitchat/db:build: $ prisma generate
+@chitchat/db:build: Loaded Prisma config from prisma.config.ts.
+@chitchat/db:build: 
+@chitchat/db:build: Prisma schema loaded from prisma/schema.prisma.
+@chitchat/db:build: 
+@chitchat/db:build: ✔ Generated Prisma Client (7.10.0) to ./src/generated/prisma in 22ms
+@chitchat/db:build: 
+@chitchat/contracts:build: cache hit, replaying logs ca2ee1b0bceadeb7
+@chitchat/worktree:typecheck: cache hit, replaying logs db39ef2afe08bf06
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/worktree:typecheck: $ tsc --noEmit
+@chitchat/email:build: cache hit, replaying logs 28cec2141793dbcd
+@chitchat/email:build: $ tsc --noEmit
+@chitchat/db:typecheck: cache hit, replaying logs fd054d4cf1b77889
+@chitchat/email:typecheck: cache hit, replaying logs 66872cbb3fc44f55
+@chitchat/db:typecheck: $ tsc --noEmit
+@chitchat/contracts:typecheck: cache hit, replaying logs 94bf9c11350e97cc
+@chitchat/email:typecheck: $ tsc --noEmit
+@chitchat/web:i18n:compile: cache hit, replaying logs 76ec0cbb524cb23f
+@chitchat/web:i18n:compile: $ paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy baseLocale
+@chitchat/web:i18n:compile: ℹ [paraglide-js] Compiling inlang project ...
+@chitchat/web:i18n:compile: ✔ [paraglide-js] Successfully compiled inlang project.
+@chitchat/contracts:typecheck: $ tsc --noEmit
+@chitchat/backend:typecheck: cache hit, replaying logs e041ec1775f98639
+@chitchat/backend:typecheck: $ tsc --noEmit
+@chitchat/web:typecheck: cache hit, replaying logs c4ce9f37ebd585fe
+@chitchat/web:typecheck: $ tsr generate && tsc --noEmit
+@chitchat/web:typecheck: (node:19577) Warning: Accessing non-existent property 'replaceRouteChunk' of module exports inside circular dependency
+@chitchat/web:typecheck: (Use `node --trace-warnings ...` to show where the warning was created)
+
+ Tasks:    10 successful, 10 total
+Cached:    10 cached, 10 total
+  Time:    62ms >>> FULL TURBO
+

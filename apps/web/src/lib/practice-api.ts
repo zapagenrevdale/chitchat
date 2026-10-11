@@ -22,9 +22,21 @@ import type {
   PracticeSelection,
   PracticeSetupRequest,
 } from "@chitchat/contracts";
+import {
+  onboardingLiveSessionSchema,
+  onboardingRecommendationSchema,
+  onboardingVoiceCompletionSchema,
+} from "@chitchat/contracts/onboarding";
+import type {
+  OnboardingLiveRequest,
+  OnboardingTurnRequest,
+  OnboardingVoiceCompletionRequest,
+  OnboardingRecommendationRequest,
+} from "@chitchat/contracts/onboarding";
 import { queryOptions } from "@tanstack/react-query";
 
 import { apiUrl } from "./env";
+import { readOnboardingTurn } from "./onboarding-turn-stream";
 
 export class PracticeApiError extends Error {
   readonly status: number;
@@ -38,6 +50,7 @@ export class PracticeApiError extends Error {
 async function request(path: string, signal: AbortSignal, body?: unknown) {
   const response = await fetch(`${apiUrl}/api/practice${path}`, {
     method: body === undefined ? "GET" : "POST",
+    credentials: path === "/onboarding-sessions" ? "include" : "same-origin",
     headers:
       body === undefined ? undefined : { "Content-Type": "application/json" },
     body: body === undefined ? undefined : JSON.stringify(body),
@@ -63,6 +76,20 @@ export const practiceOptionsQuery = queryOptions({
     practiceOptionsSchema.parse(await request("/options", signal)),
   staleTime: 60_000,
 });
+
+export function onboardingRecommendationQuery(
+  body: OnboardingRecommendationRequest
+) {
+  return queryOptions({
+    queryKey: ["onboarding-recommendation", body],
+    queryFn: async ({ signal }) =>
+      onboardingRecommendationSchema.parse(
+        await request("/onboarding-recommendations", signal, body)
+      ),
+    staleTime: Infinity,
+    retry: false,
+  });
+}
 
 export async function finalizePracticeFeedback(
   body: PracticeFeedbackRequest,
@@ -97,6 +124,24 @@ export async function createPracticeSession(
 ) {
   return practiceSessionSchema.parse(
     await request("/sessions", signal, selection)
+  );
+}
+
+export async function createOnboardingSession(
+  body: OnboardingLiveRequest,
+  signal: AbortSignal
+) {
+  return onboardingLiveSessionSchema.parse(
+    await request("/onboarding-sessions", signal, body)
+  );
+}
+
+export async function completeOnboardingVoice(
+  body: OnboardingVoiceCompletionRequest,
+  signal: AbortSignal
+) {
+  return onboardingVoiceCompletionSchema.parse(
+    await request("/onboarding-completions", signal, body)
   );
 }
 
@@ -157,4 +202,31 @@ export async function createTranscriptionSession(signal: AbortSignal) {
   return practiceTranscriptionSessionSchema.parse(
     await request("/transcription-sessions", signal, {})
   );
+}
+
+export async function replyToOnboarding(
+  body: OnboardingTurnRequest,
+  signal: AbortSignal,
+  onReply: (reply: string) => void
+) {
+  const response = await fetch(`${apiUrl}/api/practice/onboarding-turns`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+    signal,
+  });
+  signal.throwIfAborted();
+  if (!response.ok || !response.body) {
+    throw new PracticeApiError(
+      "Chit couldn't reply. Try again or choose your skills.",
+      response.status
+    );
+  }
+  if (
+    !response.headers.get("Content-Type")?.startsWith("application/x-ndjson")
+  ) {
+    await response.body.cancel();
+    throw new Error("Unexpected reply format.");
+  }
+  return readOnboardingTurn(response.body, signal, onReply);
 }

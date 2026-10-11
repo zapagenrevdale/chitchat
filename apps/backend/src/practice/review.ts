@@ -1,20 +1,21 @@
+import type { GoogleProvider } from "@ai-sdk/google";
 import { practiceReviewSchema } from "@chitchat/contracts";
 import type {
   PracticeFeedbackRequest,
   PracticeRecapRequest,
 } from "@chitchat/contracts";
-import { ThinkingLevel } from "@google/genai";
 import type { GoogleGenAI } from "@google/genai";
-import { z } from "zod";
+import { generateText, Output } from "ai";
 
 import { resolveSelection } from "./catalog";
 import { feedbackInstruction, finalizeFeedback } from "./feedback";
 import { speakPracticeText } from "./speech";
-import { traceGeneration, tokenUsage } from "./tracing";
+import { traceGeneration, textTokenUsage } from "./tracing";
 import type { PracticeTracing } from "./tracing";
 
 export function createFeedbackProvider(
   ai: GoogleGenAI,
+  textModels: GoogleProvider,
   tracing?: PracticeTracing
 ) {
   return {
@@ -46,36 +47,34 @@ export function createFeedbackProvider(
           metadata: { rubricVersion: "transcript-v1" },
         },
         async (observation) => {
-          const response = await ai.models.generateContent({
-            model,
-            contents,
-            config: {
-              abortSignal: signal,
-              systemInstruction: feedbackInstruction,
-              responseMimeType: "application/json",
-              responseJsonSchema: z.toJSONSchema(practiceReviewSchema),
-              maxOutputTokens: 2500,
-              thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
+          const response = await generateText({
+            model: textModels(model),
+            prompt: contents,
+            system: feedbackInstruction,
+            output: Output.object({ schema: practiceReviewSchema }),
+            abortSignal: signal,
+            timeout: { stepMs: 20_000 },
+            maxRetries: 0,
+            maxOutputTokens: 2500,
+            providerOptions: {
+              google: { thinkingConfig: { thinkingLevel: "low" } },
             },
           });
           signal.throwIfAborted();
-          // Preserve malformed model output too, so failed assessments can be diagnosed.
           observation.update({
             output: response.text,
-            usageDetails: tokenUsage(response.usageMetadata),
+            usageDetails: textTokenUsage(response.usage),
           });
-          const { assessment } = practiceReviewSchema.parse(
-            JSON.parse(response.text ?? "null")
-          );
+          const { assessment } = response.output;
           // Validate evidence before exposing or speaking any feedback.
           const feedback = assessment
             ? finalizeFeedback(assessment, request.messages)
             : { status: "insufficient" as const };
-          return { feedback, usage: response.usageMetadata };
+          return { feedback, usage: response.usage };
         },
         ({ feedback, usage }) => ({
           output: feedback,
-          usageDetails: tokenUsage(usage),
+          usageDetails: textTokenUsage(usage),
         }),
         tracing?.sessionId(request.tracingToken)
       );

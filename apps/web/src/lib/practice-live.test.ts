@@ -51,6 +51,7 @@ vi.mock(import("./practice-transcription"), () => ({
 
 const audio = vi.hoisted(() => ({
   onPlaying: undefined as ((playing: boolean) => void) | undefined,
+  inputVolume: 0,
   prepare: vi.fn<AudioModule.PracticeAudio["prepare"]>().mockResolvedValue(),
   play: vi.fn<AudioModule.PracticeAudio["play"]>(),
   dispose: vi.fn<() => void>(),
@@ -64,6 +65,10 @@ vi.mock(import("./practice-audio"), () => ({
   PracticeAudio: class {
     constructor(onPlaying: (playing: boolean) => void) {
       audio.onPlaying = onPlaying;
+    }
+    private audioState = audio;
+    get inputVolume() {
+      return this.audioState.inputVolume;
     }
     prepare = audio.prepare;
     play = audio.play;
@@ -172,6 +177,7 @@ describe("continuous voice transport", () => {
     captions.finish.mockResolvedValue();
     vi.stubGlobal("WebSocket", FakeSocket);
     audio.prepare.mockResolvedValue();
+    audio.inputVolume = 0;
     vi.mocked(suggestPracticeReply)
       .mockReset()
       .mockResolvedValue({ text: "I enjoy meeting new people." });

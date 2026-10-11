@@ -1,4 +1,5 @@
 import type { CustomPlaceSummary, PracticeLanguage } from "@chitchat/contracts";
+import type { LearnerContext } from "@chitchat/contracts/conversation-goals";
 import { useQuery } from "@tanstack/react-query";
 import { Check, LoaderCircle, Pencil, Plus } from "lucide-react";
 import { Checkbox, Collapsible } from "radix-ui";
@@ -15,12 +16,14 @@ import type { usePractice } from "./use-practice";
 type SceneChoice = CustomPlaceSummary & { id: string };
 
 export function PracticeReady({
+  learner,
   practice,
   language,
   selectedPlace,
   selectedSituation,
   selectedPersona,
 }: {
+  learner?: LearnerContext;
   language: PracticeLanguage;
   practice: ReturnType<typeof usePractice>;
   selectedPlace: SceneChoice;
@@ -210,6 +213,7 @@ export function PracticeReady({
                 return;
               }
               void practice.start({
+                ...(learner && { learner }),
                 language,
                 ...(mode === "guided" && { mode }),
                 placeId: selectedPlace.id,

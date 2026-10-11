@@ -6,12 +6,12 @@ import {
   practiceSpeechRequestSchema,
   practiceRecapSchema,
 } from "@chitchat/contracts";
-import { ApiError } from "@google/genai";
 import { Hono } from "hono";
 import type { Context } from "hono";
 
 import { resolveSelection } from "./catalog";
 import type { PracticeProvider } from "./gemini";
+import { providerErrorStatus } from "./provider-error";
 
 // These operations share cancellation and quota policy, including across the
 // provider's fallback attempt. Validation and response shapes stay explicit.
@@ -31,7 +31,7 @@ async function prepareTurn(
     signal.throwIfAborted();
     return response;
   } catch (error) {
-    if (error instanceof ApiError && error.status === 429) {
+    if (providerErrorStatus(error) === 429) {
       return c.json(
         {
           error: c.req.path.endsWith("/reply-suggestions")

@@ -1,0 +1,94 @@
+$ turbo run test "--filter=@chitchat/backend" --force -- src/practice/transcription.test.ts --config "../../.audit/repository-improvement-backend-br001.mutation.config.mjs"
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/backend
+   • Running test in 1 packages
+   • Remote caching disabled
+
+@chitchat/db:build: cache bypass, force executing 098fdb8bedb70ab2
+@chitchat/contracts:build: cache bypass, force executing 9a32277b9db67ffb
+@chitchat/email:build: cache bypass, force executing b8a7ef4ae660a92e
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/email:build: $ tsc --noEmit
+@chitchat/db:build: $ prisma generate
+@chitchat/db:build: Loaded Prisma config from prisma.config.ts.
+@chitchat/db:build: 
+@chitchat/db:build: Prisma schema loaded from prisma/schema.prisma.
+@chitchat/db:build: 
+@chitchat/db:build: ✔ Generated Prisma Client (7.10.0) to ./src/generated/prisma in 23ms
+@chitchat/db:build: 
+@chitchat/backend:test: cache bypass, force executing 0d2526c9a0a14112
+@chitchat/backend:test: $ vitest run src/practice/transcription.test.ts --config "../../.audit/repository-improvement-backend-br001.mutation.config.mjs"
+@chitchat/backend:test: 
+@chitchat/backend:test: [1m[30m[46m RUN [49m[39m[22m [36mv5.0.0 [39m[90m/Users/genrevzapa/projects/chitchat/apps/backend[39m
+@chitchat/backend:test: 
+@chitchat/backend:test:  [31m❯[39m src/practice/transcription.test.ts [2m([22m[2m12 tests[22m[2m | [22m[31m6 failed[39m[2m)[22m[32m 21[2mms[22m[39m
+@chitchat/backend:test:    [31m❯[39m independent Gemini captions [2m(12)[22m
+@chitchat/backend:test:      [32m✓[39m constrains one-use credentials to verbatim text transcription[32m 2[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m rejects a missing token[32m 0[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m attaches captions to practice while preserving the origin guard[32m 9[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m retains Gemini practice if transcription provisioning fails[32m 1[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m omits captions when no transcription provider is configured[32m 1[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m rejects a mandatory session returned after its deadline[32m 1[2mms[22m[39m
+@chitchat/backend:test: [31m     [31m×[31m handles overall deadline during captions (late token=false)[39m[32m 4[2mms[22m[39m
+@chitchat/backend:test: [31m     [31m×[31m handles overall deadline during captions (late token=true)[39m[32m 1[2mms[22m[39m
+@chitchat/backend:test: [31m     [31m×[31m handles caption cap during captions (late token=false)[39m[32m 1[2mms[22m[39m
+@chitchat/backend:test: [31m     [31m×[31m handles caption cap during captions (late token=true)[39m[32m 1[2mms[22m[39m
+@chitchat/backend:test: [31m     [31m×[31m handles client cancellation during captions (late token=false)[39m[32m 1[2mms[22m[39m
+@chitchat/backend:test: [31m     [31m×[31m handles client cancellation during captions (late token=true)[39m[32m 1[2mms[22m[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 6 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/transcription.test.ts[2m > [22mindependent Gemini captions[2m > [22mhandles overall deadline during captions (late token=false)
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/transcription.test.ts[2m > [22mindependent Gemini captions[2m > [22mhandles overall deadline during captions (late token=true)
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/transcription.test.ts[2m > [22mindependent Gemini captions[2m > [22mhandles caption cap during captions (late token=false)
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/transcription.test.ts[2m > [22mindependent Gemini captions[2m > [22mhandles caption cap during captions (late token=true)
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/transcription.test.ts[2m > [22mindependent Gemini captions[2m > [22mhandles client cancellation during captions (late token=false)
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/transcription.test.ts[2m > [22mindependent Gemini captions[2m > [22mhandles client cancellation during captions (late token=true)
+@chitchat/backend:test: [31m[1mAssertionError[22m: expected AbortSignal { aborted: false } to match object { aborted: true, …(1) }
+@chitchat/backend:test: (7 matching properties omitted from actual)[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [32m- Expected[39m
+@chitchat/backend:test: [31m+ Received[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [32m- {[39m
+@chitchat/backend:test: [32m-   "aborted": true,[39m
+@chitchat/backend:test: [32m-   "reason": AbortError {[39m
+@chitchat/backend:test: [32m-     "message": "Cancelled",[39m
+@chitchat/backend:test: [32m-   },[39m
+@chitchat/backend:test: [31m+ AbortSignal {[39m
+@chitchat/backend:test: [31m+   Symbol(kEvents): Map {},[39m
+@chitchat/backend:test: [31m+   Symbol(events.maxEventTargetListeners): 0,[39m
+@chitchat/backend:test: [31m+   Symbol(events.maxEventTargetListenersWarned): false,[39m
+@chitchat/backend:test: [31m+   Symbol(kHandlers): Map {},[39m
+@chitchat/backend:test: [31m+   Symbol(kAborted): false,[39m
+@chitchat/backend:test: [31m+   Symbol(kReason): undefined,[39m
+@chitchat/backend:test: [31m+   Symbol(kComposite): false,[39m
+@chitchat/backend:test: [2m  }[22m
+@chitchat/backend:test: 
+@chitchat/backend:test: [36m [2m❯[22m src/practice/transcription.test.ts:[2m195:30[22m[39m
+@chitchat/backend:test:     [90m193|[39m       expect(provision).toHaveBeenCalledOnce();
+@chitchat/backend:test:     [90m194|[39m       const suppliedSignal = provision.mock.calls[0]?.[0];
+@chitchat/backend:test:     [90m195|[39m       expect(suppliedSignal).toMatchObject({ aborted: true, reason });
+@chitchat/backend:test:     [90m   |[39m                              [31m^[39m
+@chitchat/backend:test:     [90m196|[39m       expect(response.status).toBe(
+@chitchat/backend:test:     [90m197|[39m         source === "client cancellation" ? 502 : 201
+@chitchat/backend:test: 
+@chitchat/backend:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯[22m[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: 
+@chitchat/backend:test: [2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+@chitchat/backend:test: [2m      Tests [22m [1m[31m6 failed[39m[22m[2m | [22m[1m[32m6 passed[39m[22m[90m (12)[39m
+@chitchat/backend:test: [2m   Start at [22m 11:23:39
+@chitchat/backend:test: [2m   Duration [22m 231ms[2m (import 48%, transform 37%, tests 13%, setup 2%, worker 1%)[22m
+@chitchat/backend:test: 
+@chitchat/backend:test: error: script "test" exited with code 1
+@chitchat/backend#test:  ERROR  command (/Users/genrevzapa/projects/chitchat/apps/backend) /Users/genrevzapa/.bun/bin/bun run test src/practice/transcription.test.ts --config ../../.audit/repository-improvement-backend-br001.mutation.config.mjs exited (1)
+
+ Tasks:    3 successful, 4 total
+Cached:    0 cached, 4 total
+  Time:    999ms 
+Failed:    @chitchat/backend#test
+
+ ERROR  run failed: command  exited (1)
+error: script "test" exited with code 1

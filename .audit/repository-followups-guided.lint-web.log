@@ -1,0 +1,26 @@
+$ turbo run lint "--filter=@chitchat/web" -- src/lib/practice-guided.ts src/lib/practice-guided.test.ts src/lib/playback-worklet.test.ts src/lib/recorder-worklet.test.ts
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/web
+   • Running lint in 1 packages
+   • Remote caching disabled
+
+@chitchat/contracts:build: cache hit, replaying logs 254bde7fabfd76e2
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/web:i18n:compile: cache hit, replaying logs 7143ac7680bdf5d0
+@chitchat/web:i18n:compile: $ paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy baseLocale
+@chitchat/web:i18n:compile: ℹ [paraglide-js] Compiling inlang project ...
+@chitchat/web:i18n:compile: ✔ [paraglide-js] Successfully compiled inlang project.
+@chitchat/web:lint: cache miss, executing ff9c0d8bec3bdce2
+@chitchat/web:lint: $ ultracite check src/lib/practice-guided.ts src/lib/practice-guided.test.ts src/lib/playback-worklet.test.ts src/lib/recorder-worklet.test.ts
+@chitchat/web:lint: Checking formatting...
+@chitchat/web:lint: 
+@chitchat/web:lint: All matched files use the correct format.
+@chitchat/web:lint: Finished in 37ms on 4 files using 10 threads.
+@chitchat/web:lint: Found 0 warnings and 0 errors.
+@chitchat/web:lint: Finished in 77ms on 4 files with 586 rules using 10 threads.
+
+ Tasks:    3 successful, 3 total
+Cached:    2 cached, 3 total
+  Time:    631ms 
+

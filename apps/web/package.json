@@ -9,9 +9,10 @@
     "preview": "vite preview --port 3000",
     "deploy": "bun run build && wrangler deploy",
     "typecheck": "tsr generate && tsc --noEmit",
-    "test": "vitest run --passWithNoTests",
+    "test": "vitest run",
     "lint": "ultracite check",
-    "format": "ultracite fix"
+    "format": "ultracite fix",
+    "i18n:compile": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy baseLocale"
   },
   "dependencies": {
     "@chitchat/contracts": "workspace:*",
@@ -36,6 +37,7 @@
   "devDependencies": {
     "@chitchat/worktree": "workspace:*",
     "@cloudflare/vite-plugin": "1.54.7",
+    "@inlang/paraglide-js": "2.25.4",
     "@tailwindcss/vite": "4.3.3",
     "@tanstack/router-cli": "1.167.35",
     "@testing-library/jest-dom": "7.0.1",

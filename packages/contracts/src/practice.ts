@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { learnerContextSchema } from "./conversation-goals";
+
 export const practiceLanguages = [
   "Arabic",
   "Chinese",
@@ -76,6 +78,7 @@ export const practiceScenePreviewSchema = practiceSceneSummarySchema.extend({
 const backstorySchema = z.string().trim().min(1).max(1000);
 
 export const practiceSelectionSchema = z.object({
+  learner: learnerContextSchema.optional(),
   language: practiceLanguageSchema.optional(),
   personaId: z.string().min(1).max(50),
   placeId: z.string().min(1).max(50),
@@ -171,7 +174,34 @@ const traceEventBase = {
   timestamp: z.number().finite().nonnegative(),
   sequence: z.number().int().nonnegative(),
 };
+const liveTokenCountSchema = z.number().int().min(0).max(100_000_000);
+const liveTokenDetailsSchema = z
+  .array(
+    z.object({
+      modality: z.enum([
+        "TEXT",
+        "AUDIO",
+        "IMAGE",
+        "VIDEO",
+        "MODALITY_UNSPECIFIED",
+      ]),
+      tokenCount: liveTokenCountSchema,
+    })
+  )
+  .max(8);
 export const practiceTraceEventSchema = z.discriminatedUnion("type", [
+  z.object({
+    ...traceEventBase,
+    type: z.literal("usage"),
+    usage: z.object({
+      promptTokenCount: liveTokenCountSchema.optional(),
+      responseTokenCount: liveTokenCountSchema.optional(),
+      totalTokenCount: liveTokenCountSchema.optional(),
+      thoughtsTokenCount: liveTokenCountSchema.optional(),
+      promptTokensDetails: liveTokenDetailsSchema.optional(),
+      responseTokensDetails: liveTokenDetailsSchema.optional(),
+    }),
+  }),
   z.object({
     ...traceEventBase,
     type: z.literal("transcript"),
@@ -227,21 +257,27 @@ export type PersonaRecommendationRequest = z.infer<
 >;
 export type PersonaRecommendation = z.infer<typeof personaRecommendationSchema>;
 
+export const practiceTranscriptLimits = {
+  messages: 300,
+  messageCharacters: 8000,
+  totalCodeUnits: 60_000,
+} as const;
+
 const practiceMessagesSchema = z
   .array(
     z.object({
       id: z.number().int().nonnegative(),
       speaker: z.enum(["user", "partner"]),
-      text: z.string().max(8000),
+      text: z.string().max(practiceTranscriptLimits.messageCharacters),
       suggestionShown: z.boolean().optional(),
     })
   )
-  .max(300)
+  .max(practiceTranscriptLimits.messages)
   .refine(
     (messages) =>
       new Set(messages.map(({ id }) => id)).size === messages.length &&
       messages.reduce((length, message) => length + message.text.length, 0) <=
-        60_000,
+        practiceTranscriptLimits.totalCodeUnits,
     "The transcript is too long or contains duplicate messages."
   );
 

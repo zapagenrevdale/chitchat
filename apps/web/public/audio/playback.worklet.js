@@ -5,6 +5,9 @@ class PracticeSpeaker extends AudioWorkletProcessor {
   offset = 0;
   queued = 0;
   generation = 0;
+  consumedSamples = 0;
+  reportedSamples = 0;
+  progressSamples = Math.round(sampleRate * 0.032);
   complete = false;
   draining = false;
   playing = false;
@@ -62,12 +65,18 @@ class PracticeSpeaker extends AudioWorkletProcessor {
     this.queued = 0;
     this.offset = 0;
     this.complete = false;
+    this.draining = false;
+    this.consumedSamples = 0;
+    this.reportedSamples = 0;
     this.beginFade();
     this.setPlaying(false);
   }
 
   setPlaying(playing) {
     if (this.playing !== playing) {
+      if (!playing && this.consumedSamples !== this.reportedSamples) {
+        this.reportProgress();
+      }
       this.playing = playing;
       this.notify({ type: "playing", playing });
     }
@@ -115,10 +124,14 @@ class PracticeSpeaker extends AudioWorkletProcessor {
       this.lastSample = output[index];
       this.offset += 1;
       this.queued -= 1;
+      this.consumedSamples += 1;
       if (this.offset === chunk.length) {
         this.chunks.shift();
         this.offset = 0;
       }
+    }
+    if (this.consumedSamples - this.reportedSamples >= this.progressSamples) {
+      this.reportProgress();
     }
     if (
       this.draining &&
@@ -127,9 +140,15 @@ class PracticeSpeaker extends AudioWorkletProcessor {
       this.fadeRemaining === 0
     ) {
       this.draining = false;
+      this.reportProgress();
       this.notify({ type: "drained" });
     }
     return true;
+  }
+
+  reportProgress() {
+    this.reportedSamples = this.consumedSamples;
+    this.notify({ type: "progress", consumedSamples: this.consumedSamples });
   }
 }
 registerProcessor("practice-speaker", PracticeSpeaker);

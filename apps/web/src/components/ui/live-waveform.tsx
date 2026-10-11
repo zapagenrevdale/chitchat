@@ -3,7 +3,7 @@
 // ElevenLabs UI: https://github.com/elevenlabs/ui/blob/main/apps/www/registry/elevenlabs-ui/ui/live-waveform.tsx
 // Chitchat supplies its existing analyser so visualization never opens another microphone.
 
-import { useEffect, useRef, type HTMLAttributes } from "react";
+import { useCallback, useEffect, useRef, type HTMLAttributes } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -62,15 +62,19 @@ export const LiveWaveform = ({
   const analyserRef = useRef<AnalyserNode | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
-  const animationRef = useRef<number>(0);
   const lastUpdateRef = useRef<number>(0);
-  const processingAnimationRef = useRef<number | null>(null);
   const lastActiveDataRef = useRef<number[]>([]);
   const transitionProgressRef = useRef(0);
   const staticBarsRef = useRef<number[]>([]);
   const needsRedrawRef = useRef(true);
   const gradientCacheRef = useRef<CanvasGradient | null>(null);
   const lastWidthRef = useRef(0);
+  const wakeDrawingRef = useRef<(() => void) | null>(null);
+
+  const requestRedraw = useCallback(() => {
+    needsRedrawRef.current = true;
+    wakeDrawingRef.current?.();
+  }, []);
 
   const heightStyle = typeof height === "number" ? `${height}px` : height;
 
@@ -96,19 +100,21 @@ export const LiveWaveform = ({
 
       gradientCacheRef.current = null;
       lastWidthRef.current = rect.width;
-      needsRedrawRef.current = true;
+      requestRedraw();
     });
 
     resizeObserver.observe(container);
     return () => resizeObserver.disconnect();
-  }, []);
+  }, [requestRedraw]);
 
   useEffect(() => {
+    let producerFrame: number | null = null;
     if (processing && !active) {
       let time = 0;
       transitionProgressRef.current = 0;
 
       const animateProcessing = () => {
+        producerFrame = null;
         time += 0.03;
         transitionProgressRef.current = Math.min(
           1,
@@ -186,18 +192,11 @@ export const LiveWaveform = ({
           historyRef.current = processingData;
         }
 
-        needsRedrawRef.current = true;
-        processingAnimationRef.current =
-          requestAnimationFrame(animateProcessing);
+        requestRedraw();
+        producerFrame = requestAnimationFrame(animateProcessing);
       };
 
       animateProcessing();
-
-      return () => {
-        if (processingAnimationRef.current) {
-          cancelAnimationFrame(processingAnimationRef.current);
-        }
-      };
     } else if (!active && !processing) {
       const hasData =
         mode === "static"
@@ -207,6 +206,7 @@ export const LiveWaveform = ({
       if (hasData) {
         let fadeProgress = 0;
         const fadeToIdle = () => {
+          producerFrame = null;
           fadeProgress += 0.03;
           if (fadeProgress < 1) {
             if (mode === "static") {
@@ -218,8 +218,7 @@ export const LiveWaveform = ({
                 (value) => value * (1 - fadeProgress)
               );
             }
-            needsRedrawRef.current = true;
-            requestAnimationFrame(fadeToIdle);
+            producerFrame = requestAnimationFrame(fadeToIdle);
           } else {
             if (mode === "static") {
               staticBarsRef.current = [];
@@ -227,11 +226,18 @@ export const LiveWaveform = ({
               historyRef.current = [];
             }
           }
+          requestRedraw();
         };
         fadeToIdle();
       }
     }
-  }, [processing, active, barWidth, barGap, mode]);
+    return () => {
+      if (producerFrame !== null) {
+        cancelAnimationFrame(producerFrame);
+        producerFrame = null;
+      }
+    };
+  }, [processing, active, barWidth, barGap, mode, requestRedraw]);
 
   // Handle microphone setup and teardown
   useEffect(() => {
@@ -239,7 +245,7 @@ export const LiveWaveform = ({
       analyserRef.current = active ? externalAnalyser : null;
       historyRef.current = [];
       staticBarsRef.current = [];
-      needsRedrawRef.current = true;
+      requestRedraw();
       return () => {
         analyserRef.current = null;
       };
@@ -256,10 +262,6 @@ export const LiveWaveform = ({
       ) {
         audioContextRef.current.close();
         audioContextRef.current = null;
-      }
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = 0;
       }
       return;
     }
@@ -300,6 +302,7 @@ export const LiveWaveform = ({
 
         // Clear history when starting
         historyRef.current = [];
+        requestRedraw();
       } catch (error) {
         onError?.(error as Error);
       }
@@ -320,10 +323,6 @@ export const LiveWaveform = ({
         audioContextRef.current.close();
         audioContextRef.current = null;
       }
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = 0;
-      }
     };
   }, [
     externalAnalyser,
@@ -334,6 +333,7 @@ export const LiveWaveform = ({
     onError,
     onStreamReady,
     onStreamEnd,
+    requestRedraw,
   ]);
 
   // Animation loop
@@ -344,9 +344,10 @@ export const LiveWaveform = ({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let rafId: number;
+    let rafId: number | null = null;
 
     const animate = (currentTime: number) => {
+      rafId = null;
       // Render waveform
       const rect = canvas.getBoundingClientRect();
 
@@ -422,7 +423,6 @@ export const LiveWaveform = ({
 
       // Only redraw if needed
       if (!needsRedrawRef.current && !active) {
-        rafId = requestAnimationFrame(animate);
         return;
       }
 
@@ -521,14 +521,23 @@ export const LiveWaveform = ({
 
       ctx.globalAlpha = 1;
 
-      rafId = requestAnimationFrame(animate);
+      if (active) {
+        rafId = requestAnimationFrame(animate);
+      }
     };
 
-    rafId = requestAnimationFrame(animate);
+    wakeDrawingRef.current = () => {
+      if (rafId === null) {
+        rafId = requestAnimationFrame(animate);
+      }
+    };
+    requestRedraw();
 
     return () => {
-      if (rafId) {
+      wakeDrawingRef.current = null;
+      if (rafId !== null) {
         cancelAnimationFrame(rafId);
+        rafId = null;
       }
     };
   }, [
@@ -545,6 +554,7 @@ export const LiveWaveform = ({
     fadeEdges,
     fadeWidth,
     mode,
+    requestRedraw,
   ]);
 
   return (

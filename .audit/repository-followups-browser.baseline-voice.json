@@ -1,0 +1,854 @@
+{
+  "origin": "https://amber.cc.local",
+  "label": "baseline-voice",
+  "capturedAt": "2026-10-11T03:48:27.078Z",
+  "target": "701FB9491276B2F5BDFFF26C8300ADCC",
+  "errors": [
+    {
+      "requestId": "59829.977",
+      "timestamp": 41100.439851,
+      "type": "Fetch",
+      "errorText": "net::ERR_ABORTED",
+      "canceled": true
+    }
+  ],
+  "network": [
+    {
+      "url": "https://amber.cc.local/",
+      "status": 200,
+      "statusText": "",
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sun, 11 Oct 2026 03:48:27 GMT",
+        "vary": "Origin, Sec-Fetch-Dest",
+        "x-portless": "1"
+      },
+      "mimeType": "text/html",
+      "charset": "utf-8",
+      "connectionReused": true,
+      "connectionId": 695,
+      "remoteIPAddress": "127.0.0.1",
+      "remotePort": 443,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "fromPrefetchCache": false,
+      "encodedDataLength": 37,
+      "timing": {
+        "requestTime": 41095.660746,
+        "proxyStart": -1,
+        "proxyEnd": -1,
+        "dnsStart": -1,
+        "dnsEnd": -1,
+        "connectStart": -1,
+        "connectEnd": -1,
+        "sslStart": -1,
+        "sslEnd": -1,
+        "workerStart": -1,
+        "workerReady": -1,
+        "workerFetchStart": -1,
+        "workerRespondWithSettled": -1,
+        "sendStart": 0.122,
+        "sendEnd": 0.171,
+        "pushStart": 0,
+        "pushEnd": 0,
+        "receiveHeadersStart": 24.874,
+        "receiveHeadersEnd": 24.913
+      },
+      "responseTime": 1791690507110.926,
+      "protocol": "h2",
+      "alternateProtocolUsage": "unspecifiedReason",
+      "securityState": "secure",
+      "securityDetails": {
+        "protocol": "TLS 1.3",
+        "keyExchange": "",
+        "keyExchangeGroup": "X25519MLKEM768",
+        "cipher": "AES_256_GCM",
+        "certificateId": 0,
+        "subjectName": "amber.cc.local",
+        "sanList": [
+          "amber.cc.local",
+          "*.cc.local"
+        ],
+        "issuer": "portless Local CA",
+        "validFrom": 1789146943,
+        "validTo": 1820682943,
+        "signedCertificateTimestampList": [],
+        "certificateTransparencyCompliance": "not-compliant",
+        "serverSignatureAlgorithm": 1027,
+        "encryptedClientHello": false
+      }
+    },
+    {
+      "url": "https://amber.cc.local/theme",
+      "status": 200,
+      "statusText": "",
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sun, 11 Oct 2026 03:48:28 GMT",
+        "vary": "Origin, Sec-Fetch-Dest",
+        "x-portless": "1"
+      },
+      "mimeType": "text/html",
+      "charset": "utf-8",
+      "connectionReused": true,
+      "connectionId": 695,
+      "remoteIPAddress": "127.0.0.1",
+      "remotePort": 443,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "fromPrefetchCache": false,
+      "encodedDataLength": 37,
+      "timing": {
+        "requestTime": 41097.441571,
+        "proxyStart": -1,
+        "proxyEnd": -1,
+        "dnsStart": -1,
+        "dnsEnd": -1,
+        "connectStart": -1,
+        "connectEnd": -1,
+        "sslStart": -1,
+        "sslEnd": -1,
+        "workerStart": -1,
+        "workerReady": -1,
+        "workerFetchStart": -1,
+        "workerRespondWithSettled": -1,
+        "sendStart": 0.159,
+        "sendEnd": 0.217,
+        "pushStart": 0,
+        "pushEnd": 0,
+        "receiveHeadersStart": 47.572,
+        "receiveHeadersEnd": 47.638
+      },
+      "responseTime": 1791690508914.452,
+      "protocol": "h2",
+      "alternateProtocolUsage": "unspecifiedReason",
+      "securityState": "secure",
+      "securityDetails": {
+        "protocol": "TLS 1.3",
+        "keyExchange": "",
+        "keyExchangeGroup": "X25519MLKEM768",
+        "cipher": "AES_256_GCM",
+        "certificateId": 0,
+        "subjectName": "amber.cc.local",
+        "sanList": [
+          "amber.cc.local",
+          "*.cc.local"
+        ],
+        "issuer": "portless Local CA",
+        "validFrom": 1789146943,
+        "validTo": 1820682943,
+        "signedCertificateTimestampList": [],
+        "certificateTransparencyCompliance": "not-compliant",
+        "serverSignatureAlgorithm": 1027,
+        "encryptedClientHello": false
+      }
+    },
+    {
+      "url": "https://amber.cc.local/",
+      "status": 200,
+      "statusText": "",
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sun, 11 Oct 2026 03:48:31 GMT",
+        "vary": "Origin, Sec-Fetch-Dest",
+        "x-portless": "1"
+      },
+      "mimeType": "text/html",
+      "charset": "utf-8",
+      "connectionReused": true,
+      "connectionId": 695,
+      "remoteIPAddress": "127.0.0.1",
+      "remotePort": 443,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "fromPrefetchCache": false,
+      "encodedDataLength": 3809,
+      "timing": {
+        "requestTime": 41099.596251,
+        "proxyStart": -1,
+        "proxyEnd": -1,
+        "dnsStart": -1,
+        "dnsEnd": -1,
+        "connectStart": -1,
+        "connectEnd": -1,
+        "sslStart": -1,
+        "sslEnd": -1,
+        "workerStart": -1,
+        "workerReady": -1,
+        "workerFetchStart": -1,
+        "workerRespondWithSettled": -1,
+        "sendStart": 0.347,
+        "sendEnd": 0.397,
+        "pushStart": 0,
+        "pushEnd": 0,
+        "receiveHeadersStart": 13.853,
+        "receiveHeadersEnd": 13.901
+      },
+      "responseTime": 1791690511035.411,
+      "protocol": "h2",
+      "alternateProtocolUsage": "unspecifiedReason",
+      "securityState": "secure",
+      "securityDetails": {
+        "protocol": "TLS 1.3",
+        "keyExchange": "",
+        "keyExchangeGroup": "X25519MLKEM768",
+        "cipher": "AES_256_GCM",
+        "certificateId": 0,
+        "subjectName": "amber.cc.local",
+        "sanList": [
+          "amber.cc.local",
+          "*.cc.local"
+        ],
+        "issuer": "portless Local CA",
+        "validFrom": 1789146943,
+        "validTo": 1820682943,
+        "signedCertificateTimestampList": [],
+        "certificateTransparencyCompliance": "not-compliant",
+        "serverSignatureAlgorithm": 1027,
+        "encryptedClientHello": false
+      }
+    },
+    {
+      "url": "https://amber.cc.local/",
+      "status": 200,
+      "statusText": "",
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sun, 11 Oct 2026 03:48:33 GMT",
+        "vary": "Origin, Sec-Fetch-Dest",
+        "x-portless": "1"
+      },
+      "mimeType": "text/html",
+      "charset": "utf-8",
+      "connectionReused": true,
+      "connectionId": 695,
+      "remoteIPAddress": "127.0.0.1",
+      "remotePort": 443,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "fromPrefetchCache": false,
+      "encodedDataLength": 37,
+      "timing": {
+        "requestTime": 41101.724832,
+        "proxyStart": -1,
+        "proxyEnd": -1,
+        "dnsStart": -1,
+        "dnsEnd": -1,
+        "connectStart": -1,
+        "connectEnd": -1,
+        "sslStart": -1,
+        "sslEnd": -1,
+        "workerStart": -1,
+        "workerReady": -1,
+        "workerFetchStart": -1,
+        "workerRespondWithSettled": -1,
+        "sendStart": 0.146,
+        "sendEnd": 0.2,
+        "pushStart": 0,
+        "pushEnd": 0,
+        "receiveHeadersStart": 12.768,
+        "receiveHeadersEnd": 12.833
+      },
+      "responseTime": 1791690513162.91,
+      "protocol": "h2",
+      "alternateProtocolUsage": "unspecifiedReason",
+      "securityState": "secure",
+      "securityDetails": {
+        "protocol": "TLS 1.3",
+        "keyExchange": "",
+        "keyExchangeGroup": "X25519MLKEM768",
+        "cipher": "AES_256_GCM",
+        "certificateId": 0,
+        "subjectName": "amber.cc.local",
+        "sanList": [
+          "amber.cc.local",
+          "*.cc.local"
+        ],
+        "issuer": "portless Local CA",
+        "validFrom": 1789146943,
+        "validTo": 1820682943,
+        "signedCertificateTimestampList": [],
+        "certificateTransparencyCompliance": "not-compliant",
+        "serverSignatureAlgorithm": 1027,
+        "encryptedClientHello": false
+      }
+    },
+    {
+      "url": "https://amber.cc.local/",
+      "status": 200,
+      "statusText": "",
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sun, 11 Oct 2026 03:48:34 GMT",
+        "vary": "Origin, Sec-Fetch-Dest",
+        "x-portless": "1"
+      },
+      "mimeType": "text/html",
+      "charset": "utf-8",
+      "connectionReused": true,
+      "connectionId": 695,
+      "remoteIPAddress": "127.0.0.1",
+      "remotePort": 443,
+      "fromDiskCache": false,
+      "fromServiceWorker": false,
+      "fromPrefetchCache": false,
+      "encodedDataLength": 37,
+      "timing": {
+        "requestTime": 41103.065023,
+        "proxyStart": -1,
+        "proxyEnd": -1,
+        "dnsStart": -1,
+        "dnsEnd": -1,
+        "connectStart": -1,
+        "connectEnd": -1,
+        "sslStart": -1,
+        "sslEnd": -1,
+        "workerStart": -1,
+        "workerReady": -1,
+        "workerFetchStart": -1,
+        "workerRespondWithSettled": -1,
+        "sendStart": 0.133,
+        "sendEnd": 0.179,
+        "pushStart": 0,
+        "pushEnd": 0,
+        "receiveHeadersStart": 11.749,
+        "receiveHeadersEnd": 11.803
+      },
+      "responseTime": 1791690514502.08,
+      "protocol": "h2",
+      "alternateProtocolUsage": "unspecifiedReason",
+      "securityState": "secure",
+      "securityDetails": {
+        "protocol": "TLS 1.3",
+        "keyExchange": "",
+        "keyExchangeGroup": "X25519MLKEM768",
+        "cipher": "AES_256_GCM",
+        "certificateId": 0,
+        "subjectName": "amber.cc.local",
+        "sanList": [
+          "amber.cc.local",
+          "*.cc.local"
+        ],
+        "issuer": "portless Local CA",
+        "validFrom": 1789146943,
+        "validTo": 1820682943,
+        "signedCertificateTimestampList": [],
+        "certificateTransparencyCompliance": "not-compliant",
+        "serverSignatureAlgorithm": 1027,
+        "encryptedClientHello": false
+      }
+    }
+  ],
+  "requests": [
+    {
+      "url": "https://api.amber.cc.local/api/practice/onboarding-turns",
+      "method": "POST",
+      "body": "{\"name\":\"Browser Audit\",\"language\":\"English\",\"messages\":[{\"role\":\"user\",\"text\":\"I want to feel confident talking with coworkers.\"}]}"
+    }
+  ],
+  "navigation": {
+    "frameId": "701FB9491276B2F5BDFFF26C8300ADCC",
+    "loaderId": "BBF75CB6975C45BA85F506E8B7C2B92E",
+    "isDownload": false
+  },
+  "home": {
+    "url": "https://amber.cc.local/",
+    "title": "Practice studio — Chitchat",
+    "text": "Skip to content\nA little about you.\n\nChit:\nHi, I'm Chit. Let's get started. What's your name?\n\nYou:\nBrowser Audit\n\nChit:\nWelcome, Browser Audit! We'll practice everyday conversations to help you build fluency and confidence. Tell me, what made you want to start practicing?\n\nChoose skills instead\nSwitch to voice\n\nSwitching starts a new goal conversation and clears this one.",
+    "fields": [
+      {
+        "tag": "TEXTAREA",
+        "placeholder": "I'd like to feel more comfortable talking to new people…",
+        "value": "I want to feel confident talking with coworkers.",
+        "disabled": false
+      }
+    ],
+    "buttons": [
+      {
+        "text": "",
+        "label": "Back",
+        "disabled": false
+      },
+      {
+        "text": "",
+        "label": "Continue",
+        "disabled": false
+      },
+      {
+        "text": "Choose skills instead",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Switch to voice",
+        "label": null,
+        "disabled": false
+      }
+    ],
+    "draft": "{\"version\":1,\"step\":\"motivation\",\"conversation\":[],\"conversationMode\":\"text\",\"language\":\"English\",\"name\":\"Browser Audit\",\"motivation\":\"I want to feel confident talking with coworkers.\",\"skills\":[]}"
+  },
+  "theme": {
+    "url": "https://amber.cc.local/theme",
+    "title": "Theme — Chitchat",
+    "text": "Skip to content\nChitchat\nPractice studio\n\nCHITCHAT / DESIGN LIBRARY\n\nThe little things, together.\n\nOur colors, controls, and conversation pieces. A living picture of how Chitchat looks and feels.\n\npick something. press things. see how it feels.\n\nDark appearance\nFoundations\nButtons\nSelection\nAvatars\nVoice\nForms\nChat\nFeedback\nFoundations\n\nThe shared palette and type styles behind the studio.\n\nbackground\n\ncard\n\nforeground\n\nprimary\n\nsecondary\n\nmuted\n\nmuted-foreground\n\nborder\n\ndestructive\n\nsuccess\n\ninfo\n\nwarning\n\nHeading · 30 px / Geist\n\nA little hello.\n\nBody · 16 px / Geist\n\nSmall talk gets easier with a little practice. Start wherever you feel comfortable.\n\nAnnotation · Shantell Sans\n\nmake it your own\n\nButtons\n\nComfortable app controls: 48 px standard buttons, 52 px main actions, and at least 44 px for compact controls.\n\ndefault\nContinue\nDisabled\nsecondary\nContinue\nDisabled\noutline\nContinue\nDisabled\nghost\nContinue\nDisabled\ndestructive\nContinue\nDisabled\nlink\nContinue\nDisabled\n14 px label\nCompact · 44 px\n15 px label\nSmall · 44 px\n16 px label\nDefault · 48 px\n18 px label\nLarge · 52 px\nConnecting…\nSelect place\nTry any enabled button.\nChevronLeft\nChevronRight\nArrowRight\nCheck\nPlus\nX\nShuffle\nSparkles\nMic\nMicOff\nPhoneOff\nVolume2\nSelection\n\nThe studio’s place picker, selection button, chevrons, and illustrated scenes. Browse the places and open a photo.\n\nPlace picker · browse and select\nPlace\nneighborhood cafe\n\nA cozy cafe with warm coffee, window seats, and a gentle hum of conversation.\n\nSelect place\nTry the chevrons or arrow keys.\nImage collection · press to enlarge\nRestaurant\nAirport\nCoworking Lounge\nRooftop Terrace\nAvatars\n\nOur practice partners, with the shared 56 px avatar and selected ring. Choose one to compare states.\n\nAlex\nJamie\nDani\nFelix\nVera\nLily\nVoice\n\nThe circular talk control, Chit’s animated icon, and audio waveforms. These are visual previews; they don’t access your microphone or start a conversation.\n\nTalk button · 56 px\nPress to talk\nChit · voice states\nIdle\nListening\nThinking\nSpeaking\nSimulated audio level · 50%\nLive conversations use actual audio loudness.\nWaveform · resting / processing\nWatercolor · listening with you\nI’m listening\nQuiet\nSpeaking\nMuted\n\nSwitch from Speaking to Quiet to watch the paint settle. This preview uses simulated speech.\n\nSimulated loudness · 65%\nForms\n\nLanguage, conversation mode, and text inputs with their help, error, and disabled states.\n\nPreferences\nPractice language\nArabic\nChinese\nDanish\nDutch\nEnglish\nFilipino\nFrench\nGerman\nGreek\nHebrew\nHindi\nIndonesian\nItalian\nJapanese\nKorean\nNorwegian\nPersian\nPolish\nPortuguese\nRussian\nSpanish\nSwedish\nThai\nTurkish\nUkrainian\nVietnamese\nConversation mode\nFree talk\nGuided\n\nSpeak freely. Ask for a suggested reply whenever you need one.\n\nText fields\nYour backstory\n\nHow do you know each other? What brings you here?\n\nError state\nDescribe your scene before continuing.\nChat\n\nA little room to talk. A conversation thread and a spacious input with its controls tucked below.\n\nChit:\nHey, I’m Chit. What would you like to feel more confident talking about?\n\nPreview only · Enter to send, Shift + Enter for a new line.\nFeedback\n\nStatus badges, notices, cards, and the conversation bubbles you see during practice.\n\ndefault\nsecondary\noutline\nsuccess-light\nwarning-light\ndestructive-light\ninfo-light\nprimary-light\ninvert-light\nfocus-light\ninfo\nsuccess\nwarning\ndestructive\ninvert\nfocus\nprimary-outline\ninfo-outline\nsuccess-outline\nwarning-outline\ndestructive-outline\ninvert-outline\nfocus-outline\nYou’re ready\nYour scene is set. Take your time.\nConnection interrupted\nTake a breath and try again when you’re ready.\nA little progress\nEvery conversation counts.\nYou made an introduction and kept the conversation going.\n\nAlex:\nHey! Is this seat taken?\n\nYou:\nNot at all. Go ahead!\n\nA\n\nAlex:\nThanks! Do you come here often?\n\nA little practice goes a long way.\nChitchat",
+    "fields": [
+      {
+        "tag": "INPUT",
+        "placeholder": "",
+        "value": "0.5",
+        "disabled": true
+      },
+      {
+        "tag": "INPUT",
+        "placeholder": "",
+        "value": "0.65",
+        "disabled": false
+      },
+      {
+        "tag": "INPUT",
+        "placeholder": "",
+        "value": "free",
+        "disabled": false
+      },
+      {
+        "tag": "INPUT",
+        "placeholder": "",
+        "value": "guided",
+        "disabled": false
+      },
+      {
+        "tag": "TEXTAREA",
+        "placeholder": "We’re teammates meeting for the first time…",
+        "value": "",
+        "disabled": false
+      },
+      {
+        "tag": "TEXTAREA",
+        "placeholder": "Add a little more detail",
+        "value": "",
+        "disabled": false
+      },
+      {
+        "tag": "TEXTAREA",
+        "placeholder": "Disabled field",
+        "value": "",
+        "disabled": true
+      },
+      {
+        "tag": "TEXTAREA",
+        "placeholder": "Tell Chit what’s on your mind…",
+        "value": "",
+        "disabled": false
+      }
+    ],
+    "buttons": [
+      {
+        "text": "Dark appearance",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Continue",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Disabled",
+        "label": null,
+        "disabled": true
+      },
+      {
+        "text": "Continue",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Disabled",
+        "label": null,
+        "disabled": true
+      },
+      {
+        "text": "Continue",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Disabled",
+        "label": null,
+        "disabled": true
+      },
+      {
+        "text": "Continue",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Disabled",
+        "label": null,
+        "disabled": true
+      },
+      {
+        "text": "Continue",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Disabled",
+        "label": null,
+        "disabled": true
+      },
+      {
+        "text": "Continue",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Disabled",
+        "label": null,
+        "disabled": true
+      },
+      {
+        "text": "Compact · 44 px",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Small · 44 px",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Default · 48 px",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Large · 52 px",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Connecting…",
+        "label": null,
+        "disabled": true
+      },
+      {
+        "text": "Select place",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "",
+        "label": "Enlarge neighborhood cafe photo",
+        "disabled": false
+      },
+      {
+        "text": "",
+        "label": "Previous place",
+        "disabled": false
+      },
+      {
+        "text": "",
+        "label": "Next place",
+        "disabled": false
+      },
+      {
+        "text": "Select place",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "",
+        "label": "Enlarge restaurant photo",
+        "disabled": false
+      },
+      {
+        "text": "",
+        "label": "Enlarge airport photo",
+        "disabled": false
+      },
+      {
+        "text": "",
+        "label": "Enlarge coworking lounge photo",
+        "disabled": false
+      },
+      {
+        "text": "",
+        "label": "Enlarge rooftop terrace photo",
+        "disabled": false
+      },
+      {
+        "text": "Alex",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Jamie",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Dani",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Felix",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Vera",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Lily",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "",
+        "label": "Toggle talk preview",
+        "disabled": false
+      },
+      {
+        "text": "Idle",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Listening",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Thinking",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Speaking",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Quiet",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Speaking",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Muted",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "",
+        "label": "Send message",
+        "disabled": true
+      }
+    ],
+    "draft": "{\"version\":1,\"step\":\"motivation\",\"conversation\":[],\"conversationMode\":\"text\",\"language\":\"English\",\"name\":\"Browser Audit\",\"motivation\":\"I want to feel confident talking with coworkers.\",\"skills\":[]}"
+  },
+  "before": {
+    "url": "https://amber.cc.local/",
+    "title": "Practice studio — Chitchat",
+    "text": "Skip to content\nA little about you.\n\nChit:\nHi, I'm Chit. Let's get started. What's your name?\n\nYou:\nBrowser Audit\n\nChit:\nWelcome, Browser Audit! We'll practice everyday conversations to help you build fluency and confidence. Tell me, what made you want to start practicing?\n\nChoose skills instead\nSwitch to voice\n\nSwitching starts a new goal conversation and clears this one.",
+    "fields": [
+      {
+        "tag": "TEXTAREA",
+        "placeholder": "I'd like to feel more comfortable talking to new people…",
+        "value": "I want to feel confident talking with coworkers.",
+        "disabled": false
+      }
+    ],
+    "buttons": [
+      {
+        "text": "",
+        "label": "Back",
+        "disabled": false
+      },
+      {
+        "text": "",
+        "label": "Continue",
+        "disabled": false
+      },
+      {
+        "text": "Choose skills instead",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Switch to voice",
+        "label": null,
+        "disabled": false
+      }
+    ],
+    "draft": "{\"version\":1,\"step\":\"motivation\",\"conversation\":[],\"conversationMode\":\"text\",\"language\":\"English\",\"name\":\"Browser Audit\",\"motivation\":\"I want to feel confident talking with coworkers.\",\"skills\":[]}"
+  },
+  "pending": {
+    "url": "https://amber.cc.local/",
+    "title": "Practice studio — Chitchat",
+    "text": "Skip to content\nA little about you.\n\nChit:\nHi, I'm Chit. Let's get started. What's your name?\n\nYou:\nBrowser Audit\n\nChit:\nWelcome, Browser Audit! We'll practice everyday conversations to help you build fluency and confidence. Tell me, what made you want to start practicing?\n\nYou:\nI want to feel confident talking with coworkers.\n\nChoose skills instead\nSwitch to voice\n\nSwitching starts a new goal conversation and clears this one.",
+    "fields": [
+      {
+        "tag": "TEXTAREA",
+        "placeholder": "I'd like to feel more comfortable talking to new people…",
+        "value": "I want to feel confident talking with coworkers.",
+        "disabled": true
+      }
+    ],
+    "buttons": [
+      {
+        "text": "",
+        "label": "Back",
+        "disabled": false
+      },
+      {
+        "text": "",
+        "label": "Continue",
+        "disabled": true
+      },
+      {
+        "text": "Choose skills instead",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Switch to voice",
+        "label": null,
+        "disabled": false
+      }
+    ],
+    "draft": "{\"version\":1,\"step\":\"motivation\",\"conversation\":[],\"conversationMode\":\"text\",\"language\":\"English\",\"name\":\"Browser Audit\",\"motivation\":\"I want to feel confident talking with coworkers.\",\"skills\":[]}"
+  },
+  "restored": {
+    "url": "https://amber.cc.local/",
+    "title": "Practice studio — Chitchat",
+    "text": "Skip to content\nA little about you.\n\nChit:\nHi, I'm Chit. Let's get started. What's your name?\n\nYou:\nBrowser Audit\n\nChit:\nWelcome, Browser Audit! We'll practice everyday conversations to help you build fluency and confidence. Tell me, what made you want to start practicing?\n\nYou:\nI want to feel confident talking with coworkers.\n\nChoose skills instead\nSwitch to voice\n\nSwitching starts a new goal conversation and clears this one.",
+    "fields": [
+      {
+        "tag": "TEXTAREA",
+        "placeholder": "I'd like to feel more comfortable talking to new people…",
+        "value": "I want to feel confident talking with coworkers.",
+        "disabled": true
+      }
+    ],
+    "buttons": [
+      {
+        "text": "",
+        "label": "Back",
+        "disabled": false
+      },
+      {
+        "text": "",
+        "label": "Continue",
+        "disabled": true
+      },
+      {
+        "text": "Choose skills instead",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Switch to voice",
+        "label": null,
+        "disabled": false
+      }
+    ],
+    "draft": "{\"version\":1,\"step\":\"motivation\",\"conversation\":[],\"conversationMode\":\"text\",\"language\":\"English\",\"name\":\"Browser Audit\",\"motivation\":\"I want to feel confident talking with coworkers.\",\"skills\":[]}"
+  },
+  "lifecycle": "Synthetic persisted pagehide/pageshow events in actual Chrome. This does not claim a real browser BFCache navigation.",
+  "textRecovered": false,
+  "voice-completed-open": {
+    "url": "https://amber.cc.local/",
+    "title": "Practice studio — Chitchat",
+    "text": "Skip to content\n\nYou:\nI want to feel confident talking with coworkers.\n\nChit:\nWe'll practice confident conversations with coworkers.\n\nListening and auto-continue are paused.\n\nContinue\nSwitch to text\n\nSwitching starts a new goal conversation and clears this one.\n\nChoose skills instead\nBack to voice",
+    "fields": [],
+    "buttons": [
+      {
+        "text": "",
+        "label": "Back",
+        "disabled": false
+      },
+      {
+        "text": "Continue",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Switch to text",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Choose skills instead",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Back to voice",
+        "label": "Back to voice",
+        "disabled": false
+      }
+    ],
+    "draft": "{\"version\":1,\"step\":\"microphone\",\"conversation\":[{\"role\":\"user\",\"text\":\"I want to feel confident talking with coworkers.\"},{\"role\":\"assistant\",\"text\":\"We'll practice confident conversations with coworkers.\"}],\"conversationMode\":\"voice\",\"language\":\"English\",\"name\":\"Browser Audit\",\"motivation\":\"\",\"skills\":[]}"
+  },
+  "voiceProviderFixture": {
+    "calls": [
+      {
+        "url": "https://api.amber.cc.local/api/practice/onboarding-sessions",
+        "body": "{\"name\":\"Browser Audit\",\"language\":\"English\"}"
+      },
+      {
+        "url": "https://api.amber.cc.local/api/practice/onboarding-completions",
+        "body": "{\"name\":\"Browser Audit\",\"language\":\"English\",\"outcome\":{\"status\":\"ready\",\"goal\":\"Feel confident talking with coworkers.\",\"suggestedSkills\":[]},\"messages\":[{\"role\":\"user\",\"text\":\"I want to feel confident talking with coworkers.\"}]}"
+      }
+    ],
+    "outcome": {
+      "status": "ready",
+      "goal": "Feel confident talking with coworkers.",
+      "suggestedSkills": [],
+      "benefits": {
+        "ids": [
+          "speak-smoothly",
+          "express-yourself",
+          "listen-and-connect"
+        ],
+        "personalized": true
+      }
+    }
+  },
+  "voiceGoalPersisted": false,
+  "voice-reloaded": {
+    "url": "https://amber.cc.local/",
+    "title": "Practice studio — Chitchat",
+    "text": "Skip to content\nWelcome, Browser Audit! We'll practice everyday conversations to help you build fluency and confidence. Tell me, what made you want to start practicing?\nRestart voice\n\nSwitching starts a new goal conversation and clears this one.\n\nChoose skills instead",
+    "fields": [],
+    "buttons": [
+      {
+        "text": "",
+        "label": "Back",
+        "disabled": false
+      },
+      {
+        "text": "Restart voice",
+        "label": null,
+        "disabled": false
+      },
+      {
+        "text": "Choose skills instead",
+        "label": null,
+        "disabled": false
+      }
+    ],
+    "draft": "{\"version\":1,\"step\":\"microphone\",\"conversation\":[],\"conversationMode\":\"voice\",\"language\":\"English\",\"name\":\"Browser Audit\",\"motivation\":\"\",\"skills\":[]}"
+  },
+  "voiceReloadReachedBenefits": false,
+  "voiceMethod": "Real Chrome UI, OnboardingLive controller and Web Audio worklets. Browser-injected fake getUserMedia silent stream, Gemini WebSocket messages, token and completion fetch responses. No real provider call or microphone capture."
+}

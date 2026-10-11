@@ -13,6 +13,7 @@ export const env = z
     LANGFUSE_PUBLIC_KEY: z.string().trim().optional(),
     LANGFUSE_SECRET_KEY: z.string().trim().optional(),
     LANGFUSE_BASE_URL: z.url().default("https://cloud.langfuse.com"),
+    TYPESAFE_API_KEY: z.string().trim().optional(),
     GEMINI_API_KEY: z.string().trim().optional(),
     GEMINI_API_KEY_LIVE: z.string().trim().optional(),
   })

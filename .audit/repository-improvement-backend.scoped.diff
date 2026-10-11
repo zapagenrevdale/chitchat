@@ -1,0 +1,426 @@
+--- baseline/feedback.ts
++++ apps/backend/src/practice/feedback.ts
+@@ -5,6 +5,8 @@
+   PracticeFeedbackRequest,
+ } from "@chitchat/contracts";
+ 
++const wordSegmenter = new Intl.Segmenter(undefined, { granularity: "word" });
++
+ export function hasEnoughConversation(
+   messages: PracticeFeedbackRequest["messages"]
+ ) {
+@@ -18,7 +20,11 @@
+       continue;
+     }
+     if (speaker === "user") {
+-      userWords += trimmed.split(/\s+/u).length;
++      for (const segment of wordSegmenter.segment(trimmed)) {
++        if (segment.isWordLike) {
++          userWords += 1;
++        }
++      }
+       if (previousSpeaker !== speaker) {
+         userTurns += 1;
+       }
+--- baseline/feedback.test.ts
++++ apps/backend/src/practice/feedback.test.ts
+@@ -118,16 +118,29 @@
+         ...message,
+         text: message.speaker === "user" ? "yes" : message.text,
+       })),
++      body.messages.map((message) => ({
++        ...message,
++        text:
++          message.speaker === "user" ? "! ? 。 … ".repeat(10) : message.text,
++      })),
++      ...["はい", "你好", "สวัสดี"].map((text) =>
++        body.messages.map((message) => ({ ...message, text }))
++      ),
++      [
++        ...body.messages.filter(({ speaker }) => speaker === "user"),
++        ...body.messages.filter(({ speaker }) => speaker === "partner"),
++      ],
+     ].map((messages) => ({ messages }))
+   )(
+     "does not invent a score for too little conversation",
+     async ({ messages }) => {
+-      const { request, createSession } = setup();
++      const { request, assessConversation } = setup();
+       const response = await request({ ...body, messages });
++      expect(response.status).toBe(200);
+       await expect(response.json()).resolves.toStrictEqual({
+         status: "insufficient",
+       });
+-      expect(createSession).not.toHaveBeenCalled();
++      expect(assessConversation).not.toHaveBeenCalled();
+     }
+   );
+ 
+@@ -141,17 +154,41 @@
+   });
+ 
+   it("accepts a full transcript beyond the small setup request limit", async () => {
+-    const { request, createSession } = setup();
++    const { request, assessConversation } = setup();
+     const messages = [
+       ...body.messages,
+       { id: 7, speaker: "partner", text: "More conversation. ".repeat(350) },
+     ];
+     const response = await request({ ...body, messages });
+     expect(response.status).toBe(200);
+-    expect(createSession).not.toHaveBeenCalled();
++    expect(assessConversation).toHaveBeenCalledWith(
++      { ...body, messages },
++      expect.any(AbortSignal)
++    );
++    await expect(response.json()).resolves.toStrictEqual(
++      finalizeFeedback(assessment, body.messages)
++    );
+   });
+ 
+   it.each([
++    "私は週末に公園を散歩するのが好きです。湖の近くには美しい花がたくさん咲いています。あなたは普段どこを歩きますか。",
++    "我喜欢周末和朋友一起去公园散步。湖边有很多漂亮的花，我们常常在那里聊天。你平时喜欢去什么地方？",
++    "ฉันชอบเดินเล่นในสวนสาธารณะกับเพื่อนในวันหยุดเราเห็นดอกไม้สวยงามริมทะเลสาบและพูดคุยกันคุณชอบไปเดินเล่นที่ไหน",
++  ])("assesses substantial conversation without spaces: %s", async (text) => {
++    const { request, assessConversation } = setup();
++    const messages = body.messages.map((message) => ({ ...message, text }));
++    const response = await request({ ...body, messages });
++    expect(response.status).toBe(200);
++    expect(assessConversation).toHaveBeenCalledWith(
++      { ...body, messages },
++      expect.any(AbortSignal)
++    );
++    await expect(response.json()).resolves.toStrictEqual(
++      finalizeFeedback(assessment, body.messages)
++    );
++  });
++
++  it.each([
+     { ...body, selection: { ...body.selection, personaId: "unknown" } },
+     { ...body, messages: [{ ...body.messages[0], speaker: "system" }] },
+     { ...body, messages: [body.messages[0], body.messages[0]] },
+@@ -167,21 +204,21 @@
+   ])(
+     "validates transcript limits, speakers, IDs, and scene",
+     async (invalid) => {
+-      const { request, createSession } = setup();
++      const { request, assessConversation } = setup();
+       await expect(request(invalid)).resolves.toMatchObject({ status: 400 });
+-      expect(createSession).not.toHaveBeenCalled();
++      expect(assessConversation).not.toHaveBeenCalled();
+     }
+   );
+ 
+   it("rejects foreign origins and oversized request bodies", async () => {
+-    const { request, createSession } = setup();
++    const { request, assessConversation } = setup();
+     await expect(
+       request(body, "https://elsewhere.example")
+     ).resolves.toMatchObject({ status: 403 });
+     await expect(
+-      request({ ...body, extra: "x".repeat(128_000) })
++      request({ ...body, extra: "x".repeat(512 * 1024) })
+     ).resolves.toMatchObject({ status: 413 });
+-    expect(createSession).not.toHaveBeenCalled();
++    expect(assessConversation).not.toHaveBeenCalled();
+   });
+ 
+   it.each([
+@@ -266,12 +303,6 @@
+     await expect(response.json()).resolves.toMatchObject({ score: 8 });
+   });
+ 
+-  it("does not call the scorer for insufficient evidence", async () => {
+-    const { request, assessConversation } = setup();
+-    await request({ ...body, messages: [] });
+-    expect(assessConversation).not.toHaveBeenCalled();
+-  });
+-
+   it("returns speech through an independent validated endpoint", async () => {
+     const { requestSpeech, speakFeedback, assessConversation } = setup();
+     const response = await requestSpeech();
+--- baseline/routes.ts
++++ apps/backend/src/practice/routes.ts
+@@ -33,6 +33,10 @@
+ import type { PracticeTracing } from "./tracing";
+ import type { CreateTranscriptionSession } from "./transcription";
+ 
++// Covers 60,000 UTF-16 units escaped to six bytes, 300 x 128-byte message
++// envelopes, and 32 KiB of context while schemas enforce semantic limits.
++const transcriptBodyLimit = 512 * 1024;
++
+ export function createPracticeRoutes(
+   provider: PracticeProvider | undefined,
+   webOrigin: string,
+@@ -80,7 +84,7 @@
+         c.req.path.endsWith(path)
+       )
+     ) {
+-      maxSize = 128_000;
++      maxSize = transcriptBodyLimit;
+     } else if (
+       ["/feedback-speech", "/onboarding-turns"].some((path) =>
+         c.req.path.endsWith(path)
+@@ -518,10 +522,20 @@
+       const session = await provider.createSession(parsed.data, signal);
+       signal.throwIfAborted();
+       // Caption provisioning must not prevent the audio conversation starting.
+-      const transcriptionToken = await createTranscriptionSession?.(
+-        AbortSignal.any([signal, AbortSignal.timeout(5000)])
+-      ).catch(() => null);
+-      signal.throwIfAborted();
++      let transcriptionToken: string | null | undefined;
++      if (createTranscriptionSession) {
++        try {
++          const captionSignal = AbortSignal.any([
++            signal,
++            AbortSignal.timeout(5000),
++          ]);
++          transcriptionToken = await createTranscriptionSession(captionSignal);
++          captionSignal.throwIfAborted();
++        } catch {
++          transcriptionToken = null;
++        }
++      }
++      c.req.raw.signal.throwIfAborted();
+       return c.json({ ...session, transcriptionToken }, 201);
+     } catch {
+       return c.json(
+--- baseline/transcription.test.ts
++++ apps/backend/src/practice/transcription.test.ts
+@@ -1,5 +1,5 @@
+ import type * as GeminiSdk from "@google/genai";
+-import { beforeEach, describe, expect, it, vi } from "vitest";
++import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+ 
+ import { createPracticeRoutes } from "./routes";
+ import { createGeminiTranscription } from "./transcription";
+@@ -26,9 +26,14 @@
+   expiresAt: 123_456,
+ };
+ const origin = "https://amber.cc.local";
+-function request(app: ReturnType<typeof createPracticeRoutes>, from = origin) {
++function request(
++  app: ReturnType<typeof createPracticeRoutes>,
++  from = origin,
++  signal?: AbortSignal
++) {
+   return app.request("/sessions", {
+     method: "POST",
++    signal,
+     headers: { origin: from, "Content-Type": "application/json" },
+     body: JSON.stringify({
+       personaId: "maya",
+@@ -40,6 +45,7 @@
+ 
+ describe("independent Gemini captions", () => {
+   beforeEach(() => vi.clearAllMocks());
++  afterEach(() => vi.restoreAllMocks());
+ 
+   it("constrains one-use credentials to verbatim text transcription", async () => {
+     createToken.mockResolvedValue({ name: "auth_tokens/captions" });
+@@ -108,4 +114,93 @@
+       transcriptionToken: null,
+     });
+   });
++
++  it("omits captions when no transcription provider is configured", async () => {
++    const response = await request(
++      createPracticeRoutes(
++        { createSession: () => Promise.resolve(session) },
++        origin
++      )
++    );
++    expect(response.status).toBe(201);
++    await expect(response.json()).resolves.toStrictEqual(session);
++  });
++
++  it("rejects a mandatory session returned after its deadline", async () => {
++    const deadline = new AbortController();
++    vi.spyOn(AbortSignal, "timeout").mockReturnValue(deadline.signal);
++    const provision = vi.fn<() => Promise<string>>();
++    const app = createPracticeRoutes(
++      {
++        createSession: () => {
++          deadline.abort(new DOMException("Timed out", "TimeoutError"));
++          return Promise.resolve(session);
++        },
++      },
++      origin,
++      undefined,
++      provision
++    );
++    const response = await request(app);
++    expect(response.status).toBe(502);
++    expect(provision).not.toHaveBeenCalled();
++    await expect(response.json()).resolves.toStrictEqual({
++      error: "Couldn't connect to voice practice. Please try again.",
++    });
++  });
++
++  it.each([
++    { source: "overall deadline", lateToken: false },
++    { source: "overall deadline", lateToken: true },
++    { source: "caption cap", lateToken: false },
++    { source: "caption cap", lateToken: true },
++    { source: "client cancellation", lateToken: false },
++    { source: "client cancellation", lateToken: true },
++  ] as const)(
++    "handles $source during captions (late token=$lateToken)",
++    async ({ source, lateToken }) => {
++      const deadline = new AbortController();
++      const captionCap = new AbortController();
++      const client = new AbortController();
++      const reason = new DOMException("Cancelled", "AbortError");
++      const timeout = vi
++        .spyOn(AbortSignal, "timeout")
++        .mockImplementation((milliseconds) =>
++          milliseconds === 25_000 ? deadline.signal : captionCap.signal
++        );
++      const provision = vi.fn<(signal: AbortSignal) => Promise<string>>(
++        (signal) => {
++          const controller = {
++            "overall deadline": deadline,
++            "caption cap": captionCap,
++            "client cancellation": client,
++          }[source];
++          controller.abort(reason);
++          if (!lateToken) {
++            return Promise.reject(signal.reason);
++          }
++          return Promise.resolve("auth_tokens/late");
++        }
++      );
++      const app = createPracticeRoutes(
++        { createSession: () => Promise.resolve(session) },
++        origin,
++        undefined,
++        provision
++      );
++      const response = await request(app, origin, client.signal);
++      expect(timeout.mock.calls).toStrictEqual([[25_000], [5000]]);
++      expect(provision).toHaveBeenCalledOnce();
++      const suppliedSignal = provision.mock.calls[0]?.[0];
++      expect(suppliedSignal).toMatchObject({ aborted: true, reason });
++      expect(response.status).toBe(
++        source === "client cancellation" ? 502 : 201
++      );
++      await expect(response.json()).resolves.toStrictEqual(
++        source === "client cancellation"
++          ? { error: "Couldn't connect to voice practice. Please try again." }
++          : { ...session, transcriptionToken: null }
++      );
++    }
++  );
+ });
+--- /dev/null
++++ apps/backend/src/practice/transcript-body-budget.test.ts
+@@ -0,0 +1,107 @@
++import type { PracticeFeedbackRequest } from "@chitchat/contracts";
++import { describe, expect, it, vi } from "vitest";
++
++import type { PracticeProvider } from "./gemini";
++import { createPracticeRoutes } from "./routes";
++
++const origin = "https://amber.cc.local";
++const transcript: PracticeFeedbackRequest = {
++  selection: { personaId: "theo", placeId: "cafe", settingId: "casual" },
++  messages: Array.from({ length: 300 }, (_, id) => ({
++    id,
++    speaker: id % 2 === 0 ? "user" : "partner",
++    text: "你好世界".repeat(50),
++    suggestionShown: false,
++  })),
++};
++
++describe.each([
++  { path: "/feedback", result: { status: "insufficient" as const } },
++  { path: "/reply-suggestions", result: { text: "How was your walk?" } },
++  {
++    path: "/guided-turns",
++    result: { text: "A lovely walk.", reply: "Where did you go?" },
++  },
++] as const)("transcript body budget for $path", ({ path, result }) => {
++  function setup() {
++    const assessConversation = vi
++      .fn<NonNullable<PracticeProvider["assessConversation"]>>()
++      .mockResolvedValue({ status: "insufficient" });
++    const suggestReply = vi
++      .fn<NonNullable<PracticeProvider["suggestReply"]>>()
++      .mockResolvedValue({ text: "How was your walk?" });
++    const guidedTurn = vi
++      .fn<NonNullable<PracticeProvider["guidedTurn"]>>()
++      .mockResolvedValue({
++        text: "A lovely walk.",
++        reply: "Where did you go?",
++      });
++    const app = createPracticeRoutes(
++      {
++        createSession: vi.fn<PracticeProvider["createSession"]>(),
++        assessConversation,
++        suggestReply,
++        guidedTurn,
++      },
++      origin
++    );
++    return {
++      generate: {
++        "/feedback": assessConversation,
++        "/reply-suggestions": suggestReply,
++        "/guided-turns": guidedTurn,
++      }[path],
++      request: (body: string) =>
++        app.request(path, {
++          method: "POST",
++          headers: { origin, "Content-Type": "application/json" },
++          body,
++        }),
++    };
++  }
++
++  it.each([false, true])(
++    "passes 60,000 Unicode characters to the provider (escaped=%s)",
++    async (escaped) => {
++      const { request, generate } = setup();
++      const json = JSON.stringify(transcript);
++      const payload = escaped
++        ? json.replaceAll(
++            /[你好世界]/gu,
++            (character) => `\\u${character.codePointAt(0)?.toString(16)}`
++          )
++        : json;
++      expect(new TextEncoder().encode(payload).length).toBeGreaterThan(128_000);
++      const response = await request(payload);
++      expect(response.status).toBe(200);
++      expect(generate).toHaveBeenCalledWith(
++        transcript,
++        expect.any(AbortSignal)
++      );
++      await expect(response.json()).resolves.toStrictEqual(result);
++    }
++  );
++
++  it("rejects semantic overflow below the HTTP ceiling before generation", async () => {
++    const { request, generate } = setup();
++    const messages = transcript.messages.map((message, index) => ({
++      ...message,
++      text: message.text + (index === 0 ? "你" : ""),
++    }));
++    const response = await request(JSON.stringify({ ...transcript, messages }));
++    expect(response.status).toBe(400);
++    expect(generate).not.toHaveBeenCalled();
++  });
++
++  it("rejects HTTP overflow before generation", async () => {
++    const { request, generate } = setup();
++    const response = await request(
++      JSON.stringify({ ...transcript, extra: "x".repeat(512 * 1024) })
++    );
++    expect(response.status).toBe(413);
++    await expect(response.json()).resolves.toStrictEqual({
++      error: "That request is too large.",
++    });
++    expect(generate).not.toHaveBeenCalled();
++  });
++});

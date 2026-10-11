@@ -1,17 +1,19 @@
 import { createHash, randomUUID } from "node:crypto";
 
 import type {
-  PracticeSession,
   PracticeTraceBatch,
   PracticeTraceEvent,
 } from "@chitchat/contracts";
-import { ApiError } from "@google/genai";
 import { startObservation } from "@langfuse/tracing";
 import type {
   LangfuseSpan,
   LangfuseGeneration,
   LangfuseGenerationAttributes,
 } from "@langfuse/tracing";
+import { NoObjectGeneratedError } from "ai";
+import type { LanguageModelUsage } from "ai";
+
+import { providerErrorStatus } from "./provider-error";
 
 interface TurnTrace {
   root: LangfuseSpan;
@@ -48,6 +50,17 @@ function record(session: LiveTrace, event: PracticeTraceEvent) {
     clientTimestamp: event.timestamp,
     sequence: event.sequence,
   };
+  if (event.type === "usage") {
+    // Preserve provider reports without assuming per-turn vs cumulative counts.
+    // Browser telemetry is an estimate, never a billing authorization source.
+    const observation = session.root.startObservation("live.usage", {
+      input: event.usage,
+      metadata,
+    });
+    observation.otelSpan.setAttribute("session.id", session.root.traceId);
+    observation.end();
+    return;
+  }
   if (event.type === "transcript") {
     const previous = session.turn;
     const newTurn =
@@ -139,15 +152,15 @@ function record(session: LiveTrace, event: PracticeTraceEvent) {
 export class PracticeTracing {
   private sessions = new Map<string, LiveTrace>();
 
-  async provision(
+  async provision<Session extends { model: string; expiresAt: number }>(
     input: {
       systemInstruction: string;
       model: string;
       voiceName: string;
       tools: unknown;
     },
-    run: () => Promise<PracticeSession>
-  ): Promise<PracticeSession> {
+    run: () => Promise<Session>
+  ): Promise<Session & { tracingToken?: string }> {
     // Tracing must never prevent a call when the bounded registry is full.
     if (this.sessions.size >= 500) {
       return await run();
@@ -283,6 +296,16 @@ export function tokenUsage(usage?: {
   };
 }
 
+export function textTokenUsage(usage?: LanguageModelUsage) {
+  if (!usage) {
+    return;
+  }
+  return {
+    ...(usage.inputTokens === undefined ? {} : { input: usage.inputTokens }),
+    ...(usage.outputTokens === undefined ? {} : { output: usage.outputTokens }),
+  };
+}
+
 export async function traceGeneration<T>(
   name: string,
   attributes: LangfuseGenerationAttributes,
@@ -303,13 +326,22 @@ export async function traceGeneration<T>(
     observation.update(summarize(result));
     return result;
   } catch (error) {
+    // Structured output validation happens inside AI SDK. Preserve rejected output
+    // and usage for diagnosis, just as for successfully generated assessments.
+    if (NoObjectGeneratedError.isInstance(error)) {
+      observation.update({
+        output: error.text,
+        usageDetails: textTokenUsage(error.usage),
+      });
+    }
+    const status = providerErrorStatus(error);
     // Provider errors can contain request URLs or credentials.
     observation.update({
       level: "ERROR",
       statusMessage:
-        error instanceof ApiError
-          ? `Gemini request failed (HTTP ${error.status})`
-          : "Gemini request failed",
+        status === undefined
+          ? "Gemini request failed"
+          : `Gemini request failed (HTTP ${status})`,
     });
     throw error;
   } finally {

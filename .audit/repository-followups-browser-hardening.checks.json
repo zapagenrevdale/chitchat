@@ -1,0 +1,13 @@
+{
+  "capturedAt": "2026-10-11T04:02:39.361Z",
+  "mode": "offline instrumentation checks only",
+  "checks": [
+    "Parsed .audit/repository-followups-browser.ts",
+    "Parsed .audit/repository-followups-browser.voice.js",
+    "Request-based token and string-based completion use validated fixtures with zero live fetches",
+    "Unmatched Request fetches, providers, duplicate requests, invalid payloads and sockets fail closed",
+    "Preserved baseline still contains the original missing-goal and microphone-reload failures",
+    "Actual runner helpers reject closed, hidden, incomplete transcripts and distinguish unrelated abort/runtime errors"
+  ],
+  "browserRun": false
+}

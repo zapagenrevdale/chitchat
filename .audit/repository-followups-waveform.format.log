@@ -1,0 +1,50 @@
+$ turbo run format "--filter=@chitchat/web" -- src/components/ui/live-waveform.tsx src/components/practice/live-waveform.test.tsx src/components/practice/use-persona-preview.test.ts
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/web
+   • Running format in 1 packages
+   • Remote caching disabled
+
+@chitchat/web:format: cache bypass, force executing 2b260b66035a5573
+@chitchat/web:format: $ ultracite fix src/components/ui/live-waveform.tsx src/components/practice/live-waveform.test.tsx src/components/practice/use-persona-preview.test.ts
+@chitchat/web:format: 
+@chitchat/web:format:   x eslint(prefer-destructuring): Use Array destructuring.
+@chitchat/web:format:      ,-[src/components/practice/use-persona-preview.test.ts:121:25]
+@chitchat/web:format:  120 |     act(() => { void result.current.play(leo); });
+@chitchat/web:format:  121 |     const replacement = clips[1];
+@chitchat/web:format:      :                         ^^^^^^^^
+@chitchat/web:format:  122 |     act(() => {
+@chitchat/web:format:      `----
+@chitchat/web:format:   help: Use array destructuring rather than direct member access.
+@chitchat/web:format: 
+@chitchat/web:format:   x eslint(prefer-destructuring): Use Array destructuring.
+@chitchat/web:format:      ,-[src/components/practice/use-persona-preview.test.ts:159:19]
+@chitchat/web:format:  158 |     act(() => { void result.current.play(maya); });
+@chitchat/web:format:  159 |     const audio = clips[0];
+@chitchat/web:format:      :                   ^^^^^^^^
+@chitchat/web:format:  160 |     unmount();
+@chitchat/web:format:      `----
+@chitchat/web:format:   help: Use array destructuring rather than direct member access.
+@chitchat/web:format: 
+@chitchat/web:format:   x eslint(class-methods-use-this): Expected method `observe` to have this.
+@chitchat/web:format:     ,-[src/components/practice/live-waveform.test.tsx:76:7]
+@chitchat/web:format:  75 |       constructor(onResize: () => void) { resize = onResize; }
+@chitchat/web:format:  76 |       observe = () => { resize(); };
+@chitchat/web:format:     :       ^^^^^^^
+@chitchat/web:format:  77 |       disconnect = disconnect;
+@chitchat/web:format:     `----
+@chitchat/web:format:   help: Consider converting method `observe` to a static method.
+@chitchat/web:format: 
+@chitchat/web:format: Found 0 warnings and 3 errors.
+@chitchat/web:format: Finished in 37ms on 2 files with 586 rules using 10 threads.
+@chitchat/web:format: Finished in 106ms on 3 files using 10 threads.
+@chitchat/web:format: error: script "format" exited with code 1
+@chitchat/web#format:  ERROR  command (/Users/genrevzapa/projects/chitchat/apps/web) /Users/genrevzapa/.bun/bin/bun run format src/components/ui/live-waveform.tsx src/components/practice/live-waveform.test.tsx src/components/practice/use-persona-preview.test.ts exited (1)
+
+ Tasks:    0 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    418ms 
+Failed:    @chitchat/web#format
+
+ ERROR  run failed: command  exited (1)
+error: script "format" exited with code 1

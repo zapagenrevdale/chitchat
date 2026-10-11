@@ -36,6 +36,13 @@ async function closeAudioContext(context: AudioContext) {
   }
 }
 
+export interface PlaybackPosition {
+  generation: number;
+  consumedSamples: number;
+  submittedSamples: number;
+  sampleRate: number;
+}
+
 export class PracticeAudio {
   // Keep microphone capture at the device's native rate, independent of Gemini's output rate.
   private inputContext = new AudioContext({ latencyHint: "interactive" });
@@ -54,15 +61,22 @@ export class PracticeAudio {
   private playing = false;
   private onDrained?: () => void;
   private playbackGeneration = 0;
+  private consumedSamples = 0;
+  private submittedSamples = 0;
   private disposed = false;
   private muted = false;
   private inputStopped = false;
   inputVolume = 0;
 
   private onPlaying: (playing: boolean) => void;
+  private readonly onProgress?: (position: PlaybackPosition) => void;
 
-  constructor(onPlaying: (playing: boolean) => void) {
+  constructor(
+    onPlaying: (playing: boolean) => void,
+    onProgress?: (position: PlaybackPosition) => void
+  ) {
     this.onPlaying = onPlaying;
+    this.onProgress = onProgress;
     this.analyser.fftSize = 256;
     this.inputAnalyser.fftSize = 256;
     this.analyser.connect(this.context.destination);
@@ -73,7 +87,9 @@ export class PracticeAudio {
     onAudio: (data: string, sampleRate: number) => void,
     onFailure: (message: string) => void
   ) {
+    signal.throwIfAborted();
     await Promise.all([this.inputContext.resume(), this.context.resume()]);
+    signal.throwIfAborted();
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: {
         channelCount: 1,
@@ -165,6 +181,14 @@ export class PracticeAudio {
     void closeAudioContext(this.inputContext);
   }
 
+  async prepareOutput(onFailure: (message: string) => void) {
+    await this.context.resume();
+    if (this.context.state !== "running") {
+      throw new Error("Audio playback is blocked.");
+    }
+    await this.initializePlayback(onFailure);
+  }
+
   private async initializePlayback(onFailure: (message: string) => void) {
     await this.context.audioWorklet.addModule("/audio/playback.worklet.js");
     if (this.disposed) {
@@ -184,6 +208,7 @@ export class PracticeAudio {
           type: string;
           playing: boolean;
           message: string;
+          consumedSamples: number;
         }>
       ) => {
         if (
@@ -195,6 +220,16 @@ export class PracticeAudio {
         if (event.data.type === "playing") {
           this.playing = event.data.playing;
           this.onPlaying(this.playing);
+        } else if (event.data.type === "progress") {
+          const { consumedSamples } = event.data;
+          if (
+            Number.isSafeInteger(consumedSamples) &&
+            consumedSamples >= this.consumedSamples &&
+            consumedSamples <= this.submittedSamples
+          ) {
+            this.consumedSamples = consumedSamples;
+            this.onProgress?.(this.getPlaybackPosition());
+          }
         } else if (event.data.type === "drained") {
           const { onDrained } = this;
           this.onDrained = undefined;
@@ -228,6 +263,7 @@ export class PracticeAudio {
       throw new Error("Speech playback is not ready.");
     }
     const samples = decodePcm(data);
+    this.submittedSamples += samples.length;
     // MessagePort has no targetOrigin parameter.
     // oxlint-disable-next-line unicorn/require-post-message-target-origin
     this.playback.port.postMessage(
@@ -257,12 +293,24 @@ export class PracticeAudio {
 
   stopPlayback() {
     this.playbackGeneration += 1;
+    this.onDrained = undefined;
+    this.consumedSamples = 0;
+    this.submittedSamples = 0;
     const message = { type: "clear", generation: this.playbackGeneration };
     // MessagePort has no targetOrigin parameter.
     // oxlint-disable-next-line unicorn/require-post-message-target-origin
     this.playback?.port.postMessage(message);
     this.playing = false;
     this.onPlaying(false);
+  }
+
+  getPlaybackPosition(): PlaybackPosition {
+    return {
+      generation: this.playbackGeneration,
+      consumedSamples: this.consumedSamples,
+      submittedSamples: this.submittedSamples,
+      sampleRate: this.context.sampleRate,
+    };
   }
 
   getOutputVolume() {

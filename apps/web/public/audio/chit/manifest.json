@@ -1,0 +1,1620 @@
+[
+  {
+    "code": "en",
+    "language": "English",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "Hi, I'm Chit. Let's get started. What's your name?",
+    "seconds": 5.8,
+    "file": "/audio/chit/en.mp3",
+    "generatedAt": "2026-09-22T15:33:47.160Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Hi, ",
+        "start": 0.8,
+        "end": 1.2
+      },
+      {
+        "text": "I'm ",
+        "start": 1.5,
+        "end": 1.8
+      },
+      {
+        "text": "Chit. ",
+        "start": 1.8,
+        "end": 2.3
+      },
+      {
+        "text": "Let's ",
+        "start": 3,
+        "end": 3.2
+      },
+      {
+        "text": "get ",
+        "start": 3.2,
+        "end": 3.4
+      },
+      {
+        "text": "started. ",
+        "start": 3.4,
+        "end": 3.9
+      },
+      {
+        "text": "What's ",
+        "start": 4.7,
+        "end": 4.9
+      },
+      {
+        "text": "your ",
+        "start": 4.9,
+        "end": 5.1
+      },
+      {
+        "text": "name?",
+        "start": 5.1,
+        "end": 5.4
+      }
+    ]
+  },
+  {
+    "code": "ja",
+    "language": "Japanese",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "こんにちは、チットです。さっそく始めましょう。お名前は何ですか？",
+    "seconds": 6.28,
+    "file": "/audio/chit/ja.mp3",
+    "generatedAt": "2026-09-22T15:37:48.417Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "こんにちは、",
+        "start": 0.3,
+        "end": 1
+      },
+      {
+        "text": "チッ",
+        "start": 1.4,
+        "end": 1.6
+      },
+      {
+        "text": "ト",
+        "start": 1.6,
+        "end": 1.8
+      },
+      {
+        "text": "です。",
+        "start": 1.8,
+        "end": 2
+      },
+      {
+        "text": "さっそく",
+        "start": 2.7,
+        "end": 3.1
+      },
+      {
+        "text": "始めましょう。",
+        "start": 3.1,
+        "end": 3.7
+      },
+      {
+        "text": "お",
+        "start": 4.6,
+        "end": 4.7
+      },
+      {
+        "text": "名前",
+        "start": 4.7,
+        "end": 5.1
+      },
+      {
+        "text": "は",
+        "start": 5.1,
+        "end": 5.3
+      },
+      {
+        "text": "何",
+        "start": 5.3,
+        "end": 5.5
+      },
+      {
+        "text": "です",
+        "start": 5.5,
+        "end": 5.8
+      },
+      {
+        "text": "か？",
+        "start": 5.8,
+        "end": 5.9
+      }
+    ]
+  },
+  {
+    "code": "ko",
+    "language": "Korean",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "안녕하세요, 저는 Chit입니다. 이제 시작해 볼까요? 이름이 뭐예요?",
+    "seconds": 8.04,
+    "file": "/audio/chit/ko.mp3",
+    "generatedAt": "2026-09-22T15:37:48.460Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "안녕하세요, ",
+        "start": 0.2,
+        "end": 1.2
+      },
+      {
+        "text": "저는 ",
+        "start": 1.6,
+        "end": 2.1
+      },
+      {
+        "text": "Chit입니다. ",
+        "start": 2.4,
+        "end": 3.2
+      },
+      {
+        "text": "이제 ",
+        "start": 4.2,
+        "end": 4.7
+      },
+      {
+        "text": "시작해 ",
+        "start": 4.7,
+        "end": 5.1
+      },
+      {
+        "text": "볼까요? ",
+        "start": 5.1,
+        "end": 5.6
+      },
+      {
+        "text": "이름이 ",
+        "start": 6.8,
+        "end": 7.2
+      },
+      {
+        "text": "뭐예요?",
+        "start": 7.2,
+        "end": 7.8
+      }
+    ]
+  },
+  {
+    "code": "fil",
+    "language": "Filipino",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "Hi, ako si Chit. Simulan na natin. Ano ang pangalan mo?",
+    "seconds": 5.92,
+    "file": "/audio/chit/fil.mp3",
+    "generatedAt": "2026-09-22T15:34:32.042Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Hi, ",
+        "start": 0.3,
+        "end": 0.9
+      },
+      {
+        "text": "ako ",
+        "start": 1.3,
+        "end": 1.7
+      },
+      {
+        "text": "si ",
+        "start": 1.7,
+        "end": 1.8
+      },
+      {
+        "text": "Chit. ",
+        "start": 1.8,
+        "end": 2.3
+      },
+      {
+        "text": "Simulan ",
+        "start": 2.9,
+        "end": 3.2
+      },
+      {
+        "text": "na ",
+        "start": 3.2,
+        "end": 3.3
+      },
+      {
+        "text": "natin. ",
+        "start": 3.3,
+        "end": 3.9
+      },
+      {
+        "text": "Ano ",
+        "start": 4.6,
+        "end": 4.8
+      },
+      {
+        "text": "ang ",
+        "start": 4.8,
+        "end": 4.9
+      },
+      {
+        "text": "pangalan ",
+        "start": 4.9,
+        "end": 5.4
+      },
+      {
+        "text": "mo?",
+        "start": 5.4,
+        "end": 5.6
+      }
+    ]
+  },
+  {
+    "code": "es",
+    "language": "Spanish",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "Hola, soy Chit. Vamos a empezar. ¿Cómo te llamas?",
+    "seconds": 5.92,
+    "file": "/audio/chit/es.mp3",
+    "generatedAt": "2026-09-22T15:37:48.512Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Hola, ",
+        "start": 0.3,
+        "end": 0.7
+      },
+      {
+        "text": "soy ",
+        "start": 1.3,
+        "end": 1.5
+      },
+      {
+        "text": "Chit. ",
+        "start": 1.5,
+        "end": 1.8
+      },
+      {
+        "text": "Vamos ",
+        "start": 2.7,
+        "end": 3.1
+      },
+      {
+        "text": "a ",
+        "start": 3.1,
+        "end": 3.1
+      },
+      {
+        "text": "empezar. ¿",
+        "start": 3.1,
+        "end": 3.6
+      },
+      {
+        "text": "Cómo ",
+        "start": 4.6,
+        "end": 4.9
+      },
+      {
+        "text": "te ",
+        "start": 4.9,
+        "end": 5
+      },
+      {
+        "text": "llamas?",
+        "start": 5,
+        "end": 5.5
+      }
+    ]
+  },
+  {
+    "code": "fr",
+    "language": "French",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "Salut, moi c'est Chit. On commence ! Comment tu t'appelles ?",
+    "seconds": 5.92,
+    "file": "/audio/chit/fr.mp3",
+    "generatedAt": "2026-09-22T15:37:48.552Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Salut, ",
+        "start": 0.5,
+        "end": 1
+      },
+      {
+        "text": "moi ",
+        "start": 1.4,
+        "end": 1.8
+      },
+      {
+        "text": "c'est ",
+        "start": 1.8,
+        "end": 2
+      },
+      {
+        "text": "Chit. ",
+        "start": 2,
+        "end": 2.5
+      },
+      {
+        "text": "On ",
+        "start": 3.3,
+        "end": 3.4
+      },
+      {
+        "text": "commence ! ",
+        "start": 3.4,
+        "end": 3.9
+      },
+      {
+        "text": "Comment ",
+        "start": 4.7,
+        "end": 5
+      },
+      {
+        "text": "tu ",
+        "start": 5,
+        "end": 5.1
+      },
+      {
+        "text": "t'appelles ?",
+        "start": 5.1,
+        "end": 5.6
+      }
+    ]
+  },
+  {
+    "code": "zh",
+    "language": "Chinese",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "你好，我是 Chit。我们开始吧。你叫什么名字？",
+    "seconds": 5.52,
+    "file": "/audio/chit/zh.mp3",
+    "generatedAt": "2026-09-22T15:37:48.594Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "你",
+        "start": 0.4,
+        "end": 0.5
+      },
+      {
+        "text": "好，",
+        "start": 0.5,
+        "end": 0.9
+      },
+      {
+        "text": "我",
+        "start": 1.2,
+        "end": 1.4
+      },
+      {
+        "text": "是 ",
+        "start": 1.4,
+        "end": 1.6
+      },
+      {
+        "text": "Chit。",
+        "start": 1.6,
+        "end": 2
+      },
+      {
+        "text": "我",
+        "start": 2.6,
+        "end": 2.7
+      },
+      {
+        "text": "们",
+        "start": 2.7,
+        "end": 2.8
+      },
+      {
+        "text": "开",
+        "start": 2.8,
+        "end": 3
+      },
+      {
+        "text": "始",
+        "start": 3,
+        "end": 3.2
+      },
+      {
+        "text": "吧。",
+        "start": 3.2,
+        "end": 3.4
+      },
+      {
+        "text": "你",
+        "start": 4.3,
+        "end": 4.4
+      },
+      {
+        "text": "叫",
+        "start": 4.4,
+        "end": 4.6
+      },
+      {
+        "text": "什",
+        "start": 4.6,
+        "end": 4.7
+      },
+      {
+        "text": "么",
+        "start": 4.7,
+        "end": 4.8
+      },
+      {
+        "text": "名",
+        "start": 4.8,
+        "end": 5.1
+      },
+      {
+        "text": "字？",
+        "start": 5.1,
+        "end": 5.3
+      }
+    ]
+  },
+  {
+    "code": "de",
+    "language": "German",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "Hi, ich bin Chit. Legen wir los. Wie heißt du?",
+    "seconds": 5.28,
+    "file": "/audio/chit/de.mp3",
+    "generatedAt": "2026-09-22T15:37:48.638Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Hi, ",
+        "start": 0.3,
+        "end": 0.7
+      },
+      {
+        "text": "ich ",
+        "start": 1.1,
+        "end": 1.2
+      },
+      {
+        "text": "bin ",
+        "start": 1.2,
+        "end": 1.4
+      },
+      {
+        "text": "Chit. ",
+        "start": 1.4,
+        "end": 1.8
+      },
+      {
+        "text": "Legen ",
+        "start": 2.6,
+        "end": 2.8
+      },
+      {
+        "text": "wir ",
+        "start": 2.8,
+        "end": 2.9
+      },
+      {
+        "text": "los. ",
+        "start": 2.9,
+        "end": 3.4
+      },
+      {
+        "text": "Wie ",
+        "start": 4.2,
+        "end": 4.3
+      },
+      {
+        "text": "heißt ",
+        "start": 4.3,
+        "end": 4.6
+      },
+      {
+        "text": "du?",
+        "start": 4.6,
+        "end": 4.9
+      }
+    ]
+  },
+  {
+    "code": "pt",
+    "language": "Portuguese",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "Oi, eu sou Chit. Vamos começar. Qual é o seu nome?",
+    "seconds": 5.68,
+    "file": "/audio/chit/pt.mp3",
+    "generatedAt": "2026-09-22T15:37:48.674Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Oi, ",
+        "start": 0.3,
+        "end": 0.8
+      },
+      {
+        "text": "eu ",
+        "start": 1.2,
+        "end": 1.4
+      },
+      {
+        "text": "sou ",
+        "start": 1.4,
+        "end": 1.6
+      },
+      {
+        "text": "Chit. ",
+        "start": 1.6,
+        "end": 2.2
+      },
+      {
+        "text": "Vamos ",
+        "start": 2.9,
+        "end": 3.2
+      },
+      {
+        "text": "começar. ",
+        "start": 3.2,
+        "end": 3.7
+      },
+      {
+        "text": "Qual ",
+        "start": 4.5,
+        "end": 4.7
+      },
+      {
+        "text": "é ",
+        "start": 4.7,
+        "end": 4.7
+      },
+      {
+        "text": "o ",
+        "start": 4.7,
+        "end": 4.8
+      },
+      {
+        "text": "seu ",
+        "start": 4.8,
+        "end": 5
+      },
+      {
+        "text": "nome?",
+        "start": 5,
+        "end": 5.4
+      }
+    ]
+  },
+  {
+    "code": "it",
+    "language": "Italian",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "Ciao, sono Chit. Cominciamo. Come ti chiami?",
+    "seconds": 4.76,
+    "file": "/audio/chit/it.mp3",
+    "generatedAt": "2026-09-22T15:37:48.716Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Ciao, ",
+        "start": 0.3,
+        "end": 0.8
+      },
+      {
+        "text": "sono ",
+        "start": 1,
+        "end": 1.3
+      },
+      {
+        "text": "Chit. ",
+        "start": 1.3,
+        "end": 1.7
+      },
+      {
+        "text": "Cominciamo. ",
+        "start": 2.3,
+        "end": 2.8
+      },
+      {
+        "text": "Come ",
+        "start": 3.7,
+        "end": 3.9
+      },
+      {
+        "text": "ti ",
+        "start": 3.9,
+        "end": 4.1
+      },
+      {
+        "text": "chiami?",
+        "start": 4.1,
+        "end": 4.4
+      }
+    ]
+  },
+  {
+    "code": "ar",
+    "language": "Arabic",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "مرحبًا، أنا Chit. هيا نبدأ. ما اسمك؟",
+    "seconds": 5.8,
+    "file": "/audio/chit/ar.mp3",
+    "generatedAt": "2026-09-22T15:37:48.752Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "مرحبًا، ",
+        "start": 0.3,
+        "end": 0.9
+      },
+      {
+        "text": "أنا ",
+        "start": 1.6,
+        "end": 1.9
+      },
+      {
+        "text": "Chit. ",
+        "start": 1.9,
+        "end": 2.4
+      },
+      {
+        "text": "هيا ",
+        "start": 3.2,
+        "end": 3.5
+      },
+      {
+        "text": "نبدأ. ",
+        "start": 3.5,
+        "end": 4
+      },
+      {
+        "text": "ما ",
+        "start": 4.8,
+        "end": 5
+      },
+      {
+        "text": "اسمك؟",
+        "start": 5,
+        "end": 5.4
+      }
+    ]
+  },
+  {
+    "code": "hi",
+    "language": "Hindi",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "नमस्ते, मैं चिट हूँ। चलिए शुरू करते हैं। आपका नाम क्या है?",
+    "seconds": 6.08,
+    "file": "/audio/chit/hi.mp3",
+    "generatedAt": "2026-09-22T15:35:25.980Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "नमस्ते, ",
+        "start": 0.3,
+        "end": 0.7
+      },
+      {
+        "text": "मैं ",
+        "start": 1.4,
+        "end": 1.8
+      },
+      {
+        "text": "चिट ",
+        "start": 1.8,
+        "end": 2
+      },
+      {
+        "text": "हूँ। ",
+        "start": 2,
+        "end": 2.1
+      },
+      {
+        "text": "चलिए ",
+        "start": 3,
+        "end": 3.3
+      },
+      {
+        "text": "शुरू ",
+        "start": 3.3,
+        "end": 3.6
+      },
+      {
+        "text": "करते ",
+        "start": 3.6,
+        "end": 3.8
+      },
+      {
+        "text": "हैं। ",
+        "start": 3.8,
+        "end": 4
+      },
+      {
+        "text": "आपका ",
+        "start": 4.8,
+        "end": 5
+      },
+      {
+        "text": "नाम ",
+        "start": 5,
+        "end": 5.4
+      },
+      {
+        "text": "क्या ",
+        "start": 5.4,
+        "end": 5.6
+      },
+      {
+        "text": "है?",
+        "start": 5.6,
+        "end": 5.8
+      }
+    ]
+  },
+  {
+    "code": "da",
+    "language": "Danish",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "Hej, jeg hedder Chit. Lad os komme i gang. Hvad hedder du?",
+    "seconds": 4.84,
+    "file": "/audio/chit/da.mp3",
+    "generatedAt": "2026-09-22T15:37:48.787Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Hej, ",
+        "start": 0.3,
+        "end": 0.7
+      },
+      {
+        "text": "jeg ",
+        "start": 1.1,
+        "end": 1.2
+      },
+      {
+        "text": "hedder ",
+        "start": 1.2,
+        "end": 1.4
+      },
+      {
+        "text": "Chit. ",
+        "start": 1.4,
+        "end": 1.8
+      },
+      {
+        "text": "Lad ",
+        "start": 2.4,
+        "end": 2.5
+      },
+      {
+        "text": "os ",
+        "start": 2.5,
+        "end": 2.6
+      },
+      {
+        "text": "komme ",
+        "start": 2.6,
+        "end": 2.9
+      },
+      {
+        "text": "i ",
+        "start": 2.9,
+        "end": 2.9
+      },
+      {
+        "text": "gang. ",
+        "start": 2.9,
+        "end": 3.1
+      },
+      {
+        "text": "Hvad ",
+        "start": 4.1,
+        "end": 4.2
+      },
+      {
+        "text": "hedder ",
+        "start": 4.2,
+        "end": 4.4
+      },
+      {
+        "text": "du?",
+        "start": 4.4,
+        "end": 4.6
+      }
+    ]
+  },
+  {
+    "code": "nl",
+    "language": "Dutch",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "Hoi, ik ben Chit. Laten we beginnen. Hoe heet je?",
+    "seconds": 5.72,
+    "file": "/audio/chit/nl.mp3",
+    "generatedAt": "2026-09-22T15:35:40.743Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Hoi, ",
+        "start": 0.3,
+        "end": 0.6
+      },
+      {
+        "text": "ik ",
+        "start": 1.1,
+        "end": 1.2
+      },
+      {
+        "text": "ben ",
+        "start": 1.2,
+        "end": 1.4
+      },
+      {
+        "text": "Chit. ",
+        "start": 1.4,
+        "end": 1.8
+      },
+      {
+        "text": "Laten ",
+        "start": 2.8,
+        "end": 3.1
+      },
+      {
+        "text": "we ",
+        "start": 3.1,
+        "end": 3.2
+      },
+      {
+        "text": "beginnen. ",
+        "start": 3.2,
+        "end": 3.6
+      },
+      {
+        "text": "Hoe ",
+        "start": 4.8,
+        "end": 4.9
+      },
+      {
+        "text": "heet ",
+        "start": 4.9,
+        "end": 5.3
+      },
+      {
+        "text": "je?",
+        "start": 5.3,
+        "end": 5.4
+      }
+    ]
+  },
+  {
+    "code": "el",
+    "language": "Greek",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "Γεια σου, είμαι το Chit. Ας ξεκινήσουμε. Πώς σε λένε;",
+    "seconds": 5.6,
+    "file": "/audio/chit/el.mp3",
+    "generatedAt": "2026-09-22T15:38:33.438Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Γεια ",
+        "start": 0.3,
+        "end": 0.8
+      },
+      {
+        "text": "σου, ",
+        "start": 0.8,
+        "end": 1
+      },
+      {
+        "text": "είμαι ",
+        "start": 1.5,
+        "end": 1.8
+      },
+      {
+        "text": "το ",
+        "start": 1.8,
+        "end": 1.9
+      },
+      {
+        "text": "Chit. ",
+        "start": 1.9,
+        "end": 2.3
+      },
+      {
+        "text": "Ας ",
+        "start": 3,
+        "end": 3.2
+      },
+      {
+        "text": "ξεκινήσουμε. ",
+        "start": 3.2,
+        "end": 4
+      },
+      {
+        "text": "Πώς ",
+        "start": 4.6,
+        "end": 4.8
+      },
+      {
+        "text": "σε ",
+        "start": 4.8,
+        "end": 5
+      },
+      {
+        "text": "λένε;",
+        "start": 5,
+        "end": 5.3
+      }
+    ]
+  },
+  {
+    "code": "he",
+    "language": "Hebrew",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "היי, אני Chit. בואו נתחיל. איך קוראים לך?",
+    "seconds": 5.12,
+    "file": "/audio/chit/he.mp3",
+    "generatedAt": "2026-09-22T15:38:08.306Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "היי, ",
+        "start": 0.3,
+        "end": 0.7
+      },
+      {
+        "text": "אני ",
+        "start": 1,
+        "end": 1.4
+      },
+      {
+        "text": "Chit. ",
+        "start": 1.4,
+        "end": 1.9
+      },
+      {
+        "text": "בואו ",
+        "start": 2.6,
+        "end": 2.8
+      },
+      {
+        "text": "נתחיל. ",
+        "start": 2.8,
+        "end": 3.4
+      },
+      {
+        "text": "איך ",
+        "start": 3.9,
+        "end": 4.1
+      },
+      {
+        "text": "קוראים ",
+        "start": 4.1,
+        "end": 4.4
+      },
+      {
+        "text": "לך?",
+        "start": 4.4,
+        "end": 4.8
+      }
+    ]
+  },
+  {
+    "code": "id",
+    "language": "Indonesian",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "Hai, aku Chit. Ayo kita mulai. Siapa namamu?",
+    "seconds": 5.48,
+    "file": "/audio/chit/id.mp3",
+    "generatedAt": "2026-09-22T15:36:01.149Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Hai, ",
+        "start": 0.2,
+        "end": 0.8
+      },
+      {
+        "text": "aku ",
+        "start": 1.2,
+        "end": 1.5
+      },
+      {
+        "text": "Chit. ",
+        "start": 1.5,
+        "end": 1.8
+      },
+      {
+        "text": "Ayo ",
+        "start": 2.5,
+        "end": 2.8
+      },
+      {
+        "text": "kita ",
+        "start": 2.9,
+        "end": 3.1
+      },
+      {
+        "text": "mulai. ",
+        "start": 3.1,
+        "end": 3.5
+      },
+      {
+        "text": "Siapa ",
+        "start": 4.3,
+        "end": 4.6
+      },
+      {
+        "text": "namamu?",
+        "start": 4.6,
+        "end": 5.1
+      }
+    ]
+  },
+  {
+    "code": "nb",
+    "language": "Norwegian",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "Hei, jeg heter Chit. La oss komme i gang. Hva heter du?",
+    "seconds": 6,
+    "file": "/audio/chit/nb.mp3",
+    "generatedAt": "2026-09-22T15:38:33.534Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Hei, ",
+        "start": 0.3,
+        "end": 0.6
+      },
+      {
+        "text": "jeg ",
+        "start": 1.3,
+        "end": 1.6
+      },
+      {
+        "text": "heter ",
+        "start": 1.6,
+        "end": 1.9
+      },
+      {
+        "text": "Chit. ",
+        "start": 1.9,
+        "end": 2.4
+      },
+      {
+        "text": "La ",
+        "start": 3.3,
+        "end": 3.4
+      },
+      {
+        "text": "oss ",
+        "start": 3.4,
+        "end": 3.6
+      },
+      {
+        "text": "komme ",
+        "start": 3.6,
+        "end": 3.8
+      },
+      {
+        "text": "i ",
+        "start": 3.8,
+        "end": 3.8
+      },
+      {
+        "text": "gang. ",
+        "start": 3.8,
+        "end": 4.1
+      },
+      {
+        "text": "Hva ",
+        "start": 5.1,
+        "end": 5.2
+      },
+      {
+        "text": "heter ",
+        "start": 5.2,
+        "end": 5.4
+      },
+      {
+        "text": "du?",
+        "start": 5.4,
+        "end": 5.7
+      }
+    ]
+  },
+  {
+    "code": "fa",
+    "language": "Persian",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "سلام، من چیتم. بیاین شروع کنیم. اسمتون چیه؟",
+    "seconds": 5.56,
+    "file": "/audio/chit/fa.mp3",
+    "generatedAt": "2026-09-22T15:36:14.686Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "سلام، ",
+        "start": 0.3,
+        "end": 0.8
+      },
+      {
+        "text": "من ",
+        "start": 1.3,
+        "end": 1.6
+      },
+      {
+        "text": "چیتم. ",
+        "start": 1.6,
+        "end": 2.1
+      },
+      {
+        "text": "بیاین ",
+        "start": 2.8,
+        "end": 3.1
+      },
+      {
+        "text": "شروع ",
+        "start": 3.1,
+        "end": 3.3
+      },
+      {
+        "text": "کنیم. ",
+        "start": 3.3,
+        "end": 3.8
+      },
+      {
+        "text": "اسمتون ",
+        "start": 4.3,
+        "end": 4.8
+      },
+      {
+        "text": "چیه؟",
+        "start": 4.8,
+        "end": 5.3
+      }
+    ]
+  },
+  {
+    "code": "pl",
+    "language": "Polish",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "Cześć, jestem Chit. Zaczynajmy. Jak masz na imię?",
+    "seconds": 5.68,
+    "file": "/audio/chit/pl.mp3",
+    "generatedAt": "2026-09-22T15:38:08.371Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Cześć, ",
+        "start": 0.2,
+        "end": 1.1
+      },
+      {
+        "text": "jestem ",
+        "start": 1.2,
+        "end": 1.7
+      },
+      {
+        "text": "Chit. ",
+        "start": 1.7,
+        "end": 2
+      },
+      {
+        "text": "Zaczynajmy. ",
+        "start": 2.9,
+        "end": 3.6
+      },
+      {
+        "text": "Jak ",
+        "start": 4.4,
+        "end": 4.6
+      },
+      {
+        "text": "masz ",
+        "start": 4.6,
+        "end": 4.9
+      },
+      {
+        "text": "na ",
+        "start": 4.9,
+        "end": 5
+      },
+      {
+        "text": "imię?",
+        "start": 5,
+        "end": 5.4
+      }
+    ]
+  },
+  {
+    "code": "ru",
+    "language": "Russian",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "Привет, я Чит. Давай начнём. Как тебя зовут?",
+    "seconds": 4.88,
+    "file": "/audio/chit/ru.mp3",
+    "generatedAt": "2026-09-22T15:36:27.790Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Привет, ",
+        "start": 0.3,
+        "end": 1
+      },
+      {
+        "text": "я ",
+        "start": 1.2,
+        "end": 1.4
+      },
+      {
+        "text": "Чит. ",
+        "start": 1.4,
+        "end": 1.8
+      },
+      {
+        "text": "Давай ",
+        "start": 2.3,
+        "end": 2.6
+      },
+      {
+        "text": "начнём. ",
+        "start": 2.6,
+        "end": 3.1
+      },
+      {
+        "text": "Как ",
+        "start": 3.7,
+        "end": 3.9
+      },
+      {
+        "text": "тебя ",
+        "start": 3.9,
+        "end": 4.2
+      },
+      {
+        "text": "зовут?",
+        "start": 4.2,
+        "end": 4.6
+      }
+    ]
+  },
+  {
+    "code": "sv",
+    "language": "Swedish",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "Hej, jag heter Chit. Då kör vi igång. Vad heter du?",
+    "seconds": 5.96,
+    "file": "/audio/chit/sv.mp3",
+    "generatedAt": "2026-09-22T15:36:35.957Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Hej, ",
+        "start": 0.3,
+        "end": 0.8
+      },
+      {
+        "text": "jag ",
+        "start": 1.2,
+        "end": 1.4
+      },
+      {
+        "text": "heter ",
+        "start": 1.4,
+        "end": 1.8
+      },
+      {
+        "text": "Chit. ",
+        "start": 1.8,
+        "end": 2.3
+      },
+      {
+        "text": "Då ",
+        "start": 3.2,
+        "end": 3.3
+      },
+      {
+        "text": "kör ",
+        "start": 3.3,
+        "end": 3.5
+      },
+      {
+        "text": "vi ",
+        "start": 3.5,
+        "end": 3.6
+      },
+      {
+        "text": "igång. ",
+        "start": 3.6,
+        "end": 4
+      },
+      {
+        "text": "Vad ",
+        "start": 4.9,
+        "end": 5
+      },
+      {
+        "text": "heter ",
+        "start": 5,
+        "end": 5.3
+      },
+      {
+        "text": "du?",
+        "start": 5.3,
+        "end": 5.6
+      }
+    ]
+  },
+  {
+    "code": "th",
+    "language": "Thai",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "สวัสดีค่ะ ชื่อชิตนะคะ มาเริ่มกันเลย คุณชื่ออะไรคะ?",
+    "seconds": 5.8,
+    "file": "/audio/chit/th.mp3",
+    "generatedAt": "2026-09-22T15:36:43.567Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "สวัสดี",
+        "start": 0.3,
+        "end": 0.7
+      },
+      {
+        "text": "ค่ะ ",
+        "start": 0.7,
+        "end": 1.3
+      },
+      {
+        "text": "ชื่อ",
+        "start": 1.5,
+        "end": 1.8
+      },
+      {
+        "text": "ชิต",
+        "start": 1.8,
+        "end": 2.2
+      },
+      {
+        "text": "นะคะ ",
+        "start": 2.2,
+        "end": 2.6
+      },
+      {
+        "text": "มา",
+        "start": 3.2,
+        "end": 3.3
+      },
+      {
+        "text": "เริ่ม",
+        "start": 3.3,
+        "end": 3.5
+      },
+      {
+        "text": "กัน",
+        "start": 3.5,
+        "end": 3.6
+      },
+      {
+        "text": "เลย ",
+        "start": 3.6,
+        "end": 4
+      },
+      {
+        "text": "คุณ",
+        "start": 4.5,
+        "end": 4.7
+      },
+      {
+        "text": "ชื่อ",
+        "start": 4.7,
+        "end": 4.9
+      },
+      {
+        "text": "อะไร",
+        "start": 4.9,
+        "end": 5.1
+      },
+      {
+        "text": "คะ?",
+        "start": 5.1,
+        "end": 5.4
+      }
+    ]
+  },
+  {
+    "code": "tr",
+    "language": "Turkish",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "Merhaba, ben Chit. Hadi başlayalım. Adın ne?",
+    "seconds": 4.36,
+    "file": "/audio/chit/tr.mp3",
+    "generatedAt": "2026-09-22T15:38:33.606Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Merhaba, ",
+        "start": 0.3,
+        "end": 0.8
+      },
+      {
+        "text": "ben ",
+        "start": 1.3,
+        "end": 1.5
+      },
+      {
+        "text": "Chit. ",
+        "start": 1.5,
+        "end": 1.8
+      },
+      {
+        "text": "Hadi ",
+        "start": 2.3,
+        "end": 2.5
+      },
+      {
+        "text": "başlayalım. ",
+        "start": 2.5,
+        "end": 3
+      },
+      {
+        "text": "Adın ",
+        "start": 3.6,
+        "end": 3.8
+      },
+      {
+        "text": "ne?",
+        "start": 3.8,
+        "end": 4
+      }
+    ]
+  },
+  {
+    "code": "uk",
+    "language": "Ukrainian",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "Привіт, я Чіт. Почнімо. Як тебе звати?",
+    "seconds": 5.36,
+    "file": "/audio/chit/uk.mp3",
+    "generatedAt": "2026-09-22T15:36:54.021Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Привіт, ",
+        "start": 0.3,
+        "end": 0.8
+      },
+      {
+        "text": "я ",
+        "start": 1.4,
+        "end": 1.6
+      },
+      {
+        "text": "Чіт. ",
+        "start": 1.6,
+        "end": 2.1
+      },
+      {
+        "text": "Почнімо. ",
+        "start": 2.8,
+        "end": 3.3
+      },
+      {
+        "text": "Як ",
+        "start": 4.1,
+        "end": 4.4
+      },
+      {
+        "text": "тебе ",
+        "start": 4.4,
+        "end": 4.6
+      },
+      {
+        "text": "звати?",
+        "start": 4.6,
+        "end": 5
+      }
+    ]
+  },
+  {
+    "code": "vi",
+    "language": "Vietnamese",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "Chào bạn, mình là Chit. Cùng bắt đầu nhé. Bạn tên là gì?",
+    "seconds": 6.56,
+    "file": "/audio/chit/vi.mp3",
+    "generatedAt": "2026-09-22T15:37:02.554Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Chào ",
+        "start": 0.3,
+        "end": 0.5
+      },
+      {
+        "text": "bạn, ",
+        "start": 0.5,
+        "end": 0.8
+      },
+      {
+        "text": "mình ",
+        "start": 1.7,
+        "end": 1.9
+      },
+      {
+        "text": "là ",
+        "start": 1.9,
+        "end": 2
+      },
+      {
+        "text": "Chit. ",
+        "start": 2,
+        "end": 2.3
+      },
+      {
+        "text": "Cùng ",
+        "start": 3.6,
+        "end": 3.8
+      },
+      {
+        "text": "bắt ",
+        "start": 3.8,
+        "end": 3.9
+      },
+      {
+        "text": "đầu ",
+        "start": 3.9,
+        "end": 4.1
+      },
+      {
+        "text": "nhé. ",
+        "start": 4.1,
+        "end": 4.3
+      },
+      {
+        "text": "Bạn ",
+        "start": 5.4,
+        "end": 5.6
+      },
+      {
+        "text": "tên ",
+        "start": 5.6,
+        "end": 5.8
+      },
+      {
+        "text": "là ",
+        "start": 5.8,
+        "end": 5.9
+      },
+      {
+        "text": "gì?",
+        "start": 5.9,
+        "end": 6.2
+      }
+    ]
+  }
+]

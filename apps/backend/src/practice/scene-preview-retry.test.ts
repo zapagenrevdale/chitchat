@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createGeminiProvider } from "./gemini";
+import { providerErrorStatus } from "./provider-error";
 
 const request = {
   place: { name: "Cafe", description: "A neighborhood cafe." },
@@ -71,7 +72,7 @@ describe("scene preview provider retries", () => {
       new AbortController().signal
     );
     await Promise.all([
-      expect(result).rejects.toMatchObject({ status: 429 }),
+      expect(result?.catch(providerErrorStatus)).resolves.toBe(429),
       vi.runAllTimersAsync(),
     ]);
     expect(fetch).toHaveBeenCalledTimes(4);
@@ -87,7 +88,7 @@ describe("scene preview provider retries", () => {
         request,
         new AbortController().signal
       )
-    ).rejects.toMatchObject({ status: 400 });
+    ).rejects.toMatchObject({ statusCode: 400 });
     expect(fetch).toHaveBeenCalledOnce();
   });
 });

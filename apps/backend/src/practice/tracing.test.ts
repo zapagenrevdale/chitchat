@@ -47,6 +47,37 @@ describe("practice traces", () => {
     vi.useRealTimers();
   });
 
+  it("records bounded raw Live usage without inventing cost totals", async () => {
+    const session = await provision();
+    const event = {
+      type: "usage",
+      usage: {
+        promptTokenCount: 100,
+        responseTokenCount: 30,
+        promptTokensDetails: [{ modality: "AUDIO", tokenCount: 90 }],
+      },
+      sequence: 0,
+      timestamp: Date.now(),
+    };
+    const batch = practiceTraceBatchSchema.parse({
+      tracingToken: session.tracingToken,
+      events: [event],
+    });
+    expect(tracing.ingest(batch)).toBe("accepted");
+    const span = exporter
+      .getFinishedSpans()
+      .find(({ name }) => name === "live.usage");
+    expect(span?.attributes["langfuse.observation.input"]).toContain(
+      '"promptTokenCount":100'
+    );
+    expect(
+      practiceTraceBatchSchema.safeParse({
+        ...batch,
+        events: [{ ...event, usage: { promptTokenCount: -1 } }],
+      }).success
+    ).toBeFalsy();
+  });
+
   it("links provisioning, transcripts, rejected and accepted tools, and closure without exporting credentials", async () => {
     const session = await provision();
     const batch = practiceTraceBatchSchema.parse({

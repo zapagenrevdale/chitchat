@@ -1,0 +1,14 @@
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/worktree
+   • Running worktree:smoke in 1 packages
+   • Remote caching disabled
+
+@chitchat/worktree:worktree:smoke: cache bypass, force executing 6e7de230a5d3596e
+@chitchat/worktree:worktree:smoke: $ bun src/cli.ts smoke
+@chitchat/worktree:worktree:smoke: Smoke checks passed for amber: database schema, web, API health, CORS, email preview.
+
+ Tasks:    1 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    1.163s 
+

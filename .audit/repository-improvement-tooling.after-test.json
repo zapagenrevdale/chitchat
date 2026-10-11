@@ -1,0 +1,466 @@
+{
+  "id": "3KX00VfFYYKG6RPcaDsVEazUVnA",
+  "version": "1",
+  "turboVersion": "2.10.12",
+  "monorepo": true,
+  "globalCacheInputs": {
+    "rootKey": "I can’t see ya, but I know you’re here",
+    "files": {
+      "oxfmt.config.ts": "45bce5e06de2da5edae29c358c70ef6bcd7ed1ef",
+      "oxlint.config.ts": "ab5fe47ee91a7bcdbc9d8e22be8960c7ed27f9c5",
+      "tsconfig.base.json": "cdadbe5c835c8dd46c4929d49008e010b2c8362e"
+    },
+    "hashOfExternalDependencies": "146b244a3cd30a9c",
+    "hashOfInternalDependencies": "",
+    "environmentVariables": {
+      "specified": {
+        "env": [],
+        "passThroughEnv": [
+          "CHITCHAT_WORKTREE_HOME",
+          "DOCKER_*",
+          "NODE_EXTRA_CA_CERTS",
+          "PORTLESS",
+          "PORTLESS_*",
+          "SSH_AUTH_SOCK",
+          "XDG_STATE_HOME"
+        ]
+      },
+      "configured": [],
+      "inferred": [],
+      "passthrough": [
+        "SSH_AUTH_SOCK=a2eb7ad045965385f2e9010849214ef6d929fe878af9b818a9f5ffe2db0c82de"
+      ]
+    },
+    "engines": null
+  },
+  "packages": [
+    "@chitchat/backend"
+  ],
+  "envMode": "strict",
+  "frameworkInference": true,
+  "tasks": [
+    {
+      "taskId": "@chitchat/backend#test",
+      "task": "test",
+      "package": "@chitchat/backend",
+      "hash": "7930b6b7dd6c2532",
+      "inputs": {
+        "../web/public/images/personas/ATTRIBUTION.md": "647f3d054afc91ca26a8d23f588d3b038b60fa8f",
+        "../web/public/images/personas/adrian.svg": "3661dd516bc3340e601c3d65f1637d618f7493ac",
+        "../web/public/images/personas/aisha.svg": "eea06623c815be62c2c042e733c38c272a556212",
+        "../web/public/images/personas/alex.svg": "4d507862950652e577bd534f025f2f7cbd0ad244",
+        "../web/public/images/personas/amara.svg": "ce4d88b08048f411192274cfcf09db3c603e57b6",
+        "../web/public/images/personas/arun.svg": "8a808c90bbccb46633c8418835c8a7a640c86d3c",
+        "../web/public/images/personas/ben.svg": "50539a9ab22ed78e1eca682b5428771f4c898bc9",
+        "../web/public/images/personas/chloe.svg": "c475d05a51b465a08695138b4355d0de250b7963",
+        "../web/public/images/personas/dani.svg": "5d3170a5c65517d97d704263c800f746bd309d2f",
+        "../web/public/images/personas/daniel.svg": "598e6e18fc6d34d33874038d95c17e03481246ed",
+        "../web/public/images/personas/elena.svg": "15f2d2a6bc4e253ea24e5d39bf0d618978a1e542",
+        "../web/public/images/personas/ethan.svg": "05db0217cac76c876d29bc8721bf54d3b0fa808e",
+        "../web/public/images/personas/felix.svg": "5077a090414184620f4f5c39ea520d1a5d7f1c5b",
+        "../web/public/images/personas/grace.svg": "2dfeedfa0a09ab39c6c704a7f5e96ad63946c053",
+        "../web/public/images/personas/isaac.svg": "2f4571a20da1e5291c68eef483e98b6db4ee06ad",
+        "../web/public/images/personas/jamie.svg": "d55690cbda92dbf59a3704dbba6eb96a3e421ec3",
+        "../web/public/images/personas/julian.svg": "00995c74123d5d0d53b98f0940bfec2edc8e8603",
+        "../web/public/images/personas/leo.svg": "f1e91769130132597cfa3e3b1cf49d8613adce90",
+        "../web/public/images/personas/lily.svg": "eaa49c562af35276814f2a476d41f32947c1b3c8",
+        "../web/public/images/personas/lucy.svg": "71492656355294bed0f164231ceb31eba7500f45",
+        "../web/public/images/personas/marcus.svg": "0816383118e1cd122c76dd3d3fd4dbf195ce52c3",
+        "../web/public/images/personas/maya.svg": "6cbcc45f833f9f5c901369d975f6f64b5d180808",
+        "../web/public/images/personas/noah.svg": "3ba13a6622e4085e2d4d2afe6b95027bf14c14eb",
+        "../web/public/images/personas/nora.svg": "f2d6f733fc37ea19caea7e646fd7186ea472f583",
+        "../web/public/images/personas/owen.svg": "b0054d2d048216082e85b489e89f08e8b78be59f",
+        "../web/public/images/personas/ryan.svg": "a850f663f7ae23314f7b9bc687e057c60876ee05",
+        "../web/public/images/personas/sam.svg": "c31cf73a2862a30d64efb6f024ef67e92bd555e4",
+        "../web/public/images/personas/sofia.svg": "e07619ab561d86ddd0d8e0f75c623174693a6bb5",
+        "../web/public/images/personas/theo.svg": "f8a5d23b03b8697d39a03a4601a75330f67212d7",
+        "../web/public/images/personas/vera.svg": "e7f1a3e7149ee17cac80c6ecded73017cff45b2a",
+        "../web/public/images/personas/zoe.svg": "c557e45726d0a905ef75c4b4fefc22a349558994",
+        ".env.example": "601e5917d601a5b68d7b0007ecf61b0cf0e4f140",
+        "Dockerfile": "281f6b87fea00a487e3f951043be936b2ba135d3",
+        "package.json": "be3b0e610cd6a4209123e6a21d5d10668af49ad2",
+        "portless.json": "9cbc311e339470d2c0f30dadea18843b9070e2d4",
+        "railway.json": "42d26466902a4801da446ea96aa59fe1082e9411",
+        "src/app.test.ts": "2400025f87b9e70474123962d40ca79d58b032db",
+        "src/app.ts": "3a6f7acd2e05186088ab2603a9663a8e437c2474",
+        "src/auth.ts": "a50b4e7a54bad3130f6268354f2d6e4c28c5ea91",
+        "src/env.ts": "f3a474c1dd54e003471095f960f0c647b9a23e4c",
+        "src/index.ts": "9e230638c672a722b5ceebd13b1ff463bc5a76ac",
+        "src/practice/catalog.ts": "debcf61e25905ae3d070fbdf697271d1194dd76d",
+        "src/practice/conversation-modes.test.ts": "7c4bdeaf551457c0a5bf306b67dc1cf0ae751a8e",
+        "src/practice/conversation-modes.ts": "a4a1673664a735fe318a5ac1f9c927cb32497734",
+        "src/practice/conversation-provider.test.ts": "7d78b6c6bcf902d81de271bd8b0b814c2bb0adc6",
+        "src/practice/conversation-request.test.ts": "d984152930cc26321078c24ea7e24728e74acb17",
+        "src/practice/conversation-routes.ts": "4338353f4d15b67bb57a58863f77d68d0be4c0c0",
+        "src/practice/custom-place.ts": "2fa41f41d75c3cf01a1f741ccf5a336c533c9f11",
+        "src/practice/custom-situation.ts": "bf74e07753153aa27b8677d7d7b6bf4edd1960b0",
+        "src/practice/feedback.test.ts": "0664647c4c45b07e80a7c0e80dd408fcb75d12fc",
+        "src/practice/feedback.ts": "1ef75418d71a88c45db27f337cc57e68d491c659",
+        "src/practice/gemini.test.ts": "3849705ab3f61781c4d81b2f77e3543d9f2bd452",
+        "src/practice/gemini.ts": "edfdce8d59d6a086b8966c4c2ef1bf59a2bd0b63",
+        "src/practice/generate-avatars.ts": "fb4d6e9ab95e78b48ccc012e350bfbd52361119a",
+        "src/practice/generate-chit-introductions.ts": "78dd309c5aeeb6d7dce135ab478180a122dc191c",
+        "src/practice/generate-introductions.ts": "a9b0e583aff0ae6630d80c4ceed7c7ec153c6eac",
+        "src/practice/generate-places.ts": "ebf061a5b663eb6b3122f5c01d0542cf401bc933",
+        "src/practice/introduction-timing.test.ts": "3d6fe6be3b6426b025dac5354cadb1af4dff58c0",
+        "src/practice/introduction-timing.ts": "471d7655e1419b7f3f7ff86c5e5eb984b38f542f",
+        "src/practice/onboarding-benefits-contract.test.ts": "d6a157684f1a9979b2bf2a3d23ad5d61f2648e08",
+        "src/practice/onboarding-benefits.test.ts": "1ba1cbae431df5c75e3c1bdc3f22cdaa594c727a",
+        "src/practice/onboarding-benefits.ts": "857774fb01cdb320ef5585dab64969776c682f29",
+        "src/practice/onboarding-completions.test.ts": "b55a3e115c49d3a689cc4d4467d0da9dcf780857",
+        "src/practice/onboarding-live-routes.ts": "c5cb4f8046274ef11ae25308a320e3faed569cd7",
+        "src/practice/onboarding-live.test.ts": "c737e39fa65b77c8f0e92da21bbf9e876177e8d1",
+        "src/practice/onboarding-live.ts": "22830170e4ed8cd536104f37a0b63710ac1285f8",
+        "src/practice/onboarding-provider.test.ts": "340460d3564e233cc8ba70759bc4cb4cc0d4fba6",
+        "src/practice/onboarding-turns.test.ts": "5808be368c1ece7ef3e78b12a1d8c77b6f8fee38",
+        "src/practice/onboarding.test.ts": "ef132bb9421326b6484d87eaf9a9a4cee7c2fefd",
+        "src/practice/onboarding.ts": "b1faf015ef1d54fa7c519596bfbbaef2a6c658d6",
+        "src/practice/persona-avatars.ts": "b7fa059947851e8d4d0450be82164f2f621f7c9d",
+        "src/practice/persona-recommendations.test.ts": "0391e0a8843deb2f5a98c66b06aa64d90c5206f0",
+        "src/practice/personas.ts": "7fe901a414ba37978542c018eb87523507f33c1a",
+        "src/practice/provider-error.ts": "5e9f8890dacf2c8c52c03987bf83698a0f7dc86a",
+        "src/practice/render-persona-avatar.ts": "b7685607d32c110dbfd8d6aa74642d4db41937a1",
+        "src/practice/review.test.ts": "ebd343f2985575ca0d7f01c097853d1cbbc06fbe",
+        "src/practice/review.ts": "bf1c9b5819d82213a79b58566c289d60414ea9e6",
+        "src/practice/routes.test.ts": "f8d95a286e999a72fb1f7a269d085ba970ed24fd",
+        "src/practice/routes.ts": "23edd50fc9322803486ca49b337277872f6e84d2",
+        "src/practice/scene-preview-retry.test.ts": "9d2591bea564d7392ef1120a048dacab3455e8df",
+        "src/practice/scene-preview.test.ts": "e0f79d5525a0279cb1cfc5d9c04e0d0ade3a8fc2",
+        "src/practice/setup-routes.test.ts": "e6aef8ce37a89b6d912be4af86c0bf5928fe7368",
+        "src/practice/setup.test.ts": "6a09e42640b2d8edf941e7c4de261be10162e49f",
+        "src/practice/setup.ts": "d3326de6f1f423dc19e92da43cc5386da59dd2db",
+        "src/practice/speech.ts": "e886c2d7c0e18719617b265b429275ced6758a4b",
+        "src/practice/synthesize-speech.ts": "34c938520140925d4d5a9feb3c0814e65b605f15",
+        "src/practice/text-model.test-helper.ts": "122470498523322b42a9ecd46add5ce02b77134f",
+        "src/practice/tracing.test.ts": "e7e56550616cd0aa4dc0c62271817fd555e1c911",
+        "src/practice/tracing.ts": "157adf726d9f740327f86ad689d9ec258aae11bc",
+        "src/practice/transcription.test.ts": "a7d65a1a6120c21d800d67f1b1c2b308c3b608db",
+        "src/practice/transcription.ts": "4a9be4c921e143f215f9eed61a98d0ed68299a21",
+        "src/telemetry.ts": "18c55d81e06f20f87ca493844a6f12bfa009f54f",
+        "tsconfig.json": "a0ff52b2029b7efafefa6c1c222ec62240804a42",
+        "turbo.json": "2e1d5caa46301901dd3130b05d1db710399def68"
+      },
+      "hashOfExternalDependencies": "4ebcb6443048399a",
+      "cache": {
+        "local": false,
+        "remote": false,
+        "status": "MISS",
+        "timeSaved": 0
+      },
+      "command": "vitest run",
+      "cliArguments": [],
+      "outputs": null,
+      "excludedOutputs": null,
+      "logFile": "apps/backend/.turbo/turbo-test.log",
+      "directory": "apps/backend",
+      "dependencies": [
+        "@chitchat/contracts#build",
+        "@chitchat/db#build",
+        "@chitchat/email#build",
+        "@chitchat/worktree#build"
+      ],
+      "dependents": [],
+      "with": [],
+      "resolvedTaskDefinition": {
+        "outputs": [],
+        "cache": true,
+        "dependsOn": [
+          "^build"
+        ],
+        "inputs": [
+          "../../apps/web/public/images/personas/**"
+        ],
+        "outputLogs": "full",
+        "persistent": false,
+        "interruptible": false,
+        "env": [],
+        "passThroughEnv": null,
+        "interactive": false
+      },
+      "expandedOutputs": [],
+      "framework": "",
+      "envMode": "strict",
+      "environmentVariables": {
+        "specified": {
+          "env": [],
+          "passThroughEnv": null
+        },
+        "configured": [],
+        "inferred": [],
+        "passthrough": null
+      }
+    },
+    {
+      "taskId": "@chitchat/contracts#build",
+      "task": "build",
+      "package": "@chitchat/contracts",
+      "hash": "ca2ee1b0bceadeb7",
+      "inputs": {
+        "package.json": "a0c79a18872d9608020005686edff5459fb3fa79",
+        "src/conversation-goals.ts": "0a5a04c0a7e482fc4a937e74923eab18faf8b6ba",
+        "src/index.ts": "41029d40138b4680012f8d97e606c33d7763056e",
+        "src/languages.ts": "db0612461f8b35ef59a77be77463bac467a4061e",
+        "src/onboarding.ts": "48dd737c43822928c3111b70e03b9216fb61cc6c",
+        "src/practice.ts": "468e3b3f7f51f3cd2587f3ad0a46738b305dfcd7",
+        "src/preset-places.ts": "7b52242b93975e2545c6f6bdb81c8a63d2d33c2f",
+        "tsconfig.json": "008c9456ff959dd979d0660fd511c0b2a3e40ab1",
+        "turbo.json": "e3760f877cfba829edcc06f77d836e980c0e1191"
+      },
+      "hashOfExternalDependencies": "1a2833e6356aaf2e",
+      "cache": {
+        "local": true,
+        "remote": false,
+        "status": "HIT",
+        "source": "LOCAL",
+        "timeSaved": 92,
+        "sha": "abc5fe1cde17790d1a8522a0d083eae6b372eded",
+        "dirtyHash": "82ead79392103e432c1a149c54a9a7435da6932352513e5f30acceb1adbe3f8a"
+      },
+      "command": "tsc --noEmit",
+      "cliArguments": [],
+      "outputs": null,
+      "excludedOutputs": null,
+      "logFile": "packages/contracts/.turbo/turbo-build.log",
+      "directory": "packages/contracts",
+      "dependencies": [],
+      "dependents": [
+        "@chitchat/backend#test"
+      ],
+      "with": [],
+      "resolvedTaskDefinition": {
+        "outputs": [],
+        "cache": true,
+        "dependsOn": [
+          "^build"
+        ],
+        "inputs": [],
+        "outputLogs": "full",
+        "persistent": false,
+        "interruptible": false,
+        "env": [],
+        "passThroughEnv": null,
+        "interactive": false
+      },
+      "expandedOutputs": [],
+      "framework": "",
+      "envMode": "strict",
+      "environmentVariables": {
+        "specified": {
+          "env": [],
+          "passThroughEnv": null
+        },
+        "configured": [],
+        "inferred": [],
+        "passthrough": null
+      }
+    },
+    {
+      "taskId": "@chitchat/db#build",
+      "task": "build",
+      "package": "@chitchat/db",
+      "hash": "85a4960c281bb37a",
+      "inputs": {
+        ".env.example": "d1690eea55e84d24f6673bc0f8d03b7501bffb6f",
+        "package.json": "ad650f4dc43a4e40cc00d6184aee4db54c5d0f31",
+        "prisma.config.ts": "3d835d71f0ac331d6344a7d2ac33a5cab70e557d",
+        "prisma/migrations/20260911000000_auth/migration.sql": "6218d43c445a417fe45677baf2d12ebd6da0aed5",
+        "prisma/migrations/migration_lock.toml": "2fe25d87cc30b78fc25be5e171a4876951691252",
+        "prisma/schema.prisma": "fcff08fee662b3c7dc60f2983a3ec79d66a7ebb2",
+        "src/client.ts": "291c14c3dc36fb4c57330c062d560a852dde5ea6",
+        "tsconfig.json": "dd27f19159d0b56b0082b96a7dd6340baadb6887",
+        "turbo.json": "479a57d936954ebc5082c7ec60861470c942eefd"
+      },
+      "hashOfExternalDependencies": "58c8fbdaec243f5a",
+      "cache": {
+        "local": true,
+        "remote": false,
+        "status": "HIT",
+        "source": "LOCAL",
+        "timeSaved": 491,
+        "sha": "abc5fe1cde17790d1a8522a0d083eae6b372eded",
+        "dirtyHash": "e7c3c6425b3ae90ac0207219b89238a6d761497cf422b99c93eba560d8268595"
+      },
+      "command": "prisma generate",
+      "cliArguments": [],
+      "outputs": [
+        "src/generated/**"
+      ],
+      "excludedOutputs": null,
+      "logFile": "packages/db/.turbo/turbo-build.log",
+      "directory": "packages/db",
+      "dependencies": [],
+      "dependents": [
+        "@chitchat/backend#test"
+      ],
+      "with": [],
+      "resolvedTaskDefinition": {
+        "outputs": [
+          "src/generated/**"
+        ],
+        "cache": true,
+        "dependsOn": [
+          "^build"
+        ],
+        "inputs": [],
+        "outputLogs": "full",
+        "persistent": false,
+        "interruptible": false,
+        "env": [],
+        "passThroughEnv": null,
+        "interactive": false
+      },
+      "expandedOutputs": [],
+      "framework": "",
+      "envMode": "strict",
+      "environmentVariables": {
+        "specified": {
+          "env": [],
+          "passThroughEnv": null
+        },
+        "configured": [],
+        "inferred": [],
+        "passthrough": null
+      }
+    },
+    {
+      "taskId": "@chitchat/email#build",
+      "task": "build",
+      "package": "@chitchat/email",
+      "hash": "28cec2141793dbcd",
+      "inputs": {
+        "emails/welcome.tsx": "260b131474501740f33f0bd1b8bc2d032c4bdf7d",
+        "package.json": "44a9ede67d9b1cf93ba0c049232d485ff5b8c538",
+        "portless.json": "9a43b4e0b8f3e07c2a3c5b14c69cbdca96392e2d",
+        "src/index.ts": "1cfb6f92a442e636930018d7d72dfc557c88c143",
+        "tsconfig.json": "91558248f1fb20016c7513fd187c330c35d49eb7",
+        "turbo.json": "e3760f877cfba829edcc06f77d836e980c0e1191"
+      },
+      "hashOfExternalDependencies": "69323f43dd83e4fe",
+      "cache": {
+        "local": true,
+        "remote": false,
+        "status": "HIT",
+        "source": "LOCAL",
+        "timeSaved": 277,
+        "sha": "abc5fe1cde17790d1a8522a0d083eae6b372eded",
+        "dirtyHash": "946e26b3ed6a658c3dd527364ba45d3baa3c1cc37bceec14f23a92cd5a1756fe"
+      },
+      "command": "tsc --noEmit",
+      "cliArguments": [],
+      "outputs": null,
+      "excludedOutputs": null,
+      "logFile": "packages/email/.turbo/turbo-build.log",
+      "directory": "packages/email",
+      "dependencies": [
+        "@chitchat/worktree#build"
+      ],
+      "dependents": [
+        "@chitchat/backend#test"
+      ],
+      "with": [],
+      "resolvedTaskDefinition": {
+        "outputs": [],
+        "cache": true,
+        "dependsOn": [
+          "^build"
+        ],
+        "inputs": [],
+        "outputLogs": "full",
+        "persistent": false,
+        "interruptible": false,
+        "env": [],
+        "passThroughEnv": null,
+        "interactive": false
+      },
+      "expandedOutputs": [],
+      "framework": "",
+      "envMode": "strict",
+      "environmentVariables": {
+        "specified": {
+          "env": [],
+          "passThroughEnv": null
+        },
+        "configured": [],
+        "inferred": [],
+        "passthrough": null
+      }
+    },
+    {
+      "taskId": "@chitchat/worktree#build",
+      "task": "build",
+      "package": "@chitchat/worktree",
+      "hash": "5bcad8e77276352d",
+      "inputs": {
+        "package.json": "2d3e8beec547302d5f9bc9d713605c6423486493",
+        "src/cli.ts": "a225c13c173c28c7237504f5585983501eb9c19f",
+        "src/database.ts": "52e246e449c2a488b502fa6dd3cecb33fa54ad27",
+        "src/development.ts": "f89a0f83d48941a1d88723831c557df987105825",
+        "src/environment.ts": "3636bfb3e624998cd6eb526bab96414c3e63cec0",
+        "src/lifecycle.ts": "10a3df1ec06ee77ff7a64fb25fd0b3f0f3665e00",
+        "src/proxy.ts": "8df82f0252308cbe4d3b0f489512bc357933a001",
+        "src/registry.ts": "e2d5a06ad5d279d8cd8b9b62a5f49e284d84b113",
+        "src/runtime.ts": "5b639ff752d7c2808c859e6d8eec0cfeb37d0a52",
+        "src/state.ts": "ba2ffa23064171b58d6f7b442094ecd44571eb1c",
+        "src/worktree.test.ts": "e34c4d62eb4066c1357fed805f74471d4d0b5ca6",
+        "tsconfig.json": "a0ff52b2029b7efafefa6c1c222ec62240804a42",
+        "turbo.json": "4a131357dd8d268b6f2f9899d5b446254c826ad5"
+      },
+      "hashOfExternalDependencies": "585fc511fed4adad",
+      "cache": {
+        "local": false,
+        "remote": false,
+        "status": "MISS",
+        "timeSaved": 0
+      },
+      "command": "<NONEXISTENT>",
+      "cliArguments": [],
+      "outputs": [
+        "dist/**"
+      ],
+      "excludedOutputs": null,
+      "logFile": "packages/worktree/.turbo/turbo-build.log",
+      "directory": "packages/worktree",
+      "dependencies": [],
+      "dependents": [
+        "@chitchat/backend#test",
+        "@chitchat/email#build"
+      ],
+      "with": [],
+      "resolvedTaskDefinition": {
+        "outputs": [
+          "dist/**"
+        ],
+        "cache": true,
+        "dependsOn": [
+          "^build"
+        ],
+        "inputs": [],
+        "outputLogs": "full",
+        "persistent": false,
+        "interruptible": false,
+        "env": [],
+        "passThroughEnv": null,
+        "interactive": false
+      },
+      "expandedOutputs": [],
+      "framework": "",
+      "envMode": "strict",
+      "environmentVariables": {
+        "specified": {
+          "env": [],
+          "passThroughEnv": null
+        },
+        "configured": [],
+        "inferred": [],
+        "passthrough": null
+      }
+    }
+  ],
+  "user": "",
+  "scm": {
+    "type": "git",
+    "sha": "abc5fe1cde17790d1a8522a0d083eae6b372eded",
+    "branch": "main"
+  }
+}
+

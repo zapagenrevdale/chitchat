@@ -1,0 +1,80 @@
+diff --git a/apps/backend/package.json b/apps/backend/package.json
+index f4d1eab..be3b0e6 100644
+--- a/apps/backend/package.json
++++ b/apps/backend/package.json
+@@ -12,10 +12,12 @@
+     "lint": "ultracite check",
+     "format": "ultracite fix",
+     "generate:introductions": "bun src/practice/generate-introductions.ts",
++    "generate:chit-introductions": "bun src/practice/generate-chit-introductions.ts",
+     "generate:avatars": "bun src/practice/generate-avatars.ts",
+     "generate:places": "bun src/practice/generate-places.ts"
+   },
+   "dependencies": {
++    "@ai-sdk/google": "4.0.82",
+     "@better-auth/prisma-adapter": "1.7.4",
+     "@chitchat/contracts": "workspace:*",
+     "@chitchat/db": "workspace:*",
+@@ -27,6 +29,7 @@
+     "@langfuse/otel": "5.11.1",
+     "@langfuse/tracing": "5.11.1",
+     "@opentelemetry/sdk-trace-node": "2.11.0",
++    "ai": "7.0.118",
+     "better-auth": "1.7.4",
+     "hono": "4.13.7",
+     "sharp": "0.35.4",
+diff --git a/package.json b/package.json
+index 4977f9c..de89b2d 100644
+--- a/package.json
++++ b/package.json
+@@ -21,6 +21,7 @@
+     "worktree:teardown": "turbo run worktree:teardown --filter=@chitchat/worktree --ui=stream --",
+     "worktree:check": "turbo run typecheck lint test build worktree:smoke --ui=stream",
+     "generate:introductions": "turbo run generate:introductions --filter=@chitchat/backend",
++    "generate:chit-introductions": "turbo run generate:chit-introductions --filter=@chitchat/backend",
+     "generate:avatars": "turbo run generate:avatars --filter=@chitchat/backend",
+     "generate:places": "turbo run generate:places --filter=@chitchat/backend"
+   },
+diff --git a/turbo.json b/turbo.json
+index 5966bfc..0dc746b 100644
+--- a/turbo.json
++++ b/turbo.json
+@@ -59,11 +59,38 @@
+     "generate:introductions": {
+       "cache": false
+     },
++    "generate:chit-introductions": {
++      "cache": false
++    },
+     "generate:avatars": {
+       "cache": false
+     },
+     "generate:places": {
+       "cache": false
++    },
++    "@chitchat/backend#test": {
++      "dependsOn": ["^build"],
++      "inputs": [
++        "$TURBO_DEFAULT$",
++        "$TURBO_ROOT$/apps/web/public/images/personas/**"
++      ]
++    },
++    "@chitchat/web#i18n:compile": {
++      "inputs": ["messages/**", "project.inlang/settings.json", "package.json"],
++      "outputs": ["src/paraglide/**"]
++    },
++    "@chitchat/web#build": {
++      "dependsOn": ["^build", "i18n:compile"],
++      "outputs": ["dist/**"]
++    },
++    "@chitchat/web#typecheck": {
++      "dependsOn": ["^build", "i18n:compile"]
++    },
++    "@chitchat/web#test": {
++      "dependsOn": ["^build", "i18n:compile"]
++    },
++    "@chitchat/web#lint": {
++      "dependsOn": ["^build", "i18n:compile"]
+     }
+   }
+ }

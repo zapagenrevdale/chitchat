@@ -3,6 +3,7 @@ import type {
   PracticeOptions,
   PracticeSelection,
 } from "@chitchat/contracts";
+import type { OnboardingProfile } from "@chitchat/contracts/onboarding";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   act,
@@ -72,6 +73,9 @@ vi.mock(import("@/lib/practice-live"), () => ({
 }));
 vi.mock(import("@/components/ui/live-waveform"), () => ({
   LiveWaveform: () => <div data-testid="live-waveform" />,
+}));
+vi.mock(import("@/components/ui/watercolor-wave"), () => ({
+  WatercolorWave: () => <div data-testid="watercolor-wave" />,
 }));
 
 function latestConnection() {
@@ -170,14 +174,14 @@ const options: PracticeOptions = {
   ],
 };
 
-function renderDesign() {
+function renderDesign(profile?: OnboardingProfile) {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   });
   queryClient.setQueryData(practiceOptionsQuery.queryKey, options);
   return render(
     <QueryClientProvider client={queryClient}>
-      <PracticeDesign />
+      <PracticeDesign profile={profile} />
     </QueryClientProvider>
   );
 }
@@ -239,6 +243,30 @@ describe("practice design", () => {
     await user.click(screen.getByRole("button", { name: "Select situation" }));
     await user.click(screen.getByRole("button", { name: "Select persona" }));
   }
+
+  it("carries onboarding language and selected goals into the live session", async () => {
+    const user = userEvent.setup();
+    renderDesign({
+      version: 1,
+      name: "Alex",
+      language: "Japanese",
+      motivation: "Make friends",
+      skills: ["listening", "wit"],
+    });
+    expect(
+      screen.getByRole("combobox", { name: "Practice language" })
+    ).toHaveValue("Japanese");
+    await user.click(screen.getByRole("button", { name: "Select place" }));
+    await user.click(screen.getByRole("button", { name: "Select situation" }));
+    await user.click(screen.getByRole("button", { name: "Select persona" }));
+    await screen.findByRole("heading", { name: previewFixture.title });
+    await user.click(screen.getByRole("button", { name: "Talk with Maya" }));
+    expect(latestConnection().selection).toMatchObject({
+      language: "Japanese",
+      learner: { name: "Alex", skills: ["listening", "wit"] },
+    });
+    expect(latestConnection().selection).not.toHaveProperty("motivation");
+  });
 
   it("offers 26 languages and starts practice in Filipino", async () => {
     const user = userEvent.setup();
@@ -491,7 +519,7 @@ describe("practice design", () => {
     await user.click(screen.getByRole("button", { name: "Select persona" }));
     await user.click(screen.getByRole("button", { name: /^Talk with /u }));
     const connection = latestConnection();
-    expect(screen.getByTestId("live-waveform")).toBeInTheDocument();
+    expect(screen.getByTestId("watercolor-wave")).toBeInTheDocument();
     act(() => {
       connection.callbacks.onMessage?.({
         id: 1,

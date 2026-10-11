@@ -1,3 +1,4 @@
+import { practiceTranscriptLimits } from "@chitchat/contracts";
 import type { GuidedTurn, PracticeSelection } from "@chitchat/contracts";
 
 import { matchPhrase, speechWords } from "./phrase-progress";
@@ -32,6 +33,11 @@ export const emptyGuidedProgress: GuidedProgress = {
   skipped: 0,
 };
 
+interface GuidedExchange {
+  partner: PracticeMessage;
+  user?: PracticeMessage;
+}
+
 interface Callbacks {
   onState: (state: PracticeState) => void;
   onTranscript: (transcript: PracticeTranscript) => void;
@@ -46,7 +52,8 @@ export class PracticeGuided {
   private controller = new AbortController();
   private operation?: AbortController;
   private selection?: PracticeSelection;
-  private messages: PracticeMessage[] = [];
+  private exchanges: GuidedExchange[] = [];
+  private nextMessageId = 0;
   private progress = { ...emptyGuidedProgress };
   private turn?: GuidedTurn;
   private words: string[] = [];
@@ -132,8 +139,30 @@ export class PracticeGuided {
   }
 
   private append(speaker: PracticeMessage["speaker"], text: string) {
-    const message = { id: this.messages.length, speaker, text };
-    this.messages.push(message);
+    const message = { id: this.nextMessageId, speaker, text };
+    this.nextMessageId += 1;
+    if (speaker === "partner") {
+      this.exchanges.push({ partner: message });
+    } else {
+      const exchange = this.exchanges.at(-1);
+      if (exchange) {
+        exchange.user = message;
+      }
+    }
+    let messages = 0;
+    let codeUnits = 0;
+    for (let index = this.exchanges.length - 1; index >= 0; index -= 1) {
+      const { partner, user } = this.exchanges[index];
+      messages += user ? 2 : 1;
+      codeUnits += partner.text.length + (user?.text.length ?? 0);
+      if (
+        messages > practiceTranscriptLimits.messages ||
+        codeUnits > practiceTranscriptLimits.totalCodeUnits
+      ) {
+        this.exchanges.splice(0, index + 1);
+        break;
+      }
+    }
     this.callbacks.onMessage(message);
     this.callbacks.onTranscript({
       user: speaker === "user" ? text : "",
@@ -164,7 +193,9 @@ export class PracticeGuided {
       this.turn ??= await generateGuidedTurn(
         {
           selection: this.selection,
-          messages: [...this.messages],
+          messages: this.exchanges.flatMap(({ partner, user }) =>
+            user ? [partner, user] : [partner]
+          ),
           skipped: this.nextSkipped,
         },
         signal

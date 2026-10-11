@@ -1,0 +1,1576 @@
+$ turbo run test "--filter=@chitchat/web" -- --run src/components/onboarding/onboarding-recovery.test.tsx
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/web
+   • Running test in 1 packages
+   • Remote caching disabled
+
+@chitchat/contracts:build: cache miss, executing 02781a524e602a8a
+@chitchat/web:i18n:compile: cache miss, executing 1de4f7adac8ed732
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/web:i18n:compile: $ paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy baseLocale
+@chitchat/web:i18n:compile: ℹ [paraglide-js] Compiling inlang project ...
+@chitchat/web:i18n:compile: ✔ [paraglide-js] Successfully compiled inlang project.
+@chitchat/web:test: cache miss, executing 27e3a04794c6a13f
+@chitchat/web:test: $ vitest run --run src/components/onboarding/onboarding-recovery.test.tsx
+@chitchat/web:test: 
+@chitchat/web:test: [1m[30m[46m RUN [49m[39m[22m [36mv5.0.0 [39m[90m/Users/genrevzapa/projects/chitchat/apps/web[39m
+@chitchat/web:test: 
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test:  [31m❯[39m src/components/onboarding/onboarding-recovery.test.tsx [2m([22m[2m15 tests[22m[2m | [22m[31m10 failed[39m[2m)[22m[33m 396[2mms[22m[39m
+@chitchat/web:test:    [31m❯[39m onboarding suspension and accepted outcomes [2m(15)[22m
+@chitchat/web:test: [31m     [31m×[31m restores confirmed text history and retryable input, rejecting the old late response[39m[32m 90[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m keeps an accepted clarification when suspended during its reading delay[39m[32m 28[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m consumes third-turn ready navigation once on persisted pageshow[39m[32m 63[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m consumes third-turn choose navigation once on persisted pageshow[39m[32m 21[2mms[22m[39m
+@chitchat/web:test:      [32m✓[39m abandons accepted text navigation when switching modes during the delay[32m 23[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m interrupts connecting voice and requires an explicit restart[39m[32m 19[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m interrupts listening voice and requires an explicit restart[39m[32m 20[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m interrupts thinking voice and requires an explicit restart[39m[32m 22[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m interrupts speaking voice and requires an explicit restart[39m[32m 19[2mms[22m[39m
+@chitchat/web:test:      [32m✓[39m pauses transcript capture on the same session without exposing Restart[32m 14[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m immediately persists batched transcript and ready completion while transcript is open, then restores without voice[39m[32m 12[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m immediately persists batched transcript and choose completion while transcript is open, then restores without voice[39m[32m 11[2mms[22m[39m
+@chitchat/web:test:      [32m✓[39m keeps completed voice Continue working after suspension[32m 17[2mms[22m[39m
+@chitchat/web:test:      [32m✓[39m reports blocked storage while allowing accepted voice navigation[32m 22[2mms[22m[39m
+@chitchat/web:test:      [32m✓[39m never writes an editing draft, including synchronous voice completion[32m 17[2mms[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 10 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+@chitchat/web:test: 
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/components/onboarding/onboarding-recovery.test.tsx[2m > [22monboarding suspension and accepted outcomes[2m > [22mrestores confirmed text history and retryable input, rejecting the old late response
+@chitchat/web:test: [31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toBeEnabled()[22m
+@chitchat/web:test: 
+@chitchat/web:test: Received element is not enabled:
+@chitchat/web:test:   [31m<textarea
+@chitchat/web:test:   aria-label="What brings you here?"
+@chitchat/web:test:   class="border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 placeholder:text-muted-foreground flex w-full rounded-xl outline-none disabled:cursor-not-allowed disabled:opacity-50 field-sizing-content max-h-64 min-h-12 min-w-0 resize-none border-0 bg-transparent px-2 py-0 text-base leading-6 focus-visible:ring-0"
+@chitchat/web:test:   data-slot="textarea"
+@chitchat/web:test:   dir="auto"
+@chitchat/web:test:   disabled=""
+@chitchat/web:test:   maxlength="500"
+@chitchat/web:test:   placeholder="I'd like to feel more comfortable talking to new people…"
+@chitchat/web:test:   rows="2"
+@chitchat/web:test: />[31m[39m
+@chitchat/web:test: [36m [2m❯[22m src/components/onboarding/onboarding-recovery.test.tsx:[2m73:72[22m[39m
+@chitchat/web:test:     [90m 71|[39m     const pending = Promise.withResolvers<Response>();
+@chitchat/web:test:     [90m 72|[39m     network.mockReturnValueOnce(pending.promise); mount(); submit(); h…
+@chitchat/web:test:     [90m 73|[39m     expect(screen.getByRole("textbox", { name: en.motivation_label }))…
+@chitchat/web:test:     [90m   |[39m                                                                        [31m^[39m
+@chitchat/web:test:     [90m 74|[39m     expect(screen.getByRole("textbox", { name: en.motivation_label }))…
+@chitchat/web:test:     [90m 75|[39m     await act(async () => submit("Meet coworkers"));
+@chitchat/web:test: 
+@chitchat/web:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/10]⎯[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/components/onboarding/onboarding-recovery.test.tsx[2m > [22monboarding suspension and accepted outcomes[2m > [22mkeeps an accepted clarification when suspended during its reading delay
+@chitchat/web:test: [31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toBeEnabled()[22m
+@chitchat/web:test: 
+@chitchat/web:test: Received element is not enabled:
+@chitchat/web:test:   [31m<textarea
+@chitchat/web:test:   aria-label="What brings you here?"
+@chitchat/web:test:   class="border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 placeholder:text-muted-foreground flex w-full rounded-xl outline-none disabled:cursor-not-allowed disabled:opacity-50 field-sizing-content max-h-64 min-h-12 min-w-0 resize-none border-0 bg-transparent px-2 py-0 text-base leading-6 focus-visible:ring-0"
+@chitchat/web:test:   data-slot="textarea"
+@chitchat/web:test:   dir="auto"
+@chitchat/web:test:   disabled=""
+@chitchat/web:test:   maxlength="500"
+@chitchat/web:test:   placeholder="I'd like to feel more comfortable talking to new people…"
+@chitchat/web:test:   rows="2"
+@chitchat/web:test: />[31m[39m
+@chitchat/web:test: [36m [2m❯[22m src/components/onboarding/onboarding-recovery.test.tsx:[2m86:72[22m[39m
+@chitchat/web:test:     [90m 84|[39m     network.mockResolvedValueOnce(Response.json(clarify)); mount();
+@chitchat/web:test:     [90m 85|[39m     await act(async () => submit()); hide(); show();
+@chitchat/web:test:     [90m 86|[39m     expect(screen.getByRole("textbox", { name: en.motivation_label }))…
+@chitchat/web:test:     [90m   |[39m                                                                        [31m^[39m
+@chitchat/web:test:     [90m 87|[39m     expect(screen.getByText(clarify.reply)).toBeInTheDocument();
+@chitchat/web:test:     [90m 88|[39m     await act(async () => submit("At work"));
+@chitchat/web:test: 
+@chitchat/web:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/10]⎯[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/components/onboarding/onboarding-recovery.test.tsx[2m > [22monboarding suspension and accepted outcomes[2m > [22mconsumes third-turn ready navigation once on persisted pageshow
+@chitchat/web:test: [31m[1mTestingLibraryElementError[22m[39m: Unable to find an accessible element with the role "heading" and name "Here’s how we can help"
+@chitchat/web:test: 
+@chitchat/web:test: Here are the accessible roles:
+@chitchat/web:test: 
+@chitchat/web:test:   main:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<main[39m
+@chitchat/web:test:     [33mclass[39m=[32m"relative mx-auto flex min-h-dvh w-full max-w-4xl flex-col px-5 sm:px-8"[39m
+@chitchat/web:test:     [33mdata-chat-step[39m=[32m"true"[39m
+@chitchat/web:test:     [33mdir[39m=[32m"ltr"[39m
+@chitchat/web:test:     [33mid[39m=[32m"main"[39m
+@chitchat/web:test:     [33mlang[39m=[32m"en"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   button:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Back":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Back"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 size-12 absolute end-5 top-4 z-10 rounded-full sm:end-8"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"icon"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"ghost"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Continue":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Continue"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/80 size-11 [&_svg:not([class*='size-'])]:size-4 rounded-full"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"icon-sm"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"default"[39m
+@chitchat/web:test:     [33mdisabled[39m=[32m""[39m
+@chitchat/web:test:     [33mtype[39m=[32m"submit"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Choose skills instead":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center rounded-xl border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 min-h-12 gap-2 px-5 py-2.5 has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"default"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"ghost"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Switch to voice":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33maria-describedby[39m=[32m"_r_g_"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center rounded-xl border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 text-primary underline-offset-4 hover:underline min-h-12 gap-2 px-5 py-2.5 has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"default"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"link"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   heading:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "A little about you.":
+@chitchat/web:test:   [36m<h1[39m
+@chitchat/web:test:     [33mclass[39m=[32m"sr-only"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   log:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Show transcript":
+@chitchat/web:test:   [36m<div[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Show transcript"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto pb-6"[39m
+@chitchat/web:test:     [33mrole[39m=[32m"log"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   img:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Chit":
+@chitchat/web:test:   [36m<span[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Chit"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"relative inline-block shrink-0 align-middle"[39m
+@chitchat/web:test:     [33mdata-state[39m=[32m"idle"[39m
+@chitchat/web:test:     [33mrole[39m=[32m"img"[39m
+@chitchat/web:test:     [33mstyle[39m=[32m"width: 32px; height: 32px;"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Chit":
+@chitchat/web:test:   [36m<span[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Chit"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"relative inline-block shrink-0 align-middle"[39m
+@chitchat/web:test:     [33mdata-state[39m=[32m"idle"[39m
+@chitchat/web:test:     [33mrole[39m=[32m"img"[39m
+@chitchat/web:test:     [33mstyle[39m=[32m"width: 32px; height: 32px;"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Chit":
+@chitchat/web:test:   [36m<span[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Chit"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"relative inline-block shrink-0 align-middle"[39m
+@chitchat/web:test:     [33mdata-state[39m=[32m"idle"[39m
+@chitchat/web:test:     [33mrole[39m=[32m"img"[39m
+@chitchat/web:test:     [33mstyle[39m=[32m"width: 32px; height: 32px;"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Chit":
+@chitchat/web:test:   [36m<span[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Chit"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"relative inline-block shrink-0 align-middle"[39m
+@chitchat/web:test:     [33mdata-state[39m=[32m"idle"[39m
+@chitchat/web:test:     [33mrole[39m=[32m"img"[39m
+@chitchat/web:test:     [33mstyle[39m=[32m"width: 32px; height: 32px;"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Chit":
+@chitchat/web:test:   [36m<span[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Chit"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"relative inline-block shrink-0 align-middle"[39m
+@chitchat/web:test:     [33mdata-state[39m=[32m"idle"[39m
+@chitchat/web:test:     [33mrole[39m=[32m"img"[39m
+@chitchat/web:test:     [33mstyle[39m=[32m"width: 32px; height: 32px;"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Chit":
+@chitchat/web:test:   [36m<span[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Chit"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"relative inline-block shrink-0 align-middle"[39m
+@chitchat/web:test:     [33mdata-state[39m=[32m"thinking"[39m
+@chitchat/web:test:     [33mrole[39m=[32m"img"[39m
+@chitchat/web:test:     [33mstyle[39m=[32m"width: 48px; height: 48px;"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   paragraph:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<p[39m
+@chitchat/web:test:     [33mclass[39m=[32m"rounded-3xl px-4 py-3 text-lg leading-relaxed wrap-anywhere whitespace-pre-wrap bg-muted rounded-bl-md"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<p[39m
+@chitchat/web:test:     [33mclass[39m=[32m"rounded-3xl px-4 py-3 text-lg leading-relaxed wrap-anywhere whitespace-pre-wrap bg-primary text-primary-foreground rounded-br-md"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<p[39m
+@chitchat/web:test:     [33mclass[39m=[32m"rounded-3xl px-4 py-3 text-lg leading-relaxed wrap-anywhere whitespace-pre-wrap bg-muted rounded-bl-md"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<p[39m
+@chitchat/web:test:     [33mclass[39m=[32m"rounded-3xl px-4 py-3 text-lg leading-relaxed wrap-anywhere whitespace-pre-wrap bg-primary text-primary-foreground rounded-br-md"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<p[39m
+@chitchat/web:test:     [33mclass[39m=[32m"rounded-3xl px-4 py-3 text-lg leading-relaxed wrap-anywhere whitespace-pre-wrap bg-muted rounded-bl-md"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<p[39m
+@chitchat/web:test:     [33mclass[39m=[32m"rounded-3xl px-4 py-3 text-lg leading-relaxed wrap-anywhere whitespace-pre-wrap bg-primary text-primary-foreground rounded-br-md"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<p[39m
+@chitchat/web:test:     [33mclass[39m=[32m"rounded-3xl px-4 py-3 text-lg leading-relaxed wrap-anywhere whitespace-pre-wrap bg-muted rounded-bl-md"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<p[39m
+@chitchat/web:test:     [33mclass[39m=[32m"rounded-3xl px-4 py-3 text-lg leading-relaxed wrap-anywhere whitespace-pre-wrap bg-primary text-primary-foreground rounded-br-md"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<p[39m
+@chitchat/web:test:     [33mclass[39m=[32m"rounded-3xl px-4 py-3 text-lg leading-relaxed wrap-anywhere whitespace-pre-wrap bg-muted rounded-bl-md"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<p[39m
+@chitchat/web:test:     [33mclass[39m=[32m"text-muted-foreground text-xs leading-relaxed"[39m
+@chitchat/web:test:     [33mid[39m=[32m"_r_g_"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   textbox:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "What brings you here?":
+@chitchat/web:test:   [36m<textarea[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"What brings you here?"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 placeholder:text-muted-foreground flex w-full rounded-xl outline-none disabled:cursor-not-allowed disabled:opacity-50 field-sizing-content max-h-64 min-h-12 min-w-0 resize-none border-0 bg-transparent px-2 py-0 text-base leading-6 focus-visible:ring-0"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"textarea"[39m
+@chitchat/web:test:     [33mdir[39m=[32m"auto"[39m
+@chitchat/web:test:     [33mdisabled[39m=[32m""[39m
+@chitchat/web:test:     [33mmaxlength[39m=[32m"500"[39m
+@chitchat/web:test:     [33mplaceholder[39m=[32m"I'd like to feel more comfortable talking to new people…"[39m
+@chitchat/web:test:     [33mrows[39m=[32m"2"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   contentinfo:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<footer[39m
+@chitchat/web:test:     [33mclass[39m=[32m"bg-background/95 sticky bottom-0 flex flex-col items-center gap-3 py-4 backdrop-blur-sm"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test: 
+@chitchat/web:test: Ignored nodes: comments, script, style
+@chitchat/web:test: [36m<body>[39m
+@chitchat/web:test:   [36m<div>[39m
+@chitchat/web:test:     [36m<main[39m
+@chitchat/web:test:       [33mclass[39m=[32m"relative mx-auto flex min-h-dvh w-full max-w-4xl flex-col px-5 sm:px-8"[39m
+@chitchat/web:test:       [33mdata-chat-step[39m=[32m"true"[39m
+@chitchat/web:test:       [33mdir[39m=[32m"ltr"[39m
+@chitchat/web:test:       [33mid[39m=[32m"main"[39m
+@chitchat/web:test:       [33mlang[39m=[32m"en"[39m
+@chitchat/web:test:     [36m>[39m
+@chitchat/web:test:       [36m<button[39m
+@chitchat/web:test:         [33maria-label[39m=[32m"Back"[39m
+@chitchat/web:test:         [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 size-12 absolute end-5 top-4 z-10 rounded-full sm:end-8"[39m
+@chitchat/web:test:         [33mdata-size[39m=[32m"icon"[39m
+@chitchat/web:test:         [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:         [33mdata-variant[39m=[32m"ghost"[39m
+@chitchat/web:test:       [36m>[39m
+@chitchat/web:test:         [36m<svg[39m
+@chitchat/web:test:           [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:           [33mclass[39m=[32m"lucide lucide-x"[39m
+@chitchat/web:test:           [33mfill[39m=[32m"none"[39m
+@chitchat/web:test:           [33mheight[39m=[32m"24"[39m
+@chitchat/web:test:           [33mstroke[39m=[32m"currentColor"[39m
+@chitchat/web:test:           [33mstroke-linecap[39m=[32m"round"[39m
+@chitchat/web:test:           [33mstroke-linejoin[39m=[32m"round"[39m
+@chitchat/web:test:           [33mstroke-width[39m=[32m"2"[39m
+@chitchat/web:test:           [33mviewBox[39m=[32m"0 0 24 24"[39m
+@chitchat/web:test:           [33mwidth[39m=[32m"24"[39m
+@chitchat/web:test:           [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+@chitchat/web:test:         [36m>[39m
+@chitchat/web:test:           [36m<path[39m
+@chitchat/web:test:             [33md[39m=[32m"M18 6 6 18"[39m
+@chitchat/web:test:           [36m/>[39m
+@chitchat/web:test:           [36m<path[39m
+@chitchat/web:test:             [33md[39m=[32m"m6 6 12 12"[39m
+@chitchat/web:test:           [36m/>[39m
+@chitchat/web:test:         [36m</svg>[39m
+@chitchat/web:test:       [36m</button>[39m
+@chitchat/web:test:       [36m<div[39m
+@chitchat/web:test:         [33mclass[39m=[32m"onboarding-content flex flex-1 flex-col justify-center py-8 sm:py-12"[39m
+@chitchat/web:test:       [36m>[39m
+@chitchat/web:test:         [0m [0m
+@chitchat/web:test:         [36m<div[39m
+@chitchat/web:test:           [33mclass[39m=[32m"mx-auto flex min-h-0 w-full max-w-xl flex-1 flex-col"[39m
+@chitchat/web:test:         [36m>[39m
+@chitchat/web:test:           [36m<h1[39m
+@chitchat/web:test:             [33mclass[39m=[32m"sr-only"[39m
+@chitchat/web:test:           [36m>[39m
+@chitchat/web:test:             [0mA little about you.[0m
+@chitchat/web:test:           [36m</h1>[39m
+@chitchat/web:test:           [36m<div[39m
+@chitchat/web:test:             [33maria-label[39m=[32m"Show transcript"[39m
+@chitchat/web:test:             [33mclass[39m=[32m"flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto pb-6"[39m
+@chitchat/web:test:             [33mrole[39m=[32m"log"[39m
+@chitchat/web:test:           [36m>[39m
+@chitchat/web:test:             [36m<div[39m
+@chitchat/web:test:               [33mclass[39m=[32m"flex max-w-[85%] items-end gap-2 self-start"[39m
+@chitchat/web:test:               [33mid[39m=[32m"onboarding-transcript-1"[39m
+@chitchat/web:test:             [36m>[39m
+@chitchat/web:test:               [36m<span[39m
+@chitchat/web:test:                 [33maria-label[39m=[32m"Chit"[39m
+@chitchat/web:test:                 [33mclass[39m=[32m"relative inline-block shrink-0 align-middle"[39m
+@chitchat/web:test:                 [33mdata-state[39m=[32m"idle"[39m
+@chitchat/web:test:                 [33mrole[39m=[32m"img"[39m
+@chitchat/web:test:                 [33mstyle[39m=[32m"width: 32px; height: 32px;"[39m
+@chitchat/web:test:               [36m>[39m
+@chitchat/web:test:                 [36m<span[39m
+@chitchat/web:test:                   [33mclass[39m=[32m"absolute inset-[12%]"[39m
+@chitchat/web:test:                 [36m>[39m
+@chitchat/web:test:                   [36m<span[39m
+@chitchat/web:test:                     [33mclass[39m=[32m"absolute inset-0"[39m
+@chitchat/web:test:                     [33mstyle[39m=[32m"transform: none;"[39m
+@chitchat/web:test:                   [36m>[39m
+@chitchat/web:test:                     [36m<svg[39m
+@chitchat/web:test:                       [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:                       [33mclass[39m=[32m"size-full"[39m
+@chitchat/web:test:                       [33moverflow[39m=[32m"visible"[39m
+@chitchat/web:test:                       [33mstyle[39m=[32m"transform-origin: 55% 78%; transform: none;"[39m
+@chitchat/web:test:                       [33mviewBox[39m=[32m"270 370 720 600"[39m
+@chitchat/web:test:                     [36m>[39m
+@chitchat/web:test:                       [36m<defs>[39m
+@chitchat/web:test:                         [36m<clippath[39m
+@chitchat/web:test:                           [33mid[39m=[32m"_r_c_-blue"[39m
+@chitchat/web:test:                         [36m>[39m
+@chitchat/web:test:                           [36m<path[39m
+@chitchat/web:test:                             [33md[39m=[32m"M270 780 L345 804 Q408 866 480 872 Q555 880 620 795 Q665 743 674 669 Q694 714 800 704 Q908 706 966 674 L1000 674 L1000 970 L270 970Z"[39m
+@chitchat/web:test:                           [36m/>[39m
+@chitchat/web:test:                         [36m</clippath>[39m
+@chitchat/web:test:                       [36m</defs>[39m
+@chitchat/web:test:                       [36m<image[39m
+@chitchat/web:test:                         [33mclip-path[39m=[32m"url(#_r_c_-blue)"[39m
+@chitchat/web:test:                         [33mheight[39m=[32m"1254"[39m
+@chitchat/web:test:                         [33mhref[39m=[32m"/images/chit/original.png"[39m
+@chitchat/web:test:                         [33mwidth[39m=[32m"1254"[39m
+@chitchat/web:test:                       [36m/>[39m
+@chitchat/web:test:                     [36m</svg>[39m
+@chitchat/web:test:                   [36m</span>[39m
+@chitchat/web:test:                   [36m<span[39m
+@chitchat/web:test:                     [33mclass[39m=[32m"absolute inset-0"[39m
+@chitchat/web:test:                     [33mstyle[39m=[32m"transform: none;"[39m
+@chitchat/web:test:                   [36m>[39m
+@chitchat/web:test:                     [36m<svg[39m
+@chitchat/web:test:                       [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:                       [33mclass[39m=[32m"size-full"[39m
+@chitchat/web:test:                       [33moverflow[39m=[32m"visible"[39m
+@chitchat/web:test:                       [33mstyle[39m=[32m"transform-origin: 28% 44%; transform: none;"[39m
+@chitchat/web:test:                       [33mviewBox[39m=[32m"270 370 720 600"[39m
+@chitchat/web:test:                     [36m>[39m
+@chitchat/web:test:                       [36m<defs>[39m
+@chitchat/web:test:                         [36m<clippath[39m
+@chitchat/web:test:                           [33mid[39m=[32m"_r_c_-red"[39m
+@chitchat/web:test:                         [36m>[39m
+@chitchat/web:test:                           [36m<path[39m
+@chitchat/web:test:                             [33md[39m=[32m"M270 370 H655 Q671 475 668 565 L674 669 Q665 743 620 795 Q555 880 480 872 Q408 866 345 804 L270 780Z"[39m
+@chitchat/web:test:                           [36m/>[39m
+@chitchat/web:test:                         [36m</clippath>[39m
+@chitchat/web:test:                       [36m</defs>[39m
+@chitchat/web:test:                       [36m<image[39m
+@chitchat/web:test:                         [33mclip-path[39m=[32m"url(#_r_c_-red)"[39m
+@chitchat/web:test:                         [33mheight[39m=[32m"1254"[39m
+@chitchat/web:test:                         [33mhref[39m=[32m"/images/chit/original.png"[39m
+@chitchat/web:test:                         [33mwidth[39m=[32m"1254"[39m
+@chitchat/web:test:                       [36m/>[39m
+@chitchat/web:test:                     [36m</svg>[39m
+@chitchat/web:test:                   [36m</span>[39m
+@chitchat/web:test:                   [36m<span[39m
+@chitchat/web:test:                     [33mclass[39m=[32m"absolute inset-0"[39m
+@chitchat/web:test:                     [33mstyle[39m=[32m"transform: none;"[39m
+@chitchat/web:test:                   [36m>[39m
+@chitchat/web:test:                     [36m<svg[39m
+@chitchat/web:test:                       [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:                   ...
+@chitchat/web:test: [90m [2m❯[22m Object.getElementError ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+@chitchat/web:test: [90m [2m❯[22m ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+@chitchat/web:test: [90m [2m❯[22m ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+@chitchat/web:test: [90m [2m❯[22m ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+@chitchat/web:test: [36m [2m❯[22m src/components/onboarding/onboarding-recovery.test.tsx:[2m97:19[22m[39m
+@chitchat/web:test:     [90m 95|[39m     await act(async () => submit()); expect(raw().conversation).toHave…
+@chitchat/web:test:     [90m 96|[39m     hide(); show(); show(); await act(() => vi.advanceTimersByTimeAsyn…
+@chitchat/web:test:     [90m 97|[39m     expect(screen.getByRole("heading", { name: status === "ready" ? en…
+@chitchat/web:test:     [90m   |[39m                   [31m^[39m
+@chitchat/web:test:     [90m 98|[39m     expect(network).toHaveBeenCalledOnce();
+@chitchat/web:test:     [90m 99|[39m     if (status === "ready") {
+@chitchat/web:test: 
+@chitchat/web:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/10]⎯[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/components/onboarding/onboarding-recovery.test.tsx[2m > [22monboarding suspension and accepted outcomes[2m > [22mconsumes third-turn choose navigation once on persisted pageshow
+@chitchat/web:test: [31m[1mAssertionError[22m: expected [ { role: 'user', text: 'One' }, …(3) ] to have a length of 6 but got 4[39m
+@chitchat/web:test: 
+@chitchat/web:test: [32m- Expected[39m
+@chitchat/web:test: [31m+ Received[39m
+@chitchat/web:test: 
+@chitchat/web:test: [32m- 6[39m
+@chitchat/web:test: [31m+ 4[39m
+@chitchat/web:test: 
+@chitchat/web:test: [36m [2m❯[22m src/components/onboarding/onboarding-recovery.test.tsx:[2m95:65[22m[39m
+@chitchat/web:test:     [90m 93|[39m     network.mockResolvedValueOnce(Response.json({ ...ready, status }));
+@chitchat/web:test:     [90m 94|[39m     mount({ conversation: [{ role: "user", text: "One" }, { role: "ass…
+@chitchat/web:test:     [90m 95|[39m     await act(async () => submit()); expect(raw().conversation).toHave…
+@chitchat/web:test:     [90m   |[39m                                                                 [31m^[39m
+@chitchat/web:test:     [90m 96|[39m     hide(); show(); show(); await act(() => vi.advanceTimersByTimeAsyn…
+@chitchat/web:test:     [90m 97|[39m     expect(screen.getByRole("heading", { name: status === "ready" ? en…
+@chitchat/web:test: 
+@chitchat/web:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/10]⎯[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/components/onboarding/onboarding-recovery.test.tsx[2m > [22monboarding suspension and accepted outcomes[2m > [22minterrupts connecting voice and requires an explicit restart
+@chitchat/web:test: [31m[1mTestingLibraryElementError[22m[39m: Unable to find an accessible element with the role "button" and name "Restart voice"
+@chitchat/web:test: 
+@chitchat/web:test: Here are the accessible roles:
+@chitchat/web:test: 
+@chitchat/web:test:   main:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<main[39m
+@chitchat/web:test:     [33mclass[39m=[32m"relative mx-auto flex min-h-dvh w-full max-w-4xl flex-col px-5 sm:px-8"[39m
+@chitchat/web:test:     [33mdata-voice-step[39m=[32m"true"[39m
+@chitchat/web:test:     [33mdir[39m=[32m"ltr"[39m
+@chitchat/web:test:     [33mid[39m=[32m"main"[39m
+@chitchat/web:test:     [33mlang[39m=[32m"en"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   button:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Back":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Back"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 size-12 absolute end-5 top-4 z-10 rounded-full sm:end-8"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"icon"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"ghost"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Switch to text":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33maria-describedby[39m=[32m"_r_19_"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center rounded-xl border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 text-primary underline-offset-4 hover:underline min-h-12 gap-2 px-5 py-2.5 has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"default"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"link"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Choose skills instead":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex touch-manipulation items-center justify-center rounded-xl border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 min-h-12 gap-2 px-5 py-2.5 has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4 mx-auto shrink-0"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"default"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"ghost"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Connecting…. Show transcript":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33maria-expanded[39m=[32m"false"[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Connecting…. Show transcript"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center rounded-xl border border-transparent bg-clip-padding whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground min-h-11 text-sm leading-5 [&_svg:not([class*='size-'])]:size-4 text-primary pointer-events-auto absolute bottom-10 left-1/2 h-auto -translate-x-1/2 flex-col gap-1 bg-transparent px-2 py-1 font-medium hover:bg-transparent dark:hover:bg-transparent"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"xs"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"ghost"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   region:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Answer by voice":
+@chitchat/web:test:   [36m<section[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Answer by voice"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"mx-auto flex min-h-0 w-full max-w-xl flex-1 flex-col pb-40"[39m
+@chitchat/web:test:     [33mdata-voice-session[39m=[32m"true"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   img:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Chit":
+@chitchat/web:test:   [36m<span[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Chit"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"relative inline-block shrink-0 align-middle"[39m
+@chitchat/web:test:     [33mdata-state[39m=[32m"thinking"[39m
+@chitchat/web:test:     [33mrole[39m=[32m"img"[39m
+@chitchat/web:test:     [33mstyle[39m=[32m"width: 80px; height: 80px;"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   paragraph:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<p[39m
+@chitchat/web:test:     [33maria-live[39m=[32m"polite"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"text-muted-foreground min-h-12 text-base leading-relaxed"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<p[39m
+@chitchat/web:test:     [33mclass[39m=[32m"text-muted-foreground text-xs leading-relaxed"[39m
+@chitchat/web:test:     [33mid[39m=[32m"_r_19_"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   contentinfo:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<footer[39m
+@chitchat/web:test:     [33mclass[39m=[32m"bg-background/95 sticky bottom-0 flex flex-col items-center gap-3 py-4 backdrop-blur-sm"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test: 
+@chitchat/web:test: Ignored nodes: comments, script, style
+@chitchat/web:test: [36m<body>[39m
+@chitchat/web:test:   [36m<div>[39m
+@chitchat/web:test:     [36m<main[39m
+@chitchat/web:test:       [33mclass[39m=[32m"relative mx-auto flex min-h-dvh w-full max-w-4xl flex-col px-5 sm:px-8"[39m
+@chitchat/web:test:       [33mdata-voice-step[39m=[32m"true"[39m
+@chitchat/web:test:       [33mdir[39m=[32m"ltr"[39m
+@chitchat/web:test:       [33mid[39m=[32m"main"[39m
+@chitchat/web:test:       [33mlang[39m=[32m"en"[39m
+@chitchat/web:test:     [36m>[39m
+@chitchat/web:test:       [36m<button[39m
+@chitchat/web:test:         [33maria-label[39m=[32m"Back"[39m
+@chitchat/web:test:         [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 size-12 absolute end-5 top-4 z-10 rounded-full sm:end-8"[39m
+@chitchat/web:test:         [33mdata-size[39m=[32m"icon"[39m
+@chitchat/web:test:         [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:         [33mdata-variant[39m=[32m"ghost"[39m
+@chitchat/web:test:       [36m>[39m
+@chitchat/web:test:         [36m<svg[39m
+@chitchat/web:test:           [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:           [33mclass[39m=[32m"lucide lucide-x"[39m
+@chitchat/web:test:           [33mfill[39m=[32m"none"[39m
+@chitchat/web:test:           [33mheight[39m=[32m"24"[39m
+@chitchat/web:test:           [33mstroke[39m=[32m"currentColor"[39m
+@chitchat/web:test:           [33mstroke-linecap[39m=[32m"round"[39m
+@chitchat/web:test:           [33mstroke-linejoin[39m=[32m"round"[39m
+@chitchat/web:test:           [33mstroke-width[39m=[32m"2"[39m
+@chitchat/web:test:           [33mviewBox[39m=[32m"0 0 24 24"[39m
+@chitchat/web:test:           [33mwidth[39m=[32m"24"[39m
+@chitchat/web:test:           [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+@chitchat/web:test:         [36m>[39m
+@chitchat/web:test:           [36m<path[39m
+@chitchat/web:test:             [33md[39m=[32m"M18 6 6 18"[39m
+@chitchat/web:test:           [36m/>[39m
+@chitchat/web:test:           [36m<path[39m
+@chitchat/web:test:             [33md[39m=[32m"m6 6 12 12"[39m
+@chitchat/web:test:           [36m/>[39m
+@chitchat/web:test:         [36m</svg>[39m
+@chitchat/web:test:       [36m</button>[39m
+@chitchat/web:test:       [36m<div[39m
+@chitchat/web:test:         [33mclass[39m=[32m"onboarding-content flex flex-1 flex-col justify-center py-8 sm:py-12"[39m
+@chitchat/web:test:       [36m>[39m
+@chitchat/web:test:         [0m [0m
+@chitchat/web:test:         [36m<section[39m
+@chitchat/web:test:           [33maria-label[39m=[32m"Answer by voice"[39m
+@chitchat/web:test:           [33mclass[39m=[32m"mx-auto flex min-h-0 w-full max-w-xl flex-1 flex-col pb-40"[39m
+@chitchat/web:test:           [33mdata-voice-session[39m=[32m"true"[39m
+@chitchat/web:test:         [36m>[39m
+@chitchat/web:test:           [36m<div[39m
+@chitchat/web:test:             [33mclass[39m=[32m"min-h-0 flex-1"[39m
+@chitchat/web:test:           [36m>[39m
+@chitchat/web:test:             [36m<div[39m
+@chitchat/web:test:               [33mclass[39m=[32m"flex h-full flex-col items-center justify-center gap-5 overflow-y-auto px-2 text-center"[39m
+@chitchat/web:test:             [36m>[39m
+@chitchat/web:test:               [36m<span[39m
+@chitchat/web:test:                 [33maria-label[39m=[32m"Chit"[39m
+@chitchat/web:test:                 [33mclass[39m=[32m"relative inline-block shrink-0 align-middle"[39m
+@chitchat/web:test:                 [33mdata-state[39m=[32m"thinking"[39m
+@chitchat/web:test:                 [33mrole[39m=[32m"img"[39m
+@chitchat/web:test:                 [33mstyle[39m=[32m"width: 80px; height: 80px;"[39m
+@chitchat/web:test:               [36m>[39m
+@chitchat/web:test:                 [36m<span[39m
+@chitchat/web:test:                   [33mclass[39m=[32m"absolute inset-[12%]"[39m
+@chitchat/web:test:                 [36m>[39m
+@chitchat/web:test:                   [36m<span[39m
+@chitchat/web:test:                     [33mclass[39m=[32m"absolute inset-0"[39m
+@chitchat/web:test:                     [33mstyle[39m=[32m"transform: none;"[39m
+@chitchat/web:test:                   [36m>[39m
+@chitchat/web:test:                     [36m<svg[39m
+@chitchat/web:test:                       [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:                       [33mclass[39m=[32m"size-full"[39m
+@chitchat/web:test:                       [33moverflow[39m=[32m"visible"[39m
+@chitchat/web:test:                       [33mstyle[39m=[32m"transform-origin: 55% 78%;"[39m
+@chitchat/web:test:                       [33mviewBox[39m=[32m"270 370 720 600"[39m
+@chitchat/web:test:                     [36m>[39m
+@chitchat/web:test:                       [36m<defs>[39m
+@chitchat/web:test:                         [36m<clippath[39m
+@chitchat/web:test:                           [33mid[39m=[32m"_r_18_-blue"[39m
+@chitchat/web:test:                         [36m>[39m
+@chitchat/web:test:                           [36m<path[39m
+@chitchat/web:test:                             [33md[39m=[32m"M270 780 L345 804 Q408 866 480 872 Q555 880 620 795 Q665 743 674 669 Q694 714 800 704 Q908 706 966 674 L1000 674 L1000 970 L270 970Z"[39m
+@chitchat/web:test:                           [36m/>[39m
+@chitchat/web:test:                         [36m</clippath>[39m
+@chitchat/web:test:                       [36m</defs>[39m
+@chitchat/web:test:                       [36m<image[39m
+@chitchat/web:test:                         [33mclip-path[39m=[32m"url(#_r_18_-blue)"[39m
+@chitchat/web:test:                         [33mheight[39m=[32m"1254"[39m
+@chitchat/web:test:                         [33mhref[39m=[32m"/images/chit/original.png"[39m
+@chitchat/web:test:                         [33mwidth[39m=[32m"1254"[39m
+@chitchat/web:test:                       [36m/>[39m
+@chitchat/web:test:                     [36m</svg>[39m
+@chitchat/web:test:                   [36m</span>[39m
+@chitchat/web:test:                   [36m<span[39m
+@chitchat/web:test:                     [33mclass[39m=[32m"absolute inset-0"[39m
+@chitchat/web:test:                     [33mstyle[39m=[32m"transform: none;"[39m
+@chitchat/web:test:                   [36m>[39m
+@chitchat/web:test:                     [36m<svg[39m
+@chitchat/web:test:                       [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:                       [33mclass[39m=[32m"size-full"[39m
+@chitchat/web:test:                       [33moverflow[39m=[32m"visible"[39m
+@chitchat/web:test:                       [33mstyle[39m=[32m"transform-origin: 28% 44%;"[39m
+@chitchat/web:test:                       [33mviewBox[39m=[32m"270 370 720 600"[39m
+@chitchat/web:test:                     [36m>[39m
+@chitchat/web:test:                       [36m<defs>[39m
+@chitchat/web:test:                         [36m<clippath[39m
+@chitchat/web:test:                           [33mid[39m=[32m"_r_18_-red"[39m
+@chitchat/web:test:                         [36m>[39m
+@chitchat/web:test:                           [36m<path[39m
+@chitchat/web:test:                             [33md[39m=[32m"M270 370 H655 Q671 475 668 565 L674 669 Q665 743 620 795 Q555 880 480 872 Q408 866 345 804 L270 780Z"[39m
+@chitchat/web:test:                           [36m/>[39m
+@chitchat/web:test:                         [36m</clippath>[39m
+@chitchat/web:test:                       [36m</defs>[39m
+@chitchat/web:test:                       [36m<image[39m
+@chitchat/web:test:                         [33mclip-path[39m=[32m"url(#_r_18_-red)"[39m
+@chitchat/web:test:                         [33mheight[39m=[32m"1254"[39m
+@chitchat/web:test:                         [33mhref[39m=[32m"/images/chit/original.png"[39m
+@chitchat/web:test:                         [33mwidth[39m=[32m"1254"[39m
+@chitchat/web:test:                       [36m/>[39m
+@chitchat/web:test:                     [36m</svg>[39m
+@chitchat/web:test:                   [36m</span>[39m
+@chitchat/web:test:                   [36m<span[39m
+@chitchat/web:test:                     [33mclass[39m=[32m"absolute inset-0"[39m
+@chitchat/web:test:                     [33mstyle[39m=[32m"transform: none;"[39m
+@chitchat/web:test:                   [36m>[39m
+@chitchat/web:test:                     [36m<svg[39m
+@chitchat/web:test:                       [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:                       [33mclass[39m=[32m"size-full"[39m
+@chitchat/web:test:                       [33moverflow[39m=[32m"visible"[39m
+@chitchat/web:test:                       [33mstyle[39m=[32m"transform-origin: 76% 30%;"[39m
+@chitchat/web:test:                       [33mviewBox[39m=[32...
+@chitchat/web:test: [90m [2m❯[22m Object.getElementError ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+@chitchat/web:test: [90m [2m❯[22m ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+@chitchat/web:test: [90m [2m❯[22m ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+@chitchat/web:test: [90m [2m❯[22m ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+@chitchat/web:test: [36m [2m❯[22m src/components/onboarding/onboarding-recovery.test.tsx:[2m115:28[22m[39m
+@chitchat/web:test:     [90m113|[39m     voice(); const old = latest(); act(() => old.callbacks.onPhase(pha…
+@chitchat/web:test:     [90m114|[39m     expect(old.close).toHaveBeenCalledOnce(); expect(sessions).toHaveL…
+@chitchat/web:test:     [90m115|[39m     fireEvent.click(screen.getByRole("button", { name: en.voice_restar…
+@chitchat/web:test:     [90m   |[39m                            [31m^[39m
+@chitchat/web:test:     [90m116|[39m     act(() => { old.callbacks.onComplete(ready); old.callbacks.onError…
+@chitchat/web:test:     [90m117|[39m     expect(raw().resolvedGoal).toBeUndefined(); expect(raw().conversat…
+@chitchat/web:test: 
+@chitchat/web:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/10]⎯[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/components/onboarding/onboarding-recovery.test.tsx[2m > [22monboarding suspension and accepted outcomes[2m > [22minterrupts listening voice and requires an explicit restart
+@chitchat/web:test: [31m[1mTestingLibraryElementError[22m[39m: Unable to find an accessible element with the role "button" and name "Restart voice"
+@chitchat/web:test: 
+@chitchat/web:test: Here are the accessible roles:
+@chitchat/web:test: 
+@chitchat/web:test:   main:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<main[39m
+@chitchat/web:test:     [33mclass[39m=[32m"relative mx-auto flex min-h-dvh w-full max-w-4xl flex-col px-5 sm:px-8"[39m
+@chitchat/web:test:     [33mdata-voice-step[39m=[32m"true"[39m
+@chitchat/web:test:     [33mdir[39m=[32m"ltr"[39m
+@chitchat/web:test:     [33mid[39m=[32m"main"[39m
+@chitchat/web:test:     [33mlang[39m=[32m"en"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   button:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Back":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Back"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 size-12 absolute end-5 top-4 z-10 rounded-full sm:end-8"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"icon"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"ghost"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Switch to text":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33maria-describedby[39m=[32m"_r_1g_"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center rounded-xl border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 text-primary underline-offset-4 hover:underline min-h-12 gap-2 px-5 py-2.5 has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"default"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"link"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Choose skills instead":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex touch-manipulation items-center justify-center rounded-xl border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 min-h-12 gap-2 px-5 py-2.5 has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4 mx-auto shrink-0"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"default"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"ghost"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "I’m listening. Show transcript":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33maria-expanded[39m=[32m"false"[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"I’m listening. Show transcript"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center rounded-xl border border-transparent bg-clip-padding whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground min-h-11 text-sm leading-5 [&_svg:not([class*='size-'])]:size-4 text-primary pointer-events-auto absolute bottom-10 left-1/2 h-auto -translate-x-1/2 flex-col gap-1 bg-transparent px-2 py-1 font-medium hover:bg-transparent dark:hover:bg-transparent"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"xs"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"ghost"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   region:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Answer by voice":
+@chitchat/web:test:   [36m<section[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Answer by voice"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"mx-auto flex min-h-0 w-full max-w-xl flex-1 flex-col pb-40"[39m
+@chitchat/web:test:     [33mdata-voice-session[39m=[32m"true"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   img:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Chit":
+@chitchat/web:test:   [36m<span[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Chit"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"relative inline-block shrink-0 align-middle"[39m
+@chitchat/web:test:     [33mdata-state[39m=[32m"listening"[39m
+@chitchat/web:test:     [33mrole[39m=[32m"img"[39m
+@chitchat/web:test:     [33mstyle[39m=[32m"width: 80px; height: 80px;"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   paragraph:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<p[39m
+@chitchat/web:test:     [33maria-live[39m=[32m"polite"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"text-muted-foreground min-h-12 text-base leading-relaxed"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<p[39m
+@chitchat/web:test:     [33mclass[39m=[32m"text-muted-foreground text-xs leading-relaxed"[39m
+@chitchat/web:test:     [33mid[39m=[32m"_r_1g_"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   contentinfo:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<footer[39m
+@chitchat/web:test:     [33mclass[39m=[32m"bg-background/95 sticky bottom-0 flex flex-col items-center gap-3 py-4 backdrop-blur-sm"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test: 
+@chitchat/web:test: Ignored nodes: comments, script, style
+@chitchat/web:test: [36m<body>[39m
+@chitchat/web:test:   [36m<div>[39m
+@chitchat/web:test:     [36m<main[39m
+@chitchat/web:test:       [33mclass[39m=[32m"relative mx-auto flex min-h-dvh w-full max-w-4xl flex-col px-5 sm:px-8"[39m
+@chitchat/web:test:       [33mdata-voice-step[39m=[32m"true"[39m
+@chitchat/web:test:       [33mdir[39m=[32m"ltr"[39m
+@chitchat/web:test:       [33mid[39m=[32m"main"[39m
+@chitchat/web:test:       [33mlang[39m=[32m"en"[39m
+@chitchat/web:test:     [36m>[39m
+@chitchat/web:test:       [36m<button[39m
+@chitchat/web:test:         [33maria-label[39m=[32m"Back"[39m
+@chitchat/web:test:         [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 size-12 absolute end-5 top-4 z-10 rounded-full sm:end-8"[39m
+@chitchat/web:test:         [33mdata-size[39m=[32m"icon"[39m
+@chitchat/web:test:         [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:         [33mdata-variant[39m=[32m"ghost"[39m
+@chitchat/web:test:       [36m>[39m
+@chitchat/web:test:         [36m<svg[39m
+@chitchat/web:test:           [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:           [33mclass[39m=[32m"lucide lucide-x"[39m
+@chitchat/web:test:           [33mfill[39m=[32m"none"[39m
+@chitchat/web:test:           [33mheight[39m=[32m"24"[39m
+@chitchat/web:test:           [33mstroke[39m=[32m"currentColor"[39m
+@chitchat/web:test:           [33mstroke-linecap[39m=[32m"round"[39m
+@chitchat/web:test:           [33mstroke-linejoin[39m=[32m"round"[39m
+@chitchat/web:test:           [33mstroke-width[39m=[32m"2"[39m
+@chitchat/web:test:           [33mviewBox[39m=[32m"0 0 24 24"[39m
+@chitchat/web:test:           [33mwidth[39m=[32m"24"[39m
+@chitchat/web:test:           [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+@chitchat/web:test:         [36m>[39m
+@chitchat/web:test:           [36m<path[39m
+@chitchat/web:test:             [33md[39m=[32m"M18 6 6 18"[39m
+@chitchat/web:test:           [36m/>[39m
+@chitchat/web:test:           [36m<path[39m
+@chitchat/web:test:             [33md[39m=[32m"m6 6 12 12"[39m
+@chitchat/web:test:           [36m/>[39m
+@chitchat/web:test:         [36m</svg>[39m
+@chitchat/web:test:       [36m</button>[39m
+@chitchat/web:test:       [36m<div[39m
+@chitchat/web:test:         [33mclass[39m=[32m"onboarding-content flex flex-1 flex-col justify-center py-8 sm:py-12"[39m
+@chitchat/web:test:       [36m>[39m
+@chitchat/web:test:         [0m [0m
+@chitchat/web:test:         [36m<section[39m
+@chitchat/web:test:           [33maria-label[39m=[32m"Answer by voice"[39m
+@chitchat/web:test:           [33mclass[39m=[32m"mx-auto flex min-h-0 w-full max-w-xl flex-1 flex-col pb-40"[39m
+@chitchat/web:test:           [33mdata-voice-session[39m=[32m"true"[39m
+@chitchat/web:test:         [36m>[39m
+@chitchat/web:test:           [36m<div[39m
+@chitchat/web:test:             [33mclass[39m=[32m"min-h-0 flex-1"[39m
+@chitchat/web:test:           [36m>[39m
+@chitchat/web:test:             [36m<div[39m
+@chitchat/web:test:               [33mclass[39m=[32m"flex h-full flex-col items-center justify-center gap-5 overflow-y-auto px-2 text-center"[39m
+@chitchat/web:test:             [36m>[39m
+@chitchat/web:test:               [36m<span[39m
+@chitchat/web:test:                 [33maria-label[39m=[32m"Chit"[39m
+@chitchat/web:test:                 [33mclass[39m=[32m"relative inline-block shrink-0 align-middle"[39m
+@chitchat/web:test:                 [33mdata-state[39m=[32m"listening"[39m
+@chitchat/web:test:                 [33mrole[39m=[32m"img"[39m
+@chitchat/web:test:                 [33mstyle[39m=[32m"width: 80px; height: 80px;"[39m
+@chitchat/web:test:               [36m>[39m
+@chitchat/web:test:                 [36m<span[39m
+@chitchat/web:test:                   [33mclass[39m=[32m"absolute inset-[12%]"[39m
+@chitchat/web:test:                 [36m>[39m
+@chitchat/web:test:                   [36m<span[39m
+@chitchat/web:test:                     [33mclass[39m=[32m"absolute inset-0"[39m
+@chitchat/web:test:                     [33mstyle[39m=[32m"transform: none;"[39m
+@chitchat/web:test:                   [36m>[39m
+@chitchat/web:test:                     [36m<svg[39m
+@chitchat/web:test:                       [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:                       [33mclass[39m=[32m"size-full"[39m
+@chitchat/web:test:                       [33moverflow[39m=[32m"visible"[39m
+@chitchat/web:test:                       [33mstyle[39m=[32m"transform-origin: 55% 78%;"[39m
+@chitchat/web:test:                       [33mviewBox[39m=[32m"270 370 720 600"[39m
+@chitchat/web:test:                     [36m>[39m
+@chitchat/web:test:                       [36m<defs>[39m
+@chitchat/web:test:                         [36m<clippath[39m
+@chitchat/web:test:                           [33mid[39m=[32m"_r_1f_-blue"[39m
+@chitchat/web:test:                         [36m>[39m
+@chitchat/web:test:                           [36m<path[39m
+@chitchat/web:test:                             [33md[39m=[32m"M270 780 L345 804 Q408 866 480 872 Q555 880 620 795 Q665 743 674 669 Q694 714 800 704 Q908 706 966 674 L1000 674 L1000 970 L270 970Z"[39m
+@chitchat/web:test:                           [36m/>[39m
+@chitchat/web:test:                         [36m</clippath>[39m
+@chitchat/web:test:                       [36m</defs>[39m
+@chitchat/web:test:                       [36m<image[39m
+@chitchat/web:test:                         [33mclip-path[39m=[32m"url(#_r_1f_-blue)"[39m
+@chitchat/web:test:                         [33mheight[39m=[32m"1254"[39m
+@chitchat/web:test:                         [33mhref[39m=[32m"/images/chit/original.png"[39m
+@chitchat/web:test:                         [33mwidth[39m=[32m"1254"[39m
+@chitchat/web:test:                       [36m/>[39m
+@chitchat/web:test:                     [36m</svg>[39m
+@chitchat/web:test:                   [36m</span>[39m
+@chitchat/web:test:                   [36m<span[39m
+@chitchat/web:test:                     [33mclass[39m=[32m"absolute inset-0"[39m
+@chitchat/web:test:                     [33mstyle[39m=[32m"transform: none;"[39m
+@chitchat/web:test:                   [36m>[39m
+@chitchat/web:test:                     [36m<svg[39m
+@chitchat/web:test:                       [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:                       [33mclass[39m=[32m"size-full"[39m
+@chitchat/web:test:                       [33moverflow[39m=[32m"visible"[39m
+@chitchat/web:test:                       [33mstyle[39m=[32m"transform-origin: 28% 44%;"[39m
+@chitchat/web:test:                       [33mviewBox[39m=[32m"270 370 720 600"[39m
+@chitchat/web:test:                     [36m>[39m
+@chitchat/web:test:                       [36m<defs>[39m
+@chitchat/web:test:                         [36m<clippath[39m
+@chitchat/web:test:                           [33mid[39m=[32m"_r_1f_-red"[39m
+@chitchat/web:test:                         [36m>[39m
+@chitchat/web:test:                           [36m<path[39m
+@chitchat/web:test:                             [33md[39m=[32m"M270 370 H655 Q671 475 668 565 L674 669 Q665 743 620 795 Q555 880 480 872 Q408 866 345 804 L270 780Z"[39m
+@chitchat/web:test:                           [36m/>[39m
+@chitchat/web:test:                         [36m</clippath>[39m
+@chitchat/web:test:                       [36m</defs>[39m
+@chitchat/web:test:                       [36m<image[39m
+@chitchat/web:test:                         [33mclip-path[39m=[32m"url(#_r_1f_-red)"[39m
+@chitchat/web:test:                         [33mheight[39m=[32m"1254"[39m
+@chitchat/web:test:                         [33mhref[39m=[32m"/images/chit/original.png"[39m
+@chitchat/web:test:                         [33mwidth[39m=[32m"1254"[39m
+@chitchat/web:test:                       [36m/>[39m
+@chitchat/web:test:                     [36m</svg>[39m
+@chitchat/web:test:                   [36m</span>[39m
+@chitchat/web:test:                   [36m<span[39m
+@chitchat/web:test:                     [33mclass[39m=[32m"absolute inset-0"[39m
+@chitchat/web:test:                     [33mstyle[39m=[32m"transform: none;"[39m
+@chitchat/web:test:                   [36m>[39m
+@chitchat/web:test:                     [36m<svg[39m
+@chitchat/web:test:                       [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:                       [33mclass[39m=[32m"size-full"[39m
+@chitchat/web:test:                       [33moverflow[39m=[32m"visible"[39m
+@chitchat/web:test:                       [33mstyle[39m=[32m"transform-origin: 76% 30%;"[39m
+@chitchat/web:test:                       [33mviewBox[39m=[3...
+@chitchat/web:test: [90m [2m❯[22m Object.getElementError ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+@chitchat/web:test: [90m [2m❯[22m ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+@chitchat/web:test: [90m [2m❯[22m ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+@chitchat/web:test: [90m [2m❯[22m ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+@chitchat/web:test: [36m [2m❯[22m src/components/onboarding/onboarding-recovery.test.tsx:[2m115:28[22m[39m
+@chitchat/web:test:     [90m113|[39m     voice(); const old = latest(); act(() => old.callbacks.onPhase(pha…
+@chitchat/web:test:     [90m114|[39m     expect(old.close).toHaveBeenCalledOnce(); expect(sessions).toHaveL…
+@chitchat/web:test:     [90m115|[39m     fireEvent.click(screen.getByRole("button", { name: en.voice_restar…
+@chitchat/web:test:     [90m   |[39m                            [31m^[39m
+@chitchat/web:test:     [90m116|[39m     act(() => { old.callbacks.onComplete(ready); old.callbacks.onError…
+@chitchat/web:test:     [90m117|[39m     expect(raw().resolvedGoal).toBeUndefined(); expect(raw().conversat…
+@chitchat/web:test: 
+@chitchat/web:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/10]⎯[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/components/onboarding/onboarding-recovery.test.tsx[2m > [22monboarding suspension and accepted outcomes[2m > [22minterrupts thinking voice and requires an explicit restart
+@chitchat/web:test: [31m[1mTestingLibraryElementError[22m[39m: Unable to find an accessible element with the role "button" and name "Restart voice"
+@chitchat/web:test: 
+@chitchat/web:test: Here are the accessible roles:
+@chitchat/web:test: 
+@chitchat/web:test:   main:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<main[39m
+@chitchat/web:test:     [33mclass[39m=[32m"relative mx-auto flex min-h-dvh w-full max-w-4xl flex-col px-5 sm:px-8"[39m
+@chitchat/web:test:     [33mdata-voice-step[39m=[32m"true"[39m
+@chitchat/web:test:     [33mdir[39m=[32m"ltr"[39m
+@chitchat/web:test:     [33mid[39m=[32m"main"[39m
+@chitchat/web:test:     [33mlang[39m=[32m"en"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   button:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Back":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Back"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 size-12 absolute end-5 top-4 z-10 rounded-full sm:end-8"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"icon"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"ghost"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Switch to text":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33maria-describedby[39m=[32m"_r_1n_"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center rounded-xl border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 text-primary underline-offset-4 hover:underline min-h-12 gap-2 px-5 py-2.5 has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"default"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"link"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Choose skills instead":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex touch-manipulation items-center justify-center rounded-xl border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 min-h-12 gap-2 px-5 py-2.5 has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4 mx-auto shrink-0"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"default"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"ghost"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Chit is thinking…. Show transcript":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33maria-expanded[39m=[32m"false"[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Chit is thinking…. Show transcript"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center rounded-xl border border-transparent bg-clip-padding whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground min-h-11 text-sm leading-5 [&_svg:not([class*='size-'])]:size-4 text-primary pointer-events-auto absolute bottom-10 left-1/2 h-auto -translate-x-1/2 flex-col gap-1 bg-transparent px-2 py-1 font-medium hover:bg-transparent dark:hover:bg-transparent"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"xs"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"ghost"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   region:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Answer by voice":
+@chitchat/web:test:   [36m<section[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Answer by voice"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"mx-auto flex min-h-0 w-full max-w-xl flex-1 flex-col pb-40"[39m
+@chitchat/web:test:     [33mdata-voice-session[39m=[32m"true"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   img:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Chit":
+@chitchat/web:test:   [36m<span[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Chit"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"relative inline-block shrink-0 align-middle"[39m
+@chitchat/web:test:     [33mdata-state[39m=[32m"thinking"[39m
+@chitchat/web:test:     [33mrole[39m=[32m"img"[39m
+@chitchat/web:test:     [33mstyle[39m=[32m"width: 80px; height: 80px;"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   paragraph:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<p[39m
+@chitchat/web:test:     [33maria-live[39m=[32m"polite"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"text-muted-foreground min-h-12 text-base leading-relaxed"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<p[39m
+@chitchat/web:test:     [33mclass[39m=[32m"text-muted-foreground text-xs leading-relaxed"[39m
+@chitchat/web:test:     [33mid[39m=[32m"_r_1n_"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   contentinfo:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<footer[39m
+@chitchat/web:test:     [33mclass[39m=[32m"bg-background/95 sticky bottom-0 flex flex-col items-center gap-3 py-4 backdrop-blur-sm"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test: 
+@chitchat/web:test: Ignored nodes: comments, script, style
+@chitchat/web:test: [36m<body>[39m
+@chitchat/web:test:   [36m<div>[39m
+@chitchat/web:test:     [36m<main[39m
+@chitchat/web:test:       [33mclass[39m=[32m"relative mx-auto flex min-h-dvh w-full max-w-4xl flex-col px-5 sm:px-8"[39m
+@chitchat/web:test:       [33mdata-voice-step[39m=[32m"true"[39m
+@chitchat/web:test:       [33mdir[39m=[32m"ltr"[39m
+@chitchat/web:test:       [33mid[39m=[32m"main"[39m
+@chitchat/web:test:       [33mlang[39m=[32m"en"[39m
+@chitchat/web:test:     [36m>[39m
+@chitchat/web:test:       [36m<button[39m
+@chitchat/web:test:         [33maria-label[39m=[32m"Back"[39m
+@chitchat/web:test:         [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 size-12 absolute end-5 top-4 z-10 rounded-full sm:end-8"[39m
+@chitchat/web:test:         [33mdata-size[39m=[32m"icon"[39m
+@chitchat/web:test:         [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:         [33mdata-variant[39m=[32m"ghost"[39m
+@chitchat/web:test:       [36m>[39m
+@chitchat/web:test:         [36m<svg[39m
+@chitchat/web:test:           [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:           [33mclass[39m=[32m"lucide lucide-x"[39m
+@chitchat/web:test:           [33mfill[39m=[32m"none"[39m
+@chitchat/web:test:           [33mheight[39m=[32m"24"[39m
+@chitchat/web:test:           [33mstroke[39m=[32m"currentColor"[39m
+@chitchat/web:test:           [33mstroke-linecap[39m=[32m"round"[39m
+@chitchat/web:test:           [33mstroke-linejoin[39m=[32m"round"[39m
+@chitchat/web:test:           [33mstroke-width[39m=[32m"2"[39m
+@chitchat/web:test:           [33mviewBox[39m=[32m"0 0 24 24"[39m
+@chitchat/web:test:           [33mwidth[39m=[32m"24"[39m
+@chitchat/web:test:           [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+@chitchat/web:test:         [36m>[39m
+@chitchat/web:test:           [36m<path[39m
+@chitchat/web:test:             [33md[39m=[32m"M18 6 6 18"[39m
+@chitchat/web:test:           [36m/>[39m
+@chitchat/web:test:           [36m<path[39m
+@chitchat/web:test:             [33md[39m=[32m"m6 6 12 12"[39m
+@chitchat/web:test:           [36m/>[39m
+@chitchat/web:test:         [36m</svg>[39m
+@chitchat/web:test:       [36m</button>[39m
+@chitchat/web:test:       [36m<div[39m
+@chitchat/web:test:         [33mclass[39m=[32m"onboarding-content flex flex-1 flex-col justify-center py-8 sm:py-12"[39m
+@chitchat/web:test:       [36m>[39m
+@chitchat/web:test:         [0m [0m
+@chitchat/web:test:         [36m<section[39m
+@chitchat/web:test:           [33maria-label[39m=[32m"Answer by voice"[39m
+@chitchat/web:test:           [33mclass[39m=[32m"mx-auto flex min-h-0 w-full max-w-xl flex-1 flex-col pb-40"[39m
+@chitchat/web:test:           [33mdata-voice-session[39m=[32m"true"[39m
+@chitchat/web:test:         [36m>[39m
+@chitchat/web:test:           [36m<div[39m
+@chitchat/web:test:             [33mclass[39m=[32m"min-h-0 flex-1"[39m
+@chitchat/web:test:           [36m>[39m
+@chitchat/web:test:             [36m<div[39m
+@chitchat/web:test:               [33mclass[39m=[32m"flex h-full flex-col items-center justify-center gap-5 overflow-y-auto px-2 text-center"[39m
+@chitchat/web:test:             [36m>[39m
+@chitchat/web:test:               [36m<span[39m
+@chitchat/web:test:                 [33maria-label[39m=[32m"Chit"[39m
+@chitchat/web:test:                 [33mclass[39m=[32m"relative inline-block shrink-0 align-middle"[39m
+@chitchat/web:test:                 [33mdata-state[39m=[32m"thinking"[39m
+@chitchat/web:test:                 [33mrole[39m=[32m"img"[39m
+@chitchat/web:test:                 [33mstyle[39m=[32m"width: 80px; height: 80px;"[39m
+@chitchat/web:test:               [36m>[39m
+@chitchat/web:test:                 [36m<span[39m
+@chitchat/web:test:                   [33mclass[39m=[32m"absolute inset-[12%]"[39m
+@chitchat/web:test:                 [36m>[39m
+@chitchat/web:test:                   [36m<span[39m
+@chitchat/web:test:                     [33mclass[39m=[32m"absolute inset-0"[39m
+@chitchat/web:test:                     [33mstyle[39m=[32m"transform: none;"[39m
+@chitchat/web:test:                   [36m>[39m
+@chitchat/web:test:                     [36m<svg[39m
+@chitchat/web:test:                       [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:                       [33mclass[39m=[32m"size-full"[39m
+@chitchat/web:test:                       [33moverflow[39m=[32m"visible"[39m
+@chitchat/web:test:                       [33mstyle[39m=[32m"transform-origin: 55% 78%;"[39m
+@chitchat/web:test:                       [33mviewBox[39m=[32m"270 370 720 600"[39m
+@chitchat/web:test:                     [36m>[39m
+@chitchat/web:test:                       [36m<defs>[39m
+@chitchat/web:test:                         [36m<clippath[39m
+@chitchat/web:test:                           [33mid[39m=[32m"_r_1m_-blue"[39m
+@chitchat/web:test:                         [36m>[39m
+@chitchat/web:test:                           [36m<path[39m
+@chitchat/web:test:                             [33md[39m=[32m"M270 780 L345 804 Q408 866 480 872 Q555 880 620 795 Q665 743 674 669 Q694 714 800 704 Q908 706 966 674 L1000 674 L1000 970 L270 970Z"[39m
+@chitchat/web:test:                           [36m/>[39m
+@chitchat/web:test:                         [36m</clippath>[39m
+@chitchat/web:test:                       [36m</defs>[39m
+@chitchat/web:test:                       [36m<image[39m
+@chitchat/web:test:                         [33mclip-path[39m=[32m"url(#_r_1m_-blue)"[39m
+@chitchat/web:test:                         [33mheight[39m=[32m"1254"[39m
+@chitchat/web:test:                         [33mhref[39m=[32m"/images/chit/original.png"[39m
+@chitchat/web:test:                         [33mwidth[39m=[32m"1254"[39m
+@chitchat/web:test:                       [36m/>[39m
+@chitchat/web:test:                     [36m</svg>[39m
+@chitchat/web:test:                   [36m</span>[39m
+@chitchat/web:test:                   [36m<span[39m
+@chitchat/web:test:                     [33mclass[39m=[32m"absolute inset-0"[39m
+@chitchat/web:test:                     [33mstyle[39m=[32m"transform: none;"[39m
+@chitchat/web:test:                   [36m>[39m
+@chitchat/web:test:                     [36m<svg[39m
+@chitchat/web:test:                       [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:                       [33mclass[39m=[32m"size-full"[39m
+@chitchat/web:test:                       [33moverflow[39m=[32m"visible"[39m
+@chitchat/web:test:                       [33mstyle[39m=[32m"transform-origin: 28% 44%;"[39m
+@chitchat/web:test:                       [33mviewBox[39m=[32m"270 370 720 600"[39m
+@chitchat/web:test:                     [36m>[39m
+@chitchat/web:test:                       [36m<defs>[39m
+@chitchat/web:test:                         [36m<clippath[39m
+@chitchat/web:test:                           [33mid[39m=[32m"_r_1m_-red"[39m
+@chitchat/web:test:                         [36m>[39m
+@chitchat/web:test:                           [36m<path[39m
+@chitchat/web:test:                             [33md[39m=[32m"M270 370 H655 Q671 475 668 565 L674 669 Q665 743 620 795 Q555 880 480 872 Q408 866 345 804 L270 780Z"[39m
+@chitchat/web:test:                           [36m/>[39m
+@chitchat/web:test:                         [36m</clippath>[39m
+@chitchat/web:test:                       [36m</defs>[39m
+@chitchat/web:test:                       [36m<image[39m
+@chitchat/web:test:                         [33mclip-path[39m=[32m"url(#_r_1m_-red)"[39m
+@chitchat/web:test:                         [33mheight[39m=[32m"1254"[39m
+@chitchat/web:test:                         [33mhref[39m=[32m"/images/chit/original.png"[39m
+@chitchat/web:test:                         [33mwidth[39m=[32m"1254"[39m
+@chitchat/web:test:                       [36m/>[39m
+@chitchat/web:test:                     [36m</svg>[39m
+@chitchat/web:test:                   [36m</span>[39m
+@chitchat/web:test:                   [36m<span[39m
+@chitchat/web:test:                     [33mclass[39m=[32m"absolute inset-0"[39m
+@chitchat/web:test:                     [33mstyle[39m=[32m"transform: none;"[39m
+@chitchat/web:test:                   [36m>[39m
+@chitchat/web:test:                     [36m<svg[39m
+@chitchat/web:test:                       [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:                       [33mclass[39m=[32m"size-full"[39m
+@chitchat/web:test:                       [33moverflow[39m=[32m"visible"[39m
+@chitchat/web:test:                       [33mstyle[39m=[32m"transform-origin: 76% 30%;"[39m
+@chitchat/web:test:                       [33mviewBox[39m=[32...
+@chitchat/web:test: [90m [2m❯[22m Object.getElementError ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+@chitchat/web:test: [90m [2m❯[22m ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+@chitchat/web:test: [90m [2m❯[22m ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+@chitchat/web:test: [90m [2m❯[22m ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+@chitchat/web:test: [36m [2m❯[22m src/components/onboarding/onboarding-recovery.test.tsx:[2m115:28[22m[39m
+@chitchat/web:test:     [90m113|[39m     voice(); const old = latest(); act(() => old.callbacks.onPhase(pha…
+@chitchat/web:test:     [90m114|[39m     expect(old.close).toHaveBeenCalledOnce(); expect(sessions).toHaveL…
+@chitchat/web:test:     [90m115|[39m     fireEvent.click(screen.getByRole("button", { name: en.voice_restar…
+@chitchat/web:test:     [90m   |[39m                            [31m^[39m
+@chitchat/web:test:     [90m116|[39m     act(() => { old.callbacks.onComplete(ready); old.callbacks.onError…
+@chitchat/web:test:     [90m117|[39m     expect(raw().resolvedGoal).toBeUndefined(); expect(raw().conversat…
+@chitchat/web:test: 
+@chitchat/web:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/10]⎯[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/components/onboarding/onboarding-recovery.test.tsx[2m > [22monboarding suspension and accepted outcomes[2m > [22minterrupts speaking voice and requires an explicit restart
+@chitchat/web:test: [31m[1mTestingLibraryElementError[22m[39m: Unable to find an accessible element with the role "button" and name "Restart voice"
+@chitchat/web:test: 
+@chitchat/web:test: Here are the accessible roles:
+@chitchat/web:test: 
+@chitchat/web:test:   main:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<main[39m
+@chitchat/web:test:     [33mclass[39m=[32m"relative mx-auto flex min-h-dvh w-full max-w-4xl flex-col px-5 sm:px-8"[39m
+@chitchat/web:test:     [33mdata-voice-step[39m=[32m"true"[39m
+@chitchat/web:test:     [33mdir[39m=[32m"ltr"[39m
+@chitchat/web:test:     [33mid[39m=[32m"main"[39m
+@chitchat/web:test:     [33mlang[39m=[32m"en"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   button:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Back":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Back"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 size-12 absolute end-5 top-4 z-10 rounded-full sm:end-8"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"icon"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"ghost"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Switch to text":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33maria-describedby[39m=[32m"_r_1u_"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center rounded-xl border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 text-primary underline-offset-4 hover:underline min-h-12 gap-2 px-5 py-2.5 has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"default"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"link"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Choose skills instead":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex touch-manipulation items-center justify-center rounded-xl border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 min-h-12 gap-2 px-5 py-2.5 has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4 mx-auto shrink-0"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"default"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"ghost"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Chit is speaking. Show transcript":
+@chitchat/web:test:   [36m<button[39m
+@chitchat/web:test:     [33maria-expanded[39m=[32m"false"[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Chit is speaking. Show transcript"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center rounded-xl border border-transparent bg-clip-padding whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground min-h-11 text-sm leading-5 [&_svg:not([class*='size-'])]:size-4 text-primary pointer-events-auto absolute bottom-10 left-1/2 h-auto -translate-x-1/2 flex-col gap-1 bg-transparent px-2 py-1 font-medium hover:bg-transparent dark:hover:bg-transparent"[39m
+@chitchat/web:test:     [33mdata-size[39m=[32m"xs"[39m
+@chitchat/web:test:     [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:     [33mdata-variant[39m=[32m"ghost"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   region:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Answer by voice":
+@chitchat/web:test:   [36m<section[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Answer by voice"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"mx-auto flex min-h-0 w-full max-w-xl flex-1 flex-col pb-40"[39m
+@chitchat/web:test:     [33mdata-voice-session[39m=[32m"true"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   img:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "Chit":
+@chitchat/web:test:   [36m<span[39m
+@chitchat/web:test:     [33maria-label[39m=[32m"Chit"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"relative inline-block shrink-0 align-middle"[39m
+@chitchat/web:test:     [33mdata-state[39m=[32m"speaking"[39m
+@chitchat/web:test:     [33mrole[39m=[32m"img"[39m
+@chitchat/web:test:     [33mstyle[39m=[32m"width: 80px; height: 80px;"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   paragraph:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<p[39m
+@chitchat/web:test:     [33maria-live[39m=[32m"polite"[39m
+@chitchat/web:test:     [33mclass[39m=[32m"text-muted-foreground min-h-12 text-base leading-relaxed"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<p[39m
+@chitchat/web:test:     [33mclass[39m=[32m"text-muted-foreground text-xs leading-relaxed"[39m
+@chitchat/web:test:     [33mid[39m=[32m"_r_1u_"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test:   contentinfo:
+@chitchat/web:test: 
+@chitchat/web:test:   Name "":
+@chitchat/web:test:   [36m<footer[39m
+@chitchat/web:test:     [33mclass[39m=[32m"bg-background/95 sticky bottom-0 flex flex-col items-center gap-3 py-4 backdrop-blur-sm"[39m
+@chitchat/web:test:   [36m/>[39m
+@chitchat/web:test: 
+@chitchat/web:test:   --------------------------------------------------
+@chitchat/web:test: 
+@chitchat/web:test: Ignored nodes: comments, script, style
+@chitchat/web:test: [36m<body>[39m
+@chitchat/web:test:   [36m<div>[39m
+@chitchat/web:test:     [36m<main[39m
+@chitchat/web:test:       [33mclass[39m=[32m"relative mx-auto flex min-h-dvh w-full max-w-4xl flex-col px-5 sm:px-8"[39m
+@chitchat/web:test:       [33mdata-voice-step[39m=[32m"true"[39m
+@chitchat/web:test:       [33mdir[39m=[32m"ltr"[39m
+@chitchat/web:test:       [33mid[39m=[32m"main"[39m
+@chitchat/web:test:       [33mlang[39m=[32m"en"[39m
+@chitchat/web:test:     [36m>[39m
+@chitchat/web:test:       [36m<button[39m
+@chitchat/web:test:         [33maria-label[39m=[32m"Back"[39m
+@chitchat/web:test:         [33mclass[39m=[32m"group/button focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 inline-flex shrink-0 touch-manipulation items-center justify-center border border-transparent bg-clip-padding text-base leading-6 font-semibold whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:ring-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 size-12 absolute end-5 top-4 z-10 rounded-full sm:end-8"[39m
+@chitchat/web:test:         [33mdata-size[39m=[32m"icon"[39m
+@chitchat/web:test:         [33mdata-slot[39m=[32m"button"[39m
+@chitchat/web:test:         [33mdata-variant[39m=[32m"ghost"[39m
+@chitchat/web:test:       [36m>[39m
+@chitchat/web:test:         [36m<svg[39m
+@chitchat/web:test:           [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:           [33mclass[39m=[32m"lucide lucide-x"[39m
+@chitchat/web:test:           [33mfill[39m=[32m"none"[39m
+@chitchat/web:test:           [33mheight[39m=[32m"24"[39m
+@chitchat/web:test:           [33mstroke[39m=[32m"currentColor"[39m
+@chitchat/web:test:           [33mstroke-linecap[39m=[32m"round"[39m
+@chitchat/web:test:           [33mstroke-linejoin[39m=[32m"round"[39m
+@chitchat/web:test:           [33mstroke-width[39m=[32m"2"[39m
+@chitchat/web:test:           [33mviewBox[39m=[32m"0 0 24 24"[39m
+@chitchat/web:test:           [33mwidth[39m=[32m"24"[39m
+@chitchat/web:test:           [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+@chitchat/web:test:         [36m>[39m
+@chitchat/web:test:           [36m<path[39m
+@chitchat/web:test:             [33md[39m=[32m"M18 6 6 18"[39m
+@chitchat/web:test:           [36m/>[39m
+@chitchat/web:test:           [36m<path[39m
+@chitchat/web:test:             [33md[39m=[32m"m6 6 12 12"[39m
+@chitchat/web:test:           [36m/>[39m
+@chitchat/web:test:         [36m</svg>[39m
+@chitchat/web:test:       [36m</button>[39m
+@chitchat/web:test:       [36m<div[39m
+@chitchat/web:test:         [33mclass[39m=[32m"onboarding-content flex flex-1 flex-col justify-center py-8 sm:py-12"[39m
+@chitchat/web:test:       [36m>[39m
+@chitchat/web:test:         [0m [0m
+@chitchat/web:test:         [36m<section[39m
+@chitchat/web:test:           [33maria-label[39m=[32m"Answer by voice"[39m
+@chitchat/web:test:           [33mclass[39m=[32m"mx-auto flex min-h-0 w-full max-w-xl flex-1 flex-col pb-40"[39m
+@chitchat/web:test:           [33mdata-voice-session[39m=[32m"true"[39m
+@chitchat/web:test:         [36m>[39m
+@chitchat/web:test:           [36m<div[39m
+@chitchat/web:test:             [33mclass[39m=[32m"min-h-0 flex-1"[39m
+@chitchat/web:test:           [36m>[39m
+@chitchat/web:test:             [36m<div[39m
+@chitchat/web:test:               [33mclass[39m=[32m"flex h-full flex-col items-center justify-center gap-5 overflow-y-auto px-2 text-center"[39m
+@chitchat/web:test:             [36m>[39m
+@chitchat/web:test:               [36m<span[39m
+@chitchat/web:test:                 [33maria-label[39m=[32m"Chit"[39m
+@chitchat/web:test:                 [33mclass[39m=[32m"relative inline-block shrink-0 align-middle"[39m
+@chitchat/web:test:                 [33mdata-state[39m=[32m"speaking"[39m
+@chitchat/web:test:                 [33mrole[39m=[32m"img"[39m
+@chitchat/web:test:                 [33mstyle[39m=[32m"width: 80px; height: 80px;"[39m
+@chitchat/web:test:               [36m>[39m
+@chitchat/web:test:                 [36m<span[39m
+@chitchat/web:test:                   [33mclass[39m=[32m"absolute inset-[12%]"[39m
+@chitchat/web:test:                 [36m>[39m
+@chitchat/web:test:                   [36m<span[39m
+@chitchat/web:test:                     [33mclass[39m=[32m"absolute inset-0"[39m
+@chitchat/web:test:                     [33mstyle[39m=[32m"transform: none;"[39m
+@chitchat/web:test:                   [36m>[39m
+@chitchat/web:test:                     [36m<svg[39m
+@chitchat/web:test:                       [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:                       [33mclass[39m=[32m"size-full"[39m
+@chitchat/web:test:                       [33moverflow[39m=[32m"visible"[39m
+@chitchat/web:test:                       [33mstyle[39m=[32m"transform-origin: 55% 78%;"[39m
+@chitchat/web:test:                       [33mviewBox[39m=[32m"270 370 720 600"[39m
+@chitchat/web:test:                     [36m>[39m
+@chitchat/web:test:                       [36m<defs>[39m
+@chitchat/web:test:                         [36m<clippath[39m
+@chitchat/web:test:                           [33mid[39m=[32m"_r_1t_-blue"[39m
+@chitchat/web:test:                         [36m>[39m
+@chitchat/web:test:                           [36m<path[39m
+@chitchat/web:test:                             [33md[39m=[32m"M270 780 L345 804 Q408 866 480 872 Q555 880 620 795 Q665 743 674 669 Q694 714 800 704 Q908 706 966 674 L1000 674 L1000 970 L270 970Z"[39m
+@chitchat/web:test:                           [36m/>[39m
+@chitchat/web:test:                         [36m</clippath>[39m
+@chitchat/web:test:                       [36m</defs>[39m
+@chitchat/web:test:                       [36m<image[39m
+@chitchat/web:test:                         [33mclip-path[39m=[32m"url(#_r_1t_-blue)"[39m
+@chitchat/web:test:                         [33mheight[39m=[32m"1254"[39m
+@chitchat/web:test:                         [33mhref[39m=[32m"/images/chit/original.png"[39m
+@chitchat/web:test:                         [33mwidth[39m=[32m"1254"[39m
+@chitchat/web:test:                       [36m/>[39m
+@chitchat/web:test:                     [36m</svg>[39m
+@chitchat/web:test:                   [36m</span>[39m
+@chitchat/web:test:                   [36m<span[39m
+@chitchat/web:test:                     [33mclass[39m=[32m"absolute inset-0"[39m
+@chitchat/web:test:                     [33mstyle[39m=[32m"transform: none;"[39m
+@chitchat/web:test:                   [36m>[39m
+@chitchat/web:test:                     [36m<svg[39m
+@chitchat/web:test:                       [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:                       [33mclass[39m=[32m"size-full"[39m
+@chitchat/web:test:                       [33moverflow[39m=[32m"visible"[39m
+@chitchat/web:test:                       [33mstyle[39m=[32m"transform-origin: 28% 44%;"[39m
+@chitchat/web:test:                       [33mviewBox[39m=[32m"270 370 720 600"[39m
+@chitchat/web:test:                     [36m>[39m
+@chitchat/web:test:                       [36m<defs>[39m
+@chitchat/web:test:                         [36m<clippath[39m
+@chitchat/web:test:                           [33mid[39m=[32m"_r_1t_-red"[39m
+@chitchat/web:test:                         [36m>[39m
+@chitchat/web:test:                           [36m<path[39m
+@chitchat/web:test:                             [33md[39m=[32m"M270 370 H655 Q671 475 668 565 L674 669 Q665 743 620 795 Q555 880 480 872 Q408 866 345 804 L270 780Z"[39m
+@chitchat/web:test:                           [36m/>[39m
+@chitchat/web:test:                         [36m</clippath>[39m
+@chitchat/web:test:                       [36m</defs>[39m
+@chitchat/web:test:                       [36m<image[39m
+@chitchat/web:test:                         [33mclip-path[39m=[32m"url(#_r_1t_-red)"[39m
+@chitchat/web:test:                         [33mheight[39m=[32m"1254"[39m
+@chitchat/web:test:                         [33mhref[39m=[32m"/images/chit/original.png"[39m
+@chitchat/web:test:                         [33mwidth[39m=[32m"1254"[39m
+@chitchat/web:test:                       [36m/>[39m
+@chitchat/web:test:                     [36m</svg>[39m
+@chitchat/web:test:                   [36m</span>[39m
+@chitchat/web:test:                   [36m<span[39m
+@chitchat/web:test:                     [33mclass[39m=[32m"absolute inset-0"[39m
+@chitchat/web:test:                     [33mstyle[39m=[32m"transform: none;"[39m
+@chitchat/web:test:                   [36m>[39m
+@chitchat/web:test:                     [36m<svg[39m
+@chitchat/web:test:                       [33maria-hidden[39m=[32m"true"[39m
+@chitchat/web:test:                       [33mclass[39m=[32m"size-full"[39m
+@chitchat/web:test:                       [33moverflow[39m=[32m"visible"[39m
+@chitchat/web:test:                       [33mstyle[39m=[32m"transform-origin: 76% 30%;"[39m
+@chitchat/web:test:                       [33mviewBox[39m=[32...
+@chitchat/web:test: [90m [2m❯[22m Object.getElementError ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+@chitchat/web:test: [90m [2m❯[22m ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+@chitchat/web:test: [90m [2m❯[22m ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+@chitchat/web:test: [90m [2m❯[22m ../../node_modules/.bun/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+@chitchat/web:test: [36m [2m❯[22m src/components/onboarding/onboarding-recovery.test.tsx:[2m115:28[22m[39m
+@chitchat/web:test:     [90m113|[39m     voice(); const old = latest(); act(() => old.callbacks.onPhase(pha…
+@chitchat/web:test:     [90m114|[39m     expect(old.close).toHaveBeenCalledOnce(); expect(sessions).toHaveL…
+@chitchat/web:test:     [90m115|[39m     fireEvent.click(screen.getByRole("button", { name: en.voice_restar…
+@chitchat/web:test:     [90m   |[39m                            [31m^[39m
+@chitchat/web:test:     [90m116|[39m     act(() => { old.callbacks.onComplete(ready); old.callbacks.onError…
+@chitchat/web:test:     [90m117|[39m     expect(raw().resolvedGoal).toBeUndefined(); expect(raw().conversat…
+@chitchat/web:test: 
+@chitchat/web:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/10]⎯[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/components/onboarding/onboarding-recovery.test.tsx[2m > [22monboarding suspension and accepted outcomes[2m > [22mimmediately persists batched transcript and ready completion while transcript is open, then restores without voice
+@chitchat/web:test: [31m[1mAssertionError[22m: expected { Object (version, step, ...) } to match object { step: 'microphone', …(3) }
+@chitchat/web:test: (5 matching properties omitted from actual)[39m
+@chitchat/web:test: 
+@chitchat/web:test: [32m- Expected[39m
+@chitchat/web:test: [31m+ Received[39m
+@chitchat/web:test: 
+@chitchat/web:test: [2m  {[22m
+@chitchat/web:test: [32m-   "conversation": [[39m
+@chitchat/web:test: [32m-     {[39m
+@chitchat/web:test: [32m-       "role": "user",[39m
+@chitchat/web:test: [32m-       "text": "Make friends",[39m
+@chitchat/web:test: [32m-     },[39m
+@chitchat/web:test: [32m-     {[39m
+@chitchat/web:test: [32m-       "role": "assistant",[39m
+@chitchat/web:test: [32m-       "text": "Let's practice making friends.",[39m
+@chitchat/web:test: [32m-     },[39m
+@chitchat/web:test: [32m-   ],[39m
+@chitchat/web:test: [32m-   "motivation": "Make friends",[39m
+@chitchat/web:test: [32m-   "resolvedGoal": {[39m
+@chitchat/web:test: [32m-     "benefits": {[39m
+@chitchat/web:test: [32m-       "ids": [[39m
+@chitchat/web:test: [32m-         "start-conversations",[39m
+@chitchat/web:test: [32m-         "listen-and-connect",[39m
+@chitchat/web:test: [32m-         "keep-it-going",[39m
+@chitchat/web:test: [32m-       ],[39m
+@chitchat/web:test: [32m-       "personalized": true,[39m
+@chitchat/web:test: [32m-     },[39m
+@chitchat/web:test: [32m-     "goal": "Make friends",[39m
+@chitchat/web:test: [32m-     "reply": "Let's practice making friends.",[39m
+@chitchat/web:test: [32m-     "status": "ready",[39m
+@chitchat/web:test: [32m-     "suggestedSkills": [[39m
+@chitchat/web:test: [32m-       "listening",[39m
+@chitchat/web:test: [32m-     ],[39m
+@chitchat/web:test: [32m-   },[39m
+@chitchat/web:test: [31m+   "conversation": [],[39m
+@chitchat/web:test: [31m+   "motivation": "",[39m
+@chitchat/web:test: [2m    "step": "microphone",[22m
+@chitchat/web:test: [2m  }[22m
+@chitchat/web:test: 
+@chitchat/web:test: [36m [2m❯[22m src/components/onboarding/onboarding-recovery.test.tsx:[2m134:21[22m[39m
+@chitchat/web:test:     [90m132|[39m       latest().callbacks.onMessages(conversation.map((message, id) => …
+@chitchat/web:test:     [90m133|[39m       latest().callbacks.onComplete(turn);
+@chitchat/web:test:     [90m134|[39m       expect(raw()).toMatchObject({ step: "microphone", resolvedGoal: …
+@chitchat/web:test:     [90m   |[39m                     [31m^[39m
+@chitchat/web:test:     [90m135|[39m       latest().callbacks.onComplete({ ...ready, goal: "Duplicate must …
+@chitchat/web:test:     [90m136|[39m       expect(raw().resolvedGoal).toEqual(turn);
+@chitchat/web:test: [90m [2m❯[22m ../../node_modules/.bun/@testing-library+react@16.3.3+ecd771ed1f03fe67/node_modules/@testing-library/react/dist/act-compat.js:[2m47:24[22m[39m
+@chitchat/web:test: [90m [2m❯[22m process.env.NODE_ENV.exports.act ../../node_modules/.bun/react@19.3.0/node_modules/react/cjs/react.development.js:[2m890:22[22m[39m
+@chitchat/web:test: [90m [2m❯[22m Proxy.<anonymous> ../../node_modules/.bun/@testing-library+react@16.3.3+ecd771ed1f03fe67/node_modules/@testing-library/react/dist/act-compat.js:[2m46:25[22m[39m
+@chitchat/web:test: [90m [2m❯[22m src/components/onboarding/onboarding-recovery.test.tsx:[2m131:5[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/10]⎯[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/components/onboarding/onboarding-recovery.test.tsx[2m > [22monboarding suspension and accepted outcomes[2m > [22mimmediately persists batched transcript and choose completion while transcript is open, then restores without voice
+@chitchat/web:test: [31m[1mAssertionError[22m: expected { Object (version, step, ...) } to match object { step: 'microphone', …(3) }
+@chitchat/web:test: (5 matching properties omitted from actual)[39m
+@chitchat/web:test: 
+@chitchat/web:test: [32m- Expected[39m
+@chitchat/web:test: [31m+ Received[39m
+@chitchat/web:test: 
+@chitchat/web:test: [2m  {[22m
+@chitchat/web:test: [32m-   "conversation": [[39m
+@chitchat/web:test: [32m-     {[39m
+@chitchat/web:test: [32m-       "role": "user",[39m
+@chitchat/web:test: [32m-       "text": "Make friends",[39m
+@chitchat/web:test: [32m-     },[39m
+@chitchat/web:test: [32m-     {[39m
+@chitchat/web:test: [32m-       "role": "assistant",[39m
+@chitchat/web:test: [32m-       "text": "Let's practice making friends.",[39m
+@chitchat/web:test: [32m-     },[39m
+@chitchat/web:test: [32m-   ],[39m
+@chitchat/web:test: [32m-   "motivation": "Make friends",[39m
+@chitchat/web:test: [32m-   "resolvedGoal": {[39m
+@chitchat/web:test: [32m-     "benefits": {[39m
+@chitchat/web:test: [32m-       "ids": [[39m
+@chitchat/web:test: [32m-         "start-conversations",[39m
+@chitchat/web:test: [32m-         "listen-and-connect",[39m
+@chitchat/web:test: [32m-         "keep-it-going",[39m
+@chitchat/web:test: [32m-       ],[39m
+@chitchat/web:test: [32m-       "personalized": true,[39m
+@chitchat/web:test: [32m-     },[39m
+@chitchat/web:test: [32m-     "goal": "Make friends",[39m
+@chitchat/web:test: [32m-     "reply": "Let's practice making friends.",[39m
+@chitchat/web:test: [32m-     "status": "choose",[39m
+@chitchat/web:test: [32m-     "suggestedSkills": [[39m
+@chitchat/web:test: [32m-       "listening",[39m
+@chitchat/web:test: [32m-     ],[39m
+@chitchat/web:test: [32m-   },[39m
+@chitchat/web:test: [31m+   "conversation": [],[39m
+@chitchat/web:test: [31m+   "motivation": "",[39m
+@chitchat/web:test: [2m    "step": "microphone",[22m
+@chitchat/web:test: [2m  }[22m
+@chitchat/web:test: 
+@chitchat/web:test: [36m [2m❯[22m src/components/onboarding/onboarding-recovery.test.tsx:[2m134:21[22m[39m
+@chitchat/web:test:     [90m132|[39m       latest().callbacks.onMessages(conversation.map((message, id) => …
+@chitchat/web:test:     [90m133|[39m       latest().callbacks.onComplete(turn);
+@chitchat/web:test:     [90m134|[39m       expect(raw()).toMatchObject({ step: "microphone", resolvedGoal: …
+@chitchat/web:test:     [90m   |[39m                     [31m^[39m
+@chitchat/web:test:     [90m135|[39m       latest().callbacks.onComplete({ ...ready, goal: "Duplicate must …
+@chitchat/web:test:     [90m136|[39m       expect(raw().resolvedGoal).toEqual(turn);
+@chitchat/web:test: [90m [2m❯[22m ../../node_modules/.bun/@testing-library+react@16.3.3+ecd771ed1f03fe67/node_modules/@testing-library/react/dist/act-compat.js:[2m47:24[22m[39m
+@chitchat/web:test: [90m [2m❯[22m process.env.NODE_ENV.exports.act ../../node_modules/.bun/react@19.3.0/node_modules/react/cjs/react.development.js:[2m890:22[22m[39m
+@chitchat/web:test: [90m [2m❯[22m Proxy.<anonymous> ../../node_modules/.bun/@testing-library+react@16.3.3+ecd771ed1f03fe67/node_modules/@testing-library/react/dist/act-compat.js:[2m46:25[22m[39m
+@chitchat/web:test: [90m [2m❯[22m src/components/onboarding/onboarding-recovery.test.tsx:[2m131:5[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/10]⎯[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: 
+@chitchat/web:test: [2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+@chitchat/web:test: [2m      Tests [22m [1m[31m10 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (15)[39m
+@chitchat/web:test: [2m   Start at [22m 11:51:31
+@chitchat/web:test: [2m   Duration [22m 1.36s[2m (tests 31%, import 25%, transform 24%, environment 18%, setup 3%)[22m
+@chitchat/web:test: 
+@chitchat/web:test: error: script "test" exited with code 1
+@chitchat/web#test:  ERROR  command (/Users/genrevzapa/projects/chitchat/apps/web) /Users/genrevzapa/.bun/bin/bun run test --run src/components/onboarding/onboarding-recovery.test.tsx exited (1)
+
+ Tasks:    2 successful, 3 total
+Cached:    0 cached, 3 total
+  Time:    2.309s 
+Failed:    @chitchat/web#test
+
+ ERROR  run failed: command  exited (1)
+error: script "test" exited with code 1

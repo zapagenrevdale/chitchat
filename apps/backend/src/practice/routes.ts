@@ -13,7 +13,13 @@ import {
   practiceSelectionSchema,
   practiceSetupRequestSchema,
 } from "@chitchat/contracts";
-import { ApiError } from "@google/genai";
+import {
+  onboardingTurnRequestSchema,
+  onboardingTurnSchema,
+  onboardingRecommendationRequestSchema,
+  onboardingRecommendationSchema,
+} from "@chitchat/contracts/onboarding";
+import type { OnboardingTurnEvent } from "@chitchat/contracts/onboarding";
 import { Hono } from "hono";
 import { bodyLimit } from "hono/body-limit";
 
@@ -21,10 +27,16 @@ import { getPracticeOptions, resolveSelection, validDraft } from "./catalog";
 import { createConversationRoutes } from "./conversation-routes";
 import { hasEnoughConversation } from "./feedback";
 import type { PracticeProvider } from "./gemini";
+import { createOnboardingLiveRoutes } from "./onboarding-live-routes";
 import { personas } from "./personas";
+import { providerErrorStatus } from "./provider-error";
 import { applySetupAnswer, randomizeSetup, setupAnswerSchema } from "./setup";
 import type { PracticeTracing } from "./tracing";
 import type { CreateTranscriptionSession } from "./transcription";
+
+// Covers 60,000 UTF-16 units escaped to six bytes, 300 x 128-byte message
+// envelopes, and 32 KiB of context while schemas enforce semantic limits.
+const transcriptBodyLimit = 512 * 1024;
 
 export function createPracticeRoutes(
   provider: PracticeProvider | undefined,
@@ -32,7 +44,9 @@ export function createPracticeRoutes(
   tracing?: PracticeTracing,
   createTranscriptionSession?: CreateTranscriptionSession
 ) {
-  const app = new Hono();
+  const app = new Hono<{
+    Variables: { generationPending: Promise<void> | undefined };
+  }>();
   let windowStart = Date.now();
   let requests = 0;
   let inFlight = 0;
@@ -66,13 +80,19 @@ export function createPracticeRoutes(
   });
   app.use("*", (c, next) => {
     let maxSize = 4096;
-    if (
+    if (c.req.path.endsWith("/onboarding-completions")) {
+      maxSize = 64 * 1024;
+    } else if (
       ["/feedback", "/reply-suggestions", "/guided-turns"].some((path) =>
         c.req.path.endsWith(path)
       )
     ) {
-      maxSize = 128_000;
-    } else if (c.req.path.endsWith("/feedback-speech")) {
+      maxSize = transcriptBodyLimit;
+    } else if (
+      ["/feedback-speech", "/onboarding-turns"].some((path) =>
+        c.req.path.endsWith(path)
+      )
+    ) {
       maxSize = 8192;
     }
     return bodyLimit({
@@ -100,10 +120,124 @@ export function createPracticeRoutes(
     try {
       return await next();
     } finally {
-      inFlight -= 1;
+      const pending = c.get("generationPending");
+      if (pending) {
+        // oxlint-disable-next-line promise/prefer-await-to-then -- Release the quota without blocking the streaming response.
+        void pending.finally(() => {
+          inFlight -= 1;
+        });
+      } else {
+        inFlight -= 1;
+      }
     }
   });
   app.route("/", createConversationRoutes(provider));
+  app.route("/", createOnboardingLiveRoutes(provider));
+  app.post("/onboarding-turns", async (c) => {
+    const parsed = onboardingTurnRequestSchema.safeParse(
+      await c.req.json().catch(() => null)
+    );
+    if (!parsed.success) {
+      return c.json({ error: "Invalid onboarding conversation." }, 400);
+    }
+    if (!provider?.onboardingTurn) {
+      return c.json(
+        { error: "Chit couldn't reply. Try again or choose your skills." },
+        503
+      );
+    }
+    const cancellation = new AbortController();
+    const signal = AbortSignal.any([
+      c.req.raw.signal,
+      cancellation.signal,
+      AbortSignal.timeout(25_000),
+    ]);
+    const encoder = new TextEncoder();
+    const { onboardingTurn } = provider;
+    const { data } = parsed;
+    async function generate(
+      controller: ReadableStreamDefaultController<Uint8Array>
+    ) {
+      function write(event: OnboardingTurnEvent) {
+        if (!cancellation.signal.aborted) {
+          controller.enqueue(encoder.encode(`${JSON.stringify(event)}\n`));
+        }
+      }
+      try {
+        const result = onboardingTurnSchema.parse(
+          await onboardingTurn(data, signal, (reply) => {
+            signal.throwIfAborted();
+            write({ type: "reply", reply });
+          })
+        );
+        signal.throwIfAborted();
+        write({ type: "complete", turn: result });
+      } catch {
+        write({
+          type: "error",
+          error: "Chit couldn't reply. Try again or choose your skills.",
+        });
+      } finally {
+        if (!cancellation.signal.aborted) {
+          controller.close();
+        }
+      }
+    }
+    const body = new ReadableStream<Uint8Array>({
+      start(controller) {
+        const pending = generate(controller);
+        c.set("generationPending", pending);
+        return pending;
+      },
+      cancel() {
+        cancellation.abort();
+      },
+    });
+    return new Response(body, {
+      headers: {
+        "Content-Type": "application/x-ndjson",
+        "Cache-Control": "no-store, no-transform",
+        "X-Accel-Buffering": "no",
+      },
+    });
+  });
+  app.post("/onboarding-recommendations", async (c) => {
+    const parsed = onboardingRecommendationRequestSchema.safeParse(
+      await c.req.json().catch(() => null)
+    );
+    if (!parsed.success) {
+      return c.json(
+        { error: "Add your name and a short reason for practicing." },
+        400
+      );
+    }
+    if (!provider?.recommendOnboarding) {
+      return c.json(
+        {
+          error: "Suggestions are unavailable. You can choose your own skills.",
+        },
+        503
+      );
+    }
+    try {
+      const signal = AbortSignal.any([
+        c.req.raw.signal,
+        AbortSignal.timeout(25_000),
+      ]);
+      const result = onboardingRecommendationSchema.parse(
+        await provider.recommendOnboarding(parsed.data, signal)
+      );
+      signal.throwIfAborted();
+      return c.json(result);
+    } catch {
+      return c.json(
+        {
+          error: "Suggestions couldn't load. You can still choose any skills.",
+        },
+        502
+      );
+    }
+  });
   app.post("/transcription-sessions", async (c) => {
     if (!createTranscriptionSession) {
       return c.json({ error: "Speech recognition is unavailable." }, 503);
@@ -233,7 +367,7 @@ export function createPracticeRoutes(
       signal.throwIfAborted();
       return c.json(preview);
     } catch (error) {
-      if (error instanceof ApiError && error.status === 429) {
+      if (providerErrorStatus(error) === 429) {
         c.header("Retry-After", "60");
         return c.json(
           {
@@ -437,10 +571,20 @@ export function createPracticeRoutes(
       const session = await provider.createSession(parsed.data, signal);
       signal.throwIfAborted();
       // Caption provisioning must not prevent the audio conversation starting.
-      const transcriptionToken = await createTranscriptionSession?.(
-        AbortSignal.any([signal, AbortSignal.timeout(5000)])
-      ).catch(() => null);
-      signal.throwIfAborted();
+      let transcriptionToken: string | null | undefined;
+      if (createTranscriptionSession) {
+        try {
+          const captionSignal = AbortSignal.any([
+            signal,
+            AbortSignal.timeout(5000),
+          ]);
+          transcriptionToken = await createTranscriptionSession(captionSignal);
+          captionSignal.throwIfAborted();
+        } catch {
+          transcriptionToken = null;
+        }
+      }
+      c.req.raw.signal.throwIfAborted();
       return c.json({ ...session, transcriptionToken }, 201);
     } catch {
       return c.json(

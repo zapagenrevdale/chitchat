@@ -1,0 +1,439 @@
+--- before/apps/web/src/lib/practice-guided.ts
++++ after/apps/web/src/lib/practice-guided.ts
+@@ -1,3 +1,4 @@
++import { practiceTranscriptLimits } from "@chitchat/contracts";
+ import type { GuidedTurn, PracticeSelection } from "@chitchat/contracts";
+ 
+ import { matchPhrase, speechWords } from "./phrase-progress";
+@@ -32,6 +33,11 @@
+   skipped: 0,
+ };
+ 
++interface GuidedExchange {
++  partner: PracticeMessage;
++  user?: PracticeMessage;
++}
++
+ interface Callbacks {
+   onState: (state: PracticeState) => void;
+   onTranscript: (transcript: PracticeTranscript) => void;
+@@ -46,7 +52,8 @@
+   private controller = new AbortController();
+   private operation?: AbortController;
+   private selection?: PracticeSelection;
+-  private messages: PracticeMessage[] = [];
++  private exchanges: GuidedExchange[] = [];
++  private nextMessageId = 0;
+   private progress = { ...emptyGuidedProgress };
+   private turn?: GuidedTurn;
+   private words: string[] = [];
+@@ -132,8 +139,30 @@
+   }
+ 
+   private append(speaker: PracticeMessage["speaker"], text: string) {
+-    const message = { id: this.messages.length, speaker, text };
+-    this.messages.push(message);
++    const message = { id: this.nextMessageId, speaker, text };
++    this.nextMessageId += 1;
++    if (speaker === "partner") {
++      this.exchanges.push({ partner: message });
++    } else {
++      const exchange = this.exchanges.at(-1);
++      if (exchange) {
++        exchange.user = message;
++      }
++    }
++    let messages = 0;
++    let codeUnits = 0;
++    for (let index = this.exchanges.length - 1; index >= 0; index -= 1) {
++      const { partner, user } = this.exchanges[index];
++      messages += user ? 2 : 1;
++      codeUnits += partner.text.length + (user?.text.length ?? 0);
++      if (
++        messages > practiceTranscriptLimits.messages ||
++        codeUnits > practiceTranscriptLimits.totalCodeUnits
++      ) {
++        this.exchanges.splice(0, index + 1);
++        break;
++      }
++    }
+     this.callbacks.onMessage(message);
+     this.callbacks.onTranscript({
+       user: speaker === "user" ? text : "",
+@@ -164,7 +193,9 @@
+       this.turn ??= await generateGuidedTurn(
+         {
+           selection: this.selection,
+-          messages: [...this.messages],
++          messages: this.exchanges.flatMap(({ partner, user }) =>
++            user ? [partner, user] : [partner]
++          ),
+           skipped: this.nextSkipped,
+         },
+         signal
+--- before/apps/web/src/lib/practice-guided.test.ts
++++ after/apps/web/src/lib/practice-guided.test.ts
+@@ -1,10 +1,14 @@
+ // The two transport mocks expose callbacks to exercise late events deterministically.
+ /* eslint-disable max-classes-per-file, class-methods-use-this, promise/prefer-await-to-callbacks */
++// Long-session recovery must await and observe each transition in order.
++/* eslint-disable vitest/max-expects, no-await-in-loop */
++import { guidedTurnRequestSchema, guidedTurnSchema } from "@chitchat/contracts";
+ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+ 
+ import { generateGuidedTurn, speakPracticeTurn } from "./practice-api";
+ import type { PracticeAudio } from "./practice-audio";
+ import { PracticeGuided } from "./practice-guided";
++import type { PracticeMessage } from "./practice-live";
+ import type { PracticeTranscription } from "./practice-transcription";
+ 
+ const speech = vi.hoisted(() => ({
+@@ -68,6 +72,25 @@
+ async function flush() {
+   await vi.advanceTimersByTimeAsync(0);
+ }
++
++function recentExchanges(history: PracticeMessage[]) {
++  const exchanges: PracticeMessage[][] = [];
++  for (const message of history) {
++    if (message.speaker === "partner") {
++      exchanges.push([message]);
++    } else {
++      exchanges.at(-1)?.push(message);
++    }
++  }
++  while (
++    exchanges.flat().length > 300 ||
++    exchanges.flat().reduce((sum, message) => sum + message.text.length, 0) >
++      60_000
++  ) {
++    exchanges.shift();
++  }
++  return exchanges.flat();
++}
+ async function setup() {
+   const callbacks = {
+     onState:
+@@ -213,4 +236,179 @@
+     );
+     expect(speech.dispose).toHaveBeenCalledOnce();
+   });
++
++  it.each([
++    {
++      name: "short completed exchanges",
++      count: 160,
++      long: false,
++      mixed: false,
++      skips: false,
++    },
++    {
++      name: "maximum-length exchanges",
++      count: 80,
++      long: true,
++      mixed: false,
++      skips: false,
++    },
++    {
++      name: "skipped exchanges",
++      count: 310,
++      long: false,
++      mixed: false,
++      skips: true,
++    },
++    {
++      name: "mixed exchanges",
++      count: 320,
++      long: true,
++      mixed: true,
++      skips: false,
++    },
++    {
++      name: "non-BMP exchanges",
++      count: 80,
++      long: true,
++      mixed: false,
++      skips: false,
++      unicode: true,
++    },
++  ])(
++    "keeps a whole recent suffix for $name and preserves the full recap",
++    async ({ count, long, mixed, skips, unicode }) => {
++      const response = guidedTurnSchema.parse(
++        long
++          ? { text: (unicode ? "😀" : "p").repeat(600), reply: "r".repeat(240) }
++          : turn
++      );
++      vi.mocked(generateGuidedTurn).mockResolvedValue(response);
++      const { guided, callbacks } = await setup();
++      let completed = 0;
++      let skipped = 0;
++      for (let index = 0; index < count; index += 1) {
++        const shouldSkip = skips || (mixed && index % 3 === 0);
++        if (shouldSkip) {
++          guided.skip();
++          skipped += 1;
++          await flush();
++        } else {
++          speech.segments.at(-1)?.onSegment?.(`${index}`, response.reply, true);
++          completed += 1;
++          await vi.advanceTimersByTimeAsync(1200);
++        }
++        const request = vi.mocked(generateGuidedTurn).mock.lastCall?.[0];
++        expect(request).toBeDefined();
++        expect(guidedTurnRequestSchema.safeParse(request).success).toBeTruthy();
++        const history = callbacks.onMessage.mock.calls
++          .map(([message]) => message)
++          .slice(0, -1);
++        expect(request?.messages).toStrictEqual(recentExchanges(history));
++        expect(request?.skipped).toBe(shouldSkip);
++        speech.drain?.();
++        await flush();
++      }
++      const messages = callbacks.onMessage.mock.calls.map(
++        ([message]) => message
++      );
++      expect(messages.map(({ id }) => id)).toStrictEqual(
++        Array.from({ length: completed * 2 + skipped + 1 }, (_, index) => index)
++      );
++      expect(callbacks.onProgress.mock.lastCall?.[0]).toMatchObject({
++        completed,
++        skipped,
++        phase: "listening",
++      });
++      expect(
++        callbacks.onError.mock.calls.filter(([error]) => error)
++      ).toStrictEqual([]);
++      const beforeRetry = callbacks.onMessage.mock.calls.length;
++      vi.mocked(generateGuidedTurn).mockRejectedValueOnce(
++        new Error("unavailable")
++      );
++      guided.skip();
++      await flush();
++      const failedRequest = vi.mocked(generateGuidedTurn).mock.lastCall?.[0];
++      expect(
++        guidedTurnRequestSchema.safeParse(failedRequest).success
++      ).toBeTruthy();
++      expect(callbacks.onProgress.mock.lastCall?.[0].phase).toBe("error");
++      expect(callbacks.onMessage).toHaveBeenCalledTimes(beforeRetry);
++      vi.mocked(speakPracticeTurn).mockRejectedValueOnce(
++        new Error("unavailable")
++      );
++      guided.retry();
++      await flush();
++      expect(vi.mocked(generateGuidedTurn).mock.lastCall?.[0]).toStrictEqual(
++        failedRequest
++      );
++      expect(callbacks.onMessage).toHaveBeenCalledTimes(beforeRetry);
++      const generations = vi.mocked(generateGuidedTurn).mock.calls.length;
++      guided.retry();
++      await flush();
++      expect(generateGuidedTurn).toHaveBeenCalledTimes(generations);
++      expect(callbacks.onMessage).toHaveBeenCalledTimes(beforeRetry + 1);
++      expect(callbacks.onMessage.mock.lastCall?.[0].id).toBe(beforeRetry);
++      speech.drain?.();
++      await flush();
++      expect(callbacks.onProgress.mock.lastCall?.[0]).toMatchObject({
++        completed,
++        skipped: skipped + 1,
++        phase: "listening",
++      });
++      guided.finish();
++      expect(callbacks.onState).toHaveBeenLastCalledWith("ended");
++    }
++  );
+ });
++
++const message = (id: number, text: string) => ({
++  id,
++  speaker: "partner" as const,
++  text,
++});
++
++describe("guided transcript contract boundaries", () => {
++  it("accepts 300 messages and rejects one extra", () => {
++    const messages = Array.from({ length: 300 }, (_, index) =>
++      message(index, "p")
++    );
++    expect(
++      guidedTurnRequestSchema.safeParse({ selection, messages }).success
++    ).toBeTruthy();
++    expect(
++      guidedTurnRequestSchema.safeParse({
++        selection,
++        messages: [...messages, message(300, "p")],
++      }).success
++    ).toBeFalsy();
++  });
++
++  it("counts characters per message and UTF-16 units in aggregate", () => {
++    const text = "😀".repeat(8000);
++    expect(
++      guidedTurnRequestSchema.safeParse({
++        selection,
++        messages: [message(0, text)],
++      }).success
++    ).toBeTruthy();
++    expect(
++      guidedTurnRequestSchema.safeParse({
++        selection,
++        messages: [message(0, `${text}x`)],
++      }).success
++    ).toBeFalsy();
++    const messages = Array.from({ length: 8 }, (_, index) =>
++      message(index, "😀".repeat(index === 7 ? 2000 : 4000))
++    );
++    expect(
++      guidedTurnRequestSchema.safeParse({ selection, messages }).success
++    ).toBeTruthy();
++    expect(
++      guidedTurnRequestSchema.safeParse({
++        selection,
++        messages: [...messages, message(8, "x")],
++      }).success
++    ).toBeFalsy();
++  });
++});
+--- before/apps/web/src/lib/playback-worklet.test.ts
++++ after/apps/web/src/lib/playback-worklet.test.ts
+@@ -10,6 +10,7 @@
+   let Processor: (new () => PlaybackProcessor) | undefined;
+   let receive: ((event: { data: object }) => void) | undefined;
+   const notifications = vi.fn<(message: object) => void>();
++  const registrations: string[] = [];
+   runInNewContext(readFileSync("public/audio/playback.worklet.js", "utf-8"), {
+     sampleRate: 24_000,
+     AudioWorkletProcessor: class {
+@@ -26,10 +27,12 @@
+         postMessage: notifications,
+       };
+     },
+-    registerProcessor(_name: string, constructor: new () => PlaybackProcessor) {
++    registerProcessor(name: string, constructor: new () => PlaybackProcessor) {
++      registrations.push(name);
+       Processor = constructor;
+     },
+   });
++  expect(registrations).toStrictEqual(["practice-speaker"]);
+   if (!Processor) {
+     throw new Error("Playback processor was not registered.");
+   }
+--- before/apps/web/src/lib/recorder-worklet.test.ts
++++ after/apps/web/src/lib/recorder-worklet.test.ts
+@@ -0,0 +1,83 @@
++// Conservation includes the emitted prefix and a later completed remainder.
++/* eslint-disable vitest/max-expects */
++import { readFileSync } from "node:fs";
++import { runInNewContext } from "node:vm";
++
++import { describe, expect, it } from "vitest";
++
++interface RecorderProcessor {
++  process: (inputs: Float32Array[][]) => boolean;
++}
++
++function createRecorder(sampleRate: number) {
++  let Processor: (new () => RecorderProcessor) | undefined;
++  const registrations: string[] = [];
++  const chunks: Float32Array[] = [];
++  runInNewContext(readFileSync("public/audio/recorder.worklet.js", "utf-8"), {
++    sampleRate,
++    AudioWorkletProcessor: class {
++      port = {
++        postMessage(samples: Float32Array, transfer: ArrayBuffer[]) {
++          chunks.push(structuredClone(samples, { transfer }));
++          expect(samples.byteLength).toBe(0);
++        },
++      };
++    },
++    registerProcessor(name: string, constructor: new () => RecorderProcessor) {
++      registrations.push(name);
++      Processor = constructor;
++    },
++  });
++  expect(registrations).toStrictEqual(["practice-recorder"]);
++  if (!Processor) {
++    throw new Error("Recorder processor was not registered.");
++  }
++  return { recorder: new Processor(), chunks };
++}
++
++describe("continuous microphone recording", () => {
++  it.each([44_100, 48_000])(
++    "conserves ordered samples and the pending remainder at %i Hz",
++    (sampleRate) => {
++      const { recorder, chunks } = createRecorder(sampleRate);
++      const chunkSize = sampleRate / 20;
++      const samples = Float32Array.from(
++        { length: chunkSize * 4 },
++        (_, index) => (index - chunkSize * 2) / (chunkSize * 2)
++      );
++      const firstEnd = chunkSize * 3 + 73;
++      for (let offset = 0; offset < firstEnd; offset += 128) {
++        expect(
++          recorder.process([
++            [samples.slice(offset, Math.min(offset + 128, firstEnd))],
++          ])
++        ).toBeTruthy();
++      }
++      expect(chunks.map((chunk) => chunk.length)).toStrictEqual([
++        chunkSize,
++        chunkSize,
++        chunkSize,
++      ]);
++      expect(
++        Float32Array.from(chunks.flatMap((chunk) => [...chunk]))
++      ).toStrictEqual(samples.slice(0, chunkSize * 3));
++      expect(recorder.process([])).toBeTruthy();
++      expect(recorder.process([[]])).toBeTruthy();
++      expect(chunks).toHaveLength(3);
++      for (let offset = firstEnd; offset < samples.length; offset += 128) {
++        expect(
++          recorder.process([
++            [samples.slice(offset, Math.min(offset + 128, samples.length))],
++          ])
++        ).toBeTruthy();
++      }
++      expect(chunks.map((chunk) => chunk.length)).toStrictEqual([
++        chunkSize,
++        chunkSize,
++        chunkSize,
++        chunkSize,
++      ]);
++      expect(chunks.flatMap((chunk) => [...chunk])).toStrictEqual([...samples]);
++    }
++  );
++});
+--- before/packages/contracts/src/practice.ts
++++ after/packages/contracts/src/practice.ts
+@@ -257,21 +257,27 @@
+ >;
+ export type PersonaRecommendation = z.infer<typeof personaRecommendationSchema>;
+ 
++export const practiceTranscriptLimits = {
++  messages: 300,
++  messageCharacters: 8000,
++  totalCodeUnits: 60_000,
++} as const;
++
+ const practiceMessagesSchema = z
+   .array(
+     z.object({
+       id: z.number().int().nonnegative(),
+       speaker: z.enum(["user", "partner"]),
+-      text: z.string().max(8000),
++      text: z.string().max(practiceTranscriptLimits.messageCharacters),
+       suggestionShown: z.boolean().optional(),
+     })
+   )
+-  .max(300)
++  .max(practiceTranscriptLimits.messages)
+   .refine(
+     (messages) =>
+       new Set(messages.map(({ id }) => id)).size === messages.length &&
+       messages.reduce((length, message) => length + message.text.length, 0) <=
+-        60_000,
++        practiceTranscriptLimits.totalCodeUnits,
+     "The transcript is too long or contains duplicate messages."
+   );
+ 

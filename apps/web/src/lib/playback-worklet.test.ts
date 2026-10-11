@@ -10,6 +10,7 @@ function createPlayer() {
   let Processor: (new () => PlaybackProcessor) | undefined;
   let receive: ((event: { data: object }) => void) | undefined;
   const notifications = vi.fn<(message: object) => void>();
+  const registrations: string[] = [];
   runInNewContext(readFileSync("public/audio/playback.worklet.js", "utf-8"), {
     sampleRate: 24_000,
     AudioWorkletProcessor: class {
@@ -23,13 +24,17 @@ function createPlayer() {
         start() {
           /* The test delivers messages synchronously. */
         },
-        postMessage: notifications,
+        postMessage(message: object) {
+          notifications({ ...message });
+        },
       };
     },
-    registerProcessor(_name: string, constructor: new () => PlaybackProcessor) {
+    registerProcessor(name: string, constructor: new () => PlaybackProcessor) {
+      registrations.push(name);
       Processor = constructor;
     },
   });
+  expect(registrations).toStrictEqual(["practice-speaker"]);
   if (!Processor) {
     throw new Error("Playback processor was not registered.");
   }
@@ -54,6 +59,110 @@ function createPlayer() {
 }
 
 describe("continuous speech playback", () => {
+  it("reports copied silent PCM, not startup buffering, underrun silence, or fades", () => {
+    const player = createPlayer();
+    player.send({
+      type: "audio",
+      generation: 0,
+      samples: new Float32Array(100),
+    });
+    player.render(10);
+    expect(player.notifications).not.toHaveBeenCalledWith(
+      expect.objectContaining({ type: "progress" })
+    );
+    player.send({
+      type: "audio",
+      generation: 0,
+      samples: new Float32Array(2200),
+    });
+    player.render(30);
+    const progress = player.notifications.mock.calls
+      .map(([message]) => message)
+      .filter((message) => "type" in message && message.type === "progress");
+    expect(progress).toStrictEqual([
+      { type: "progress", generation: 0, consumedSamples: 768 },
+      { type: "progress", generation: 0, consumedSamples: 1536 },
+      { type: "progress", generation: 0, consumedSamples: 2300 },
+    ]);
+    player.send({ type: "drain", generation: 0 });
+    player.render(1);
+    expect(player.notifications.mock.calls.slice(-2)).toStrictEqual([
+      [{ type: "progress", generation: 0, consumedSamples: 2300 }],
+      [{ type: "drained", generation: 0 }],
+    ]);
+    player.render(20);
+    expect(player.notifications.mock.calls.at(-2)).toStrictEqual([
+      { type: "progress", generation: 0, consumedSamples: 2300 },
+    ]);
+  });
+
+  it("resets progress and cancels an old drain on generation clear", () => {
+    const player = createPlayer();
+    player.send({
+      type: "audio",
+      generation: 0,
+      samples: new Float32Array(2400).fill(0.5),
+    });
+    player.send({ type: "drain", generation: 0 });
+    player.render(6);
+    player.send({ type: "clear", generation: 1 });
+    player.render(20);
+    expect(player.notifications).not.toHaveBeenCalledWith(
+      expect.objectContaining({ type: "drained" })
+    );
+    player.send({
+      type: "audio",
+      generation: 0,
+      samples: new Float32Array(2400),
+    });
+    player.send({ type: "drain", generation: 0 });
+    player.send({
+      type: "audio",
+      generation: 1,
+      samples: new Float32Array(10),
+    });
+    player.send({ type: "drain", generation: 1 });
+    player.render(2);
+    expect(player.notifications.mock.calls.slice(-2)).toStrictEqual([
+      [{ type: "progress", generation: 1, consumedSamples: 10 }],
+      [{ type: "drained", generation: 1 }],
+    ]);
+  });
+
+  it("reports short finished speech before announcing playback stopped without a drain", () => {
+    const player = createPlayer();
+    player.send({
+      type: "audio",
+      generation: 0,
+      samples: new Float32Array(128).fill(0.5),
+    });
+    player.send({ type: "finish", generation: 0 });
+    player.render(100);
+    expect(player.notifications.mock.calls.slice(-2)).toStrictEqual([
+      [{ type: "progress", generation: 0, consumedSamples: 128 }],
+      [{ type: "playing", generation: 0, playing: false }],
+    ]);
+  });
+
+  it("flushes residual consumption on underrun and keeps silence out of progress", () => {
+    const player = createPlayer();
+    player.send({
+      type: "audio",
+      generation: 0,
+      samples: new Float32Array(2400).fill(0.5),
+    });
+    player.render(100);
+    const progress = player.notifications.mock.calls
+      .map(([message]) => message)
+      .filter((message) => "type" in message && message.type === "progress");
+    expect(progress).toStrictEqual([
+      { type: "progress", generation: 0, consumedSamples: 768 },
+      { type: "progress", generation: 0, consumedSamples: 1536 },
+      { type: "progress", generation: 0, consumedSamples: 2304 },
+      { type: "progress", generation: 0, consumedSamples: 2400 },
+    ]);
+  });
+
   it("preserves every sample across uneven chunks without introducing tones at boundaries", () => {
     const player = createPlayer();
     const speech = Float32Array.from(

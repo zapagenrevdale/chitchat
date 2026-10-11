@@ -1,0 +1,14 @@
+{
+  "origin": "https://amber.cc.local",
+  "label": "hardening-setup-failure",
+  "capturedAt": "2026-10-11T03:59:12.472Z",
+  "errors": [],
+  "requests": [],
+  "network": [],
+  "failures": [],
+  "diagnostics": [],
+  "expectedCancellations": [],
+  "unexpectedErrors": [],
+  "blocker": "TypeError: Was there a typo in the url or port?",
+  "exitCode": 2
+}

@@ -1,0 +1,110 @@
+$ turbo run test "--filter=@chitchat/web" -- --run src/components/onboarding src/lib/onboarding-storage.test.ts
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/web
+   • Running test in 1 packages
+   • Remote caching disabled
+
+@chitchat/contracts:build: cache hit, replaying logs 714200a298143ed5
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/web:i18n:compile: cache hit, replaying logs 05446e1f6ae5c7e8
+@chitchat/web:i18n:compile: $ paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy baseLocale
+@chitchat/web:i18n:compile: ℹ [paraglide-js] Compiling inlang project ...
+@chitchat/web:i18n:compile: ✔ [paraglide-js] Successfully compiled inlang project.
+@chitchat/web:test: cache miss, executing 654fc7e999389940
+@chitchat/web:test: $ vitest run --run src/components/onboarding src/lib/onboarding-storage.test.ts
+@chitchat/web:test: 
+@chitchat/web:test: [1m[30m[46m RUN [49m[39m[22m [36mv5.0.0 [39m[90m/Users/genrevzapa/projects/chitchat/apps/web[39m
+@chitchat/web:test: 
+@chitchat/web:test:  [32m✓[39m src/components/onboarding/use-onboarding-goal.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 75[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/lib/onboarding-storage.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/components/onboarding/use-onboarding-live.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 107[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/components/onboarding/onboarding-introduction.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/components/onboarding/onboarding-audio-fallback.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 17[2mms[22m[39m
+@chitchat/web:test: [90mstderr[2m | src/components/onboarding/onboarding-recovery.test.tsx[2m > [22m[2monboarding suspension and accepted outcomes[2m > [22m[2mrestores confirmed text history and retryable input, rejecting the old late response
+@chitchat/web:test: [22m[39mThe current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: 
+@chitchat/web:test: [90mstderr[2m | src/components/onboarding/onboarding-recovery.test.tsx[2m > [22m[2monboarding suspension and accepted outcomes[2m > [22m[2mkeeps an accepted clarification when suspended during its reading delay
+@chitchat/web:test: [22m[39mThe current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: 
+@chitchat/web:test: [90mstderr[2m | src/components/onboarding/onboarding-recovery.test.tsx[2m > [22m[2monboarding suspension and accepted outcomes[2m > [22m[2mkeeps an accepted clarification when suspended during its reading delay
+@chitchat/web:test: [22m[39mThe current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: 
+@chitchat/web:test: [90mstderr[2m | src/components/onboarding/onboarding-recovery.test.tsx[2m > [22m[2monboarding suspension and accepted outcomes[2m > [22m[2mconsumes third-turn ready navigation once on persisted pageshow
+@chitchat/web:test: [22m[39mThe current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: 
+@chitchat/web:test: [90mstderr[2m | src/components/onboarding/onboarding-recovery.test.tsx[2m > [22m[2monboarding suspension and accepted outcomes[2m > [22m[2mconsumes third-turn choose navigation once on persisted pageshow
+@chitchat/web:test: [22m[39mThe current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: 
+@chitchat/web:test: [90mstderr[2m | src/components/onboarding/onboarding-recovery.test.tsx[2m > [22m[2monboarding suspension and accepted outcomes[2m > [22m[2mabandons accepted text navigation when switching modes during the delay
+@chitchat/web:test: [22m[39mThe current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: 
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test:  [32m✓[39m src/components/onboarding/onboarding-recovery.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 1048[2mms[22m[39m
+@chitchat/web:test:    [32m✓[39m onboarding suspension and accepted outcomes [2m(16)[22m
+@chitchat/web:test:      [33m[2m✓[22m[39m restores confirmed text history and retryable input, rejecting the old late response[33m 380[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/components/onboarding/onboarding.test.tsx [2m([22m[2m25 tests[22m[2m)[22m[33m 9405[2mms[22m[39m
+@chitchat/web:test:    [32m✓[39m onboarding [2m(25)[22m
+@chitchat/web:test:      [32m✓[39m text onboarding [2m(6)[22m
+@chitchat/web:test:        [33m[2m✓[22m[39m takes a English learner through text onboarding after switching from voice[33m 2648[2mms[22m[39m
+@chitchat/web:test:        [33m[2m✓[22m[39m takes a Japanese learner through text onboarding after switching from voice[33m 2082[2mms[22m[39m
+@chitchat/web:test:        [33m[2m✓[22m[39m takes a Filipino learner through text onboarding after switching from voice[33m 2099[2mms[22m[39m
+@chitchat/web:test:        [33m[2m✓[22m[39m takes a Arabic learner through text onboarding after switching from voice[33m 2102[2mms[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+@chitchat/web:test: [2m      Tests [22m [1m[32m91 passed[39m[22m[90m (91)[39m
+@chitchat/web:test: [2m   Start at [22m 11:54:51
+@chitchat/web:test: [2m   Duration [22m 12.59s[2m (tests 39%, environment 31%, transform 14%, import 12%, setup 4%)[22m
+@chitchat/web:test: 
+
+ Tasks:    3 successful, 3 total
+Cached:    2 cached, 3 total
+  Time:    12.937s 
+

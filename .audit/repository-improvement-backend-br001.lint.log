@@ -1,0 +1,20 @@
+$ turbo run lint "--filter=@chitchat/backend" --force -- src/practice/transcription.test.ts
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/backend
+   • Running lint in 1 packages
+   • Remote caching disabled
+
+@chitchat/backend:lint: cache bypass, force executing 89da170acaa1134f
+@chitchat/backend:lint: $ ultracite check src/practice/transcription.test.ts
+@chitchat/backend:lint: Checking formatting...
+@chitchat/backend:lint: 
+@chitchat/backend:lint: All matched files use the correct format.
+@chitchat/backend:lint: Finished in 24ms on 1 files using 10 threads.
+@chitchat/backend:lint: Found 0 warnings and 0 errors.
+@chitchat/backend:lint: Finished in 50ms on 1 file with 586 rules using 10 threads.
+
+ Tasks:    1 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    437ms 
+

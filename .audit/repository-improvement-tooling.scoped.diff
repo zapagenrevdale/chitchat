@@ -1,0 +1,27 @@
+--- baseline/turbo.json
++++ turbo.json
+@@ -68,6 +68,13 @@
+     "generate:places": {
+       "cache": false
+     },
++    "@chitchat/backend#test": {
++      "dependsOn": ["^build"],
++      "inputs": [
++        "$TURBO_DEFAULT$",
++        "$TURBO_ROOT$/apps/web/public/images/personas/**"
++      ]
++    },
+     "@chitchat/web#i18n:compile": {
+       "inputs": ["messages/**", "project.inlang/settings.json", "package.json"],
+       "outputs": ["src/paraglide/**"]
+--- baseline/apps/web/package.json
++++ apps/web/package.json
+@@ -9,7 +9,7 @@
+     "preview": "vite preview --port 3000",
+     "deploy": "bun run build && wrangler deploy",
+     "typecheck": "tsr generate && tsc --noEmit",
+-    "test": "vitest run --passWithNoTests",
++    "test": "vitest run",
+     "lint": "ultracite check",
+     "format": "ultracite fix",
+     "i18n:compile": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy baseLocale"

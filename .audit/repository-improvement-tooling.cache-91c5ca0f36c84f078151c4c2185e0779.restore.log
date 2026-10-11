@@ -1,0 +1,20 @@
+
+   • Packages in scope: @chitchat/db
+   • Running build in 1 packages
+   • Remote caching disabled
+
+@chitchat/db:build: cache hit, replaying logs 85a4960c281bb37a
+@chitchat/db:build: $ prisma generate
+@chitchat/db:build: Loaded Prisma config from prisma.config.ts.
+@chitchat/db:build: 
+@chitchat/db:build: Prisma schema loaded from prisma/schema.prisma.
+@chitchat/db:build: 
+@chitchat/db:build: ✔ Generated Prisma Client (7.10.0) to ./src/generated/prisma in 22ms
+@chitchat/db:build: 
+
+ Tasks:    1 successful, 1 total
+Cached:    1 cached, 1 total
+  Time:    20ms >>> FULL TURBO
+
+$ turbo run build "--filter=@chitchat/db" "--ui=stream"
+• turbo 2.10.12

@@ -1,0 +1,17 @@
+$ turbo run format "--filter=@chitchat/backend" -- src/practice/feedback.ts src/practice/feedback.test.ts src/practice/routes.ts src/practice/transcription.test.ts src/practice/transcript-body-budget.test.ts
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/backend
+   • Running format in 1 packages
+   • Remote caching disabled
+
+@chitchat/backend:format: cache bypass, force executing 11b43c0023b46403
+@chitchat/backend:format: $ ultracite fix src/practice/feedback.ts src/practice/feedback.test.ts src/practice/routes.ts src/practice/transcription.test.ts src/practice/transcript-body-budget.test.ts
+@chitchat/backend:format: Found 0 warnings and 0 errors.
+@chitchat/backend:format: Finished in 43ms on 5 files with 586 rules using 10 threads.
+@chitchat/backend:format: Finished in 24ms on 5 files using 10 threads.
+
+ Tasks:    1 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    336ms 
+

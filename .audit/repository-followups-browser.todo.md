@@ -1,0 +1,7 @@
+- [x] Read AGENTS.md and the follow-up plan.
+- [x] Route investigation within the assigned browser-only subagent scope. Nested delegation prohibited.
+- [x] Throughput checkpoint. Single reusable Bun CDP runner; 10–15 minute timebox.
+- [x] Inspect home and /theme in Chrome and record TLS/runtime evidence.
+- [x] Reproduce RI-001 using a paused request and page lifecycle events.
+- [x] Reproduce RI-002 with fake provider messages and real browser UI/audio worklets.
+- [x] Return artifact paths and repeatable verification command.

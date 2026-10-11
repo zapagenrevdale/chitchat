@@ -1,0 +1,95 @@
+ M AGENTS.md
+ D CONTEXT.md
+ M apps/backend/.env.example
+ M apps/backend/package.json
+ M apps/backend/src/env.ts
+ M apps/backend/src/index.ts
+ M apps/backend/src/practice/catalog.ts
+ M apps/backend/src/practice/conversation-modes.ts
+ M apps/backend/src/practice/conversation-provider.test.ts
+ M apps/backend/src/practice/conversation-request.test.ts
+ M apps/backend/src/practice/conversation-routes.ts
+ M apps/backend/src/practice/feedback.test.ts
+ M apps/backend/src/practice/feedback.ts
+ M apps/backend/src/practice/gemini.test.ts
+ M apps/backend/src/practice/gemini.ts
+ M apps/backend/src/practice/review.test.ts
+ M apps/backend/src/practice/review.ts
+ M apps/backend/src/practice/routes.ts
+ M apps/backend/src/practice/scene-preview-retry.test.ts
+ M apps/backend/src/practice/speech.ts
+ M apps/backend/src/practice/tracing.test.ts
+ M apps/backend/src/practice/tracing.ts
+ M apps/backend/src/practice/transcription.test.ts
+ M apps/web/package.json
+ M apps/web/src/components/practice/practice-conversation.tsx
+ M apps/web/src/components/practice/practice-design.test.tsx
+ M apps/web/src/components/practice/practice-design.tsx
+ M apps/web/src/components/practice/practice-ready.tsx
+ M apps/web/src/components/practice/setup-answer.tsx
+ M apps/web/src/components/practice/use-setup-speech.test.tsx
+ M apps/web/src/components/practice/use-setup-speech.ts
+ M apps/web/src/components/theme/theme-gallery.tsx
+ M apps/web/src/lib/practice-api.ts
+ M apps/web/src/lib/practice-audio.test.ts
+ M apps/web/src/lib/practice-audio.ts
+ M apps/web/src/lib/practice-guided.test.ts
+ M apps/web/src/lib/practice-live.test.ts
+ M apps/web/src/routes/index.tsx
+ M apps/web/vite.config.ts
+ M bun.lock
+ D docs/agents/domain.md
+ D docs/agents/issue-tracker.md
+ D docs/agents/triage-labels.md
+ M oxfmt.config.ts
+ M oxlint.config.ts
+ M package.json
+ M packages/contracts/package.json
+ M packages/contracts/src/practice.ts
+ M turbo.json
+?? .audit/
+?? .opencode/
+?? apps/backend/src/practice/generate-chit-introductions.ts
+?? apps/backend/src/practice/introduction-timing.test.ts
+?? apps/backend/src/practice/introduction-timing.ts
+?? apps/backend/src/practice/onboarding-benefits-contract.test.ts
+?? apps/backend/src/practice/onboarding-benefits.test.ts
+?? apps/backend/src/practice/onboarding-benefits.ts
+?? apps/backend/src/practice/onboarding-completions.test.ts
+?? apps/backend/src/practice/onboarding-live-routes.ts
+?? apps/backend/src/practice/onboarding-live.test.ts
+?? apps/backend/src/practice/onboarding-live.ts
+?? apps/backend/src/practice/onboarding-provider.test.ts
+?? apps/backend/src/practice/onboarding-turns.test.ts
+?? apps/backend/src/practice/onboarding.test.ts
+?? apps/backend/src/practice/onboarding.ts
+?? apps/backend/src/practice/provider-error.ts
+?? apps/backend/src/practice/synthesize-speech.ts
+?? apps/backend/src/practice/text-model.test-helper.ts
+?? apps/backend/src/practice/transcript-body-budget.test.ts
+?? apps/web/messages/
+?? apps/web/project.inlang/
+?? apps/web/public/audio/chit/
+?? apps/web/public/images/flags/
+?? apps/web/public/images/watercolor/
+?? apps/web/src/components/onboarding/
+?? apps/web/src/components/practice/practice-conversation.test.tsx
+?? apps/web/src/components/theme/chat-input-preview.tsx
+?? apps/web/src/components/theme/watercolor-wave-preview.tsx
+?? apps/web/src/components/ui/chat-input.tsx
+?? apps/web/src/components/ui/watercolor-wave.test.tsx
+?? apps/web/src/components/ui/watercolor-wave.tsx
+?? apps/web/src/lib/onboarding-api.test.ts
+?? apps/web/src/lib/onboarding-live.test.ts
+?? apps/web/src/lib/onboarding-live.ts
+?? apps/web/src/lib/onboarding-locale.test.ts
+?? apps/web/src/lib/onboarding-locale.ts
+?? apps/web/src/lib/onboarding-storage.test.ts
+?? apps/web/src/lib/onboarding-storage.ts
+?? apps/web/src/lib/watercolor-paint.ts
+?? docs/i18n.md
+?? docs/research/pstack-model-recommendations.md
+?? opencode.jsonc
+?? packages/contracts/src/conversation-goals.ts
+?? packages/contracts/src/languages.ts
+?? packages/contracts/src/onboarding.ts

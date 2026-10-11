@@ -11,6 +11,7 @@
     "build": "turbo run build",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
+    "test:auth": "turbo run test:auth --filter=@chitchat/backend",
     "lint": "turbo run lint",
     "format": "turbo run format",
     "db:generate": "turbo run generate --filter=@chitchat/db",
@@ -21,6 +22,7 @@
     "worktree:teardown": "turbo run worktree:teardown --filter=@chitchat/worktree --ui=stream --",
     "worktree:check": "turbo run typecheck lint test build worktree:smoke --ui=stream",
     "generate:introductions": "turbo run generate:introductions --filter=@chitchat/backend",
+    "generate:chit-introductions": "turbo run generate:chit-introductions --filter=@chitchat/backend",
     "generate:avatars": "turbo run generate:avatars --filter=@chitchat/backend",
     "generate:places": "turbo run generate:places --filter=@chitchat/backend"
   },

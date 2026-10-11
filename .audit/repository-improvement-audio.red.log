@@ -1,0 +1,111 @@
+$ turbo run test "--filter=@chitchat/web" -- src/lib/practice-audio.test.ts
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/web
+   • Running test in 1 packages
+   • Remote caching disabled
+
+@chitchat/contracts:build: cache miss, executing e3020678733545d2
+@chitchat/web:i18n:compile: cache miss, executing e57cb7ea6df8a6e2
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/web:i18n:compile: $ paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy baseLocale
+@chitchat/web:i18n:compile: ℹ [paraglide-js] Compiling inlang project ...
+@chitchat/web:i18n:compile: ✔ [paraglide-js] Successfully compiled inlang project.
+@chitchat/web:test: cache miss, executing 5c4fd57251dfc0f0
+@chitchat/web:test: $ vitest run src/lib/practice-audio.test.ts
+@chitchat/web:test: 
+@chitchat/web:test: [1m[30m[46m RUN [49m[39m[22m [36mv5.0.0 [39m[90m/Users/genrevzapa/projects/chitchat/apps/web[39m
+@chitchat/web:test: 
+@chitchat/web:test:  [31m❯[39m src/lib/practice-audio.test.ts [2m([22m[2m7 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[32m 7[2mms[22m[39m
+@chitchat/web:test:    [31m❯[39m audio startup cancellation [2m(4)[22m
+@chitchat/web:test: [31m     [31m×[31m rejects an already-aborted startup without resuming audio or requesting the microphone[39m[32m 3[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m does not request the microphone after cancellation while input audio resumes[39m[32m 0[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m does not request the microphone after cancellation while output audio resumes[39m[32m 0[2mms[22m[39m
+@chitchat/web:test:      [32m✓[39m stops every acquired track without starting worklets when canceled during microphone acquisition[32m 0[2mms[22m[39m
+@chitchat/web:test:    [32m✓[39m streaming PCM audio [2m(2)[22m
+@chitchat/web:test:      [32m✓[39m encodes signed little-endian samples without a WAV header[32m 1[2mms[22m[39m
+@chitchat/web:test:      [32m✓[39m rejects partial samples[32m 0[2mms[22m[39m
+@chitchat/web:test:    [32m✓[39m microphone capture during speech playback [2m(1)[22m
+@chitchat/web:test:      [32m✓[39m preserves native-rate microphone audio through playback, interruption, and cleanup[32m 1[2mms[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+@chitchat/web:test: 
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/lib/practice-audio.test.ts[2m > [22maudio startup cancellation[2m > [22mrejects an already-aborted startup without resuming audio or requesting the microphone
+@chitchat/web:test: [31m[1mAssertionError[22m: expected "vi.fn()" to not be called at all, but actually been called 1 times[90m
+@chitchat/web:test: 
+@chitchat/web:test: Received:
+@chitchat/web:test: 
+@chitchat/web:test: [1m  1st vi.fn() call:
+@chitchat/web:test: 
+@chitchat/web:test: [22m    Array [
+@chitchat/web:test:       Object {
+@chitchat/web:test:         "audio": Object {
+@chitchat/web:test:           "autoGainControl": true,
+@chitchat/web:test:           "channelCount": 1,
+@chitchat/web:test:           "echoCancellation": true,
+@chitchat/web:test:           "noiseSuppression": true,
+@chitchat/web:test:         },
+@chitchat/web:test:       },
+@chitchat/web:test:     ]
+@chitchat/web:test: [31m[90m
+@chitchat/web:test: 
+@chitchat/web:test: Number of calls: [1m1[22m
+@chitchat/web:test: [31m[39m
+@chitchat/web:test: [36m [2m❯[22m src/lib/practice-audio.test.ts:[2m76:40[22m[39m
+@chitchat/web:test:     [90m 74|[39m         fixture.audio.prepare(controller.signal, vi.fn(), vi.fn())
+@chitchat/web:test:     [90m 75|[39m       ).rejects.toBe(controller.signal.reason);
+@chitchat/web:test:     [90m 76|[39m       expect(fixture.getUserMedia).not.toHaveBeenCalled();
+@chitchat/web:test:     [90m   |[39m                                        [31m^[39m
+@chitchat/web:test:     [90m 77|[39m       expect(fixture.resume).not.toHaveBeenCalled();
+@chitchat/web:test:     [90m 78|[39m       expect(fixture.addModule).not.toHaveBeenCalled();
+@chitchat/web:test: 
+@chitchat/web:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/lib/practice-audio.test.ts[2m > [22maudio startup cancellation[2m > [22mdoes not request the microphone after cancellation while input audio resumes
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/lib/practice-audio.test.ts[2m > [22maudio startup cancellation[2m > [22mdoes not request the microphone after cancellation while output audio resumes
+@chitchat/web:test: [31m[1mAssertionError[22m: expected "vi.fn()" to not be called at all, but actually been called 1 times[90m
+@chitchat/web:test: 
+@chitchat/web:test: Received:
+@chitchat/web:test: 
+@chitchat/web:test: [1m  1st vi.fn() call:
+@chitchat/web:test: 
+@chitchat/web:test: [22m    Array [
+@chitchat/web:test:       Object {
+@chitchat/web:test:         "audio": Object {
+@chitchat/web:test:           "autoGainControl": true,
+@chitchat/web:test:           "channelCount": 1,
+@chitchat/web:test:           "echoCancellation": true,
+@chitchat/web:test:           "noiseSuppression": true,
+@chitchat/web:test:         },
+@chitchat/web:test:       },
+@chitchat/web:test:     ]
+@chitchat/web:test: [31m[90m
+@chitchat/web:test: 
+@chitchat/web:test: Number of calls: [1m1[22m
+@chitchat/web:test: [31m[39m
+@chitchat/web:test: [36m [2m❯[22m src/lib/practice-audio.test.ts:[2m112:42[22m[39m
+@chitchat/web:test:     [90m110|[39m         pendingResume.resolve();
+@chitchat/web:test:     [90m111|[39m         await rejection;
+@chitchat/web:test:     [90m112|[39m         expect(fixture.getUserMedia).not.toHaveBeenCalled();
+@chitchat/web:test:     [90m   |[39m                                          [31m^[39m
+@chitchat/web:test:     [90m113|[39m         expect(fixture.addModule).not.toHaveBeenCalled();
+@chitchat/web:test:     [90m114|[39m         expect(fixture.worklet).not.toHaveBeenCalled();
+@chitchat/web:test: 
+@chitchat/web:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: 
+@chitchat/web:test: [2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+@chitchat/web:test: [2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (7)[39m
+@chitchat/web:test: [2m   Start at [22m 11:12:30
+@chitchat/web:test: [2m   Duration [22m 346ms[2m (environment 76%, setup 12%, transform 7%, tests 2%, import 2%, worker 1%)[22m
+@chitchat/web:test: 
+@chitchat/web:test: error: script "test" exited with code 1
+@chitchat/web#test:  ERROR  command (/Users/genrevzapa/projects/chitchat/apps/web) /Users/genrevzapa/.bun/bin/bun run test src/lib/practice-audio.test.ts exited (1)
+
+ Tasks:    2 successful, 3 total
+Cached:    0 cached, 3 total
+  Time:    1.314s 
+Failed:    @chitchat/web#test
+
+ ERROR  run failed: command  exited (1)
+error: script "test" exited with code 1

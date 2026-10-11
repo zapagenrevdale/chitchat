@@ -1,10 +1,7 @@
-import { ApiError } from "@google/genai";
-import type { GoogleGenAI } from "@google/genai";
 import { Hono } from "hono";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { createConversationModes } from "./conversation-modes";
-import type { PracticeProvider } from "./gemini";
+import { createGeminiProvider } from "./gemini";
 import { createPracticeRoutes } from "./routes";
 
 const origin = "https://amber.cc.local";
@@ -13,7 +10,7 @@ const selection = {
   placeId: "cafe",
   settingId: "networking",
 };
-type Generation = Awaited<ReturnType<GoogleGenAI["models"]["generateContent"]>>;
+type Generation = Response;
 
 const operations = [
   {
@@ -34,35 +31,58 @@ const operations = [
 ];
 
 function client() {
-  const generateContent = vi.fn<GoogleGenAI["models"]["generateContent"]>();
   return {
-    generateContent,
-    ai: { models: { generateContent } } as unknown as GoogleGenAI,
+    generateContent: vi.fn<(init?: RequestInit) => Promise<Response>>(),
   };
 }
 
 function generated(): Generation {
-  return {
-    text: JSON.stringify({ text: "Hello!", reply: "Nice to meet you." }),
+  return Response.json({
     candidates: [
       {
         content: {
+          role: "model",
           parts: [
+            {
+              text: JSON.stringify({
+                text: "Hello!",
+                reply: "Nice to meet you.",
+              }),
+            },
             { inlineData: { data: "AAA=", mimeType: "audio/pcm;rate=24000" } },
           ],
         },
+        finishReason: "STOP",
       },
     ],
-  } as Generation;
+    usageMetadata: { promptTokenCount: 10, candidatesTokenCount: 20 },
+  });
+}
+
+function failure(status: number, message: string) {
+  return Response.json(
+    {
+      error: {
+        code: status,
+        message,
+        status: status === 429 ? "RESOURCE_EXHAUSTED" : "UNAVAILABLE",
+      },
+    },
+    { status }
+  );
 }
 
 function setup() {
   const primary = client();
   const fallback = client();
-  const provider = {
-    createSession: vi.fn<PracticeProvider["createSession"]>(),
-    ...createConversationModes(primary.ai, fallback.ai),
-  };
+  vi.stubGlobal(
+    "fetch",
+    vi.fn((_url: unknown, init?: RequestInit) => {
+      const key = new Headers(init?.headers).get("x-goog-api-key");
+      return (key === "primary-key" ? primary : fallback).generateContent(init);
+    })
+  );
+  const provider = createGeminiProvider("primary-key", "fallback-key");
   const app = new Hono().route(
     "/api/practice",
     createPracticeRoutes(provider, origin)
@@ -78,16 +98,17 @@ function setup() {
 }
 
 describe("conversation requests through provider fallback", () => {
-  afterEach(() => vi.restoreAllMocks());
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
 
   it.each(operations)(
     "recovers $path within one shared deadline",
     async ({ path, body, deadline }) => {
       const { primary, fallback, post } = setup();
       const timeout = vi.spyOn(AbortSignal, "timeout");
-      primary.generateContent.mockRejectedValueOnce(
-        new ApiError({ status: 429, message: "quota" })
-      );
+      primary.generateContent.mockResolvedValueOnce(failure(429, "quota"));
       fallback.generateContent.mockResolvedValueOnce(generated());
       const response = await post(path, body);
       expect({
@@ -99,9 +120,10 @@ describe("conversation requests through provider fallback", () => {
         primary: primary.generateContent.mock.calls.length,
         fallback: fallback.generateContent.mock.calls.length,
       }).toStrictEqual({ primary: 1, fallback: 1 });
-      expect(
-        fallback.generateContent.mock.calls[0]?.[0].config?.abortSignal
-      ).toBe(primary.generateContent.mock.calls[0]?.[0].config?.abortSignal);
+      expect([
+        primary.generateContent.mock.calls[0]?.[0]?.signal?.aborted,
+        fallback.generateContent.mock.calls[0]?.[0]?.signal?.aborted,
+      ]).toStrictEqual([false, false]);
       await expect(response.json()).resolves.toMatchObject({ text: "Hello!" });
     }
   );
@@ -110,12 +132,12 @@ describe("conversation requests through provider fallback", () => {
     "preserves exhausted quota on $path",
     async ({ path, body }) => {
       const { primary, fallback, post } = setup();
-      const error = new ApiError({
-        status: 429,
-        message: "private provider detail",
-      });
-      primary.generateContent.mockRejectedValueOnce(error);
-      fallback.generateContent.mockRejectedValueOnce(error);
+      primary.generateContent.mockResolvedValueOnce(
+        failure(429, "private provider detail")
+      );
+      fallback.generateContent.mockResolvedValueOnce(
+        failure(429, "private provider detail")
+      );
       const response = await post(path, body);
       expect(response.status).toBe(429);
       const result = await response.text();
@@ -129,9 +151,16 @@ describe("conversation requests through provider fallback", () => {
     "rejects malformed $path output without fallback",
     async ({ path, body }) => {
       const { primary, fallback, post } = setup();
-      primary.generateContent.mockResolvedValueOnce({
-        text: "{}",
-      } as Generation);
+      primary.generateContent.mockResolvedValueOnce(
+        Response.json({
+          candidates: [
+            {
+              content: { role: "model", parts: [{ text: "{}" }] },
+              finishReason: "STOP",
+            },
+          ],
+        })
+      );
       const response = await post(path, body);
       expect(response.status).toBe(502);
       await expect(response.json()).resolves.toStrictEqual({
@@ -167,9 +196,7 @@ describe("conversation requests through provider fallback", () => {
 
   it("cancels a fallback already in flight and rejects its late result", async () => {
     const { primary, fallback, post } = setup();
-    primary.generateContent.mockRejectedValueOnce(
-      new ApiError({ status: 503, message: "busy" })
-    );
+    primary.generateContent.mockResolvedValueOnce(failure(503, "busy"));
     const entered = Promise.withResolvers<undefined>();
     const pending = Promise.withResolvers<Generation>();
     fallback.generateContent.mockImplementationOnce(() => {
@@ -185,7 +212,7 @@ describe("conversation requests through provider fallback", () => {
     await entered.promise;
     controller.abort();
     expect(
-      fallback.generateContent.mock.calls[0]?.[0].config?.abortSignal?.aborted
+      fallback.generateContent.mock.calls[0]?.[0]?.signal?.aborted
     ).toBeTruthy();
     pending.resolve(generated());
     const response = await request;
@@ -209,7 +236,7 @@ describe("conversation requests through provider fallback", () => {
     );
     await entered.promise;
     controller.abort();
-    pending.reject(new ApiError({ status: 429, message: "quota" }));
+    pending.resolve(failure(429, "quota"));
     const response = await request;
     expect(response.status).toBe(502);
     expect(fallback.generateContent).not.toHaveBeenCalled();

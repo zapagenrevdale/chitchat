@@ -1,0 +1,637 @@
+--- baseline/apps/web/src/components/ui/live-waveform.tsx
++++ apps/web/src/components/ui/live-waveform.tsx
+@@ -3,7 +3,7 @@
+ // ElevenLabs UI: https://github.com/elevenlabs/ui/blob/main/apps/www/registry/elevenlabs-ui/ui/live-waveform.tsx
+ // Chitchat supplies its existing analyser so visualization never opens another microphone.
+ 
+-import { useEffect, useRef, type HTMLAttributes } from "react";
++import { useCallback, useEffect, useRef, type HTMLAttributes } from "react";
+ 
+ import { cn } from "@/lib/utils";
+ 
+@@ -62,15 +62,19 @@
+   const analyserRef = useRef<AnalyserNode | null>(null);
+   const audioContextRef = useRef<AudioContext | null>(null);
+   const streamRef = useRef<MediaStream | null>(null);
+-  const animationRef = useRef<number>(0);
+   const lastUpdateRef = useRef<number>(0);
+-  const processingAnimationRef = useRef<number | null>(null);
+   const lastActiveDataRef = useRef<number[]>([]);
+   const transitionProgressRef = useRef(0);
+   const staticBarsRef = useRef<number[]>([]);
+   const needsRedrawRef = useRef(true);
+   const gradientCacheRef = useRef<CanvasGradient | null>(null);
+   const lastWidthRef = useRef(0);
++  const wakeDrawingRef = useRef<(() => void) | null>(null);
++
++  const requestRedraw = useCallback(() => {
++    needsRedrawRef.current = true;
++    wakeDrawingRef.current?.();
++  }, []);
+ 
+   const heightStyle = typeof height === "number" ? `${height}px` : height;
+ 
+@@ -96,19 +100,21 @@
+ 
+       gradientCacheRef.current = null;
+       lastWidthRef.current = rect.width;
+-      needsRedrawRef.current = true;
++      requestRedraw();
+     });
+ 
+     resizeObserver.observe(container);
+     return () => resizeObserver.disconnect();
+-  }, []);
++  }, [requestRedraw]);
+ 
+   useEffect(() => {
++    let producerFrame: number | null = null;
+     if (processing && !active) {
+       let time = 0;
+       transitionProgressRef.current = 0;
+ 
+       const animateProcessing = () => {
++        producerFrame = null;
+         time += 0.03;
+         transitionProgressRef.current = Math.min(
+           1,
+@@ -186,18 +192,11 @@
+           historyRef.current = processingData;
+         }
+ 
+-        needsRedrawRef.current = true;
+-        processingAnimationRef.current =
+-          requestAnimationFrame(animateProcessing);
++        requestRedraw();
++        producerFrame = requestAnimationFrame(animateProcessing);
+       };
+ 
+       animateProcessing();
+-
+-      return () => {
+-        if (processingAnimationRef.current) {
+-          cancelAnimationFrame(processingAnimationRef.current);
+-        }
+-      };
+     } else if (!active && !processing) {
+       const hasData =
+         mode === "static"
+@@ -207,6 +206,7 @@
+       if (hasData) {
+         let fadeProgress = 0;
+         const fadeToIdle = () => {
++          producerFrame = null;
+           fadeProgress += 0.03;
+           if (fadeProgress < 1) {
+             if (mode === "static") {
+@@ -218,8 +218,7 @@
+                 (value) => value * (1 - fadeProgress)
+               );
+             }
+-            needsRedrawRef.current = true;
+-            requestAnimationFrame(fadeToIdle);
++            producerFrame = requestAnimationFrame(fadeToIdle);
+           } else {
+             if (mode === "static") {
+               staticBarsRef.current = [];
+@@ -227,11 +226,18 @@
+               historyRef.current = [];
+             }
+           }
++          requestRedraw();
+         };
+         fadeToIdle();
+       }
+     }
+-  }, [processing, active, barWidth, barGap, mode]);
++    return () => {
++      if (producerFrame !== null) {
++        cancelAnimationFrame(producerFrame);
++        producerFrame = null;
++      }
++    };
++  }, [processing, active, barWidth, barGap, mode, requestRedraw]);
+ 
+   // Handle microphone setup and teardown
+   useEffect(() => {
+@@ -239,7 +245,7 @@
+       analyserRef.current = active ? externalAnalyser : null;
+       historyRef.current = [];
+       staticBarsRef.current = [];
+-      needsRedrawRef.current = true;
++      requestRedraw();
+       return () => {
+         analyserRef.current = null;
+       };
+@@ -256,10 +262,6 @@
+       ) {
+         audioContextRef.current.close();
+         audioContextRef.current = null;
+-      }
+-      if (animationRef.current) {
+-        cancelAnimationFrame(animationRef.current);
+-        animationRef.current = 0;
+       }
+       return;
+     }
+@@ -300,6 +302,7 @@
+ 
+         // Clear history when starting
+         historyRef.current = [];
++        requestRedraw();
+       } catch (error) {
+         onError?.(error as Error);
+       }
+@@ -319,10 +322,6 @@
+       ) {
+         audioContextRef.current.close();
+         audioContextRef.current = null;
+-      }
+-      if (animationRef.current) {
+-        cancelAnimationFrame(animationRef.current);
+-        animationRef.current = 0;
+       }
+     };
+   }, [
+@@ -334,6 +333,7 @@
+     onError,
+     onStreamReady,
+     onStreamEnd,
++    requestRedraw,
+   ]);
+ 
+   // Animation loop
+@@ -344,9 +344,10 @@
+     const ctx = canvas.getContext("2d");
+     if (!ctx) return;
+ 
+-    let rafId: number;
++    let rafId: number | null = null;
+ 
+     const animate = (currentTime: number) => {
++      rafId = null;
+       // Render waveform
+       const rect = canvas.getBoundingClientRect();
+ 
+@@ -422,7 +423,6 @@
+ 
+       // Only redraw if needed
+       if (!needsRedrawRef.current && !active) {
+-        rafId = requestAnimationFrame(animate);
+         return;
+       }
+ 
+@@ -521,14 +521,23 @@
+ 
+       ctx.globalAlpha = 1;
+ 
+-      rafId = requestAnimationFrame(animate);
++      if (active) {
++        rafId = requestAnimationFrame(animate);
++      }
+     };
+ 
+-    rafId = requestAnimationFrame(animate);
++    wakeDrawingRef.current = () => {
++      if (rafId === null) {
++        rafId = requestAnimationFrame(animate);
++      }
++    };
++    requestRedraw();
+ 
+     return () => {
+-      if (rafId) {
++      wakeDrawingRef.current = null;
++      if (rafId !== null) {
+         cancelAnimationFrame(rafId);
++        rafId = null;
+       }
+     };
+   }, [
+@@ -545,6 +554,7 @@
+     fadeEdges,
+     fadeWidth,
+     mode,
++    requestRedraw,
+   ]);
+ 
+   return (
+--- baseline/apps/web/src/components/practice/live-waveform.test.tsx
++++ apps/web/src/components/practice/live-waveform.test.tsx
+@@ -1,20 +1,107 @@
+-import { cleanup, render } from "@testing-library/react";
++/* oxlint-disable vitest/max-expects -- Lifecycle transitions verify both visible output and resource ownership. */
++import { act, cleanup, render } from "@testing-library/react";
++import { StrictMode } from "react";
+ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+ 
+ import { LiveWaveform } from "@/components/ui/live-waveform";
++
++function analyser() {
++  return {
++    frequencyBinCount: 128,
++    getByteFrequencyData: vi.fn<(data: Uint8Array) => void>((data) => {
++      data.fill(180);
++    }),
++    disconnect: vi.fn<() => void>(),
++  };
++}
+ 
+ describe("shared conversation waveform", () => {
+   const getUserMedia = vi.fn<() => Promise<MediaStream>>();
+   const createContext = vi.fn<() => void>();
++  let frames: Map<number, FrameRequestCallback>;
++  let nextFrame: number;
++  let time = 0;
++  let visibleBars: number;
++  let width: number;
++  let resize: () => void;
++  let disconnect: ReturnType<typeof vi.fn>;
++  let clear: ReturnType<typeof vi.fn>;
++
++  function advance(count = 1) {
++    act(() => {
++      for (let index = 0; index < count; index += 1) {
++        time += 16;
++        const scheduled = [...frames.keys()];
++        for (const id of scheduled) {
++          const onFrame = frames.get(id);
++          frames.delete(id);
++          onFrame?.(time);
++        }
++      }
++    });
++  }
+ 
+   beforeEach(() => {
+     vi.clearAllMocks();
+-    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(null);
++    frames = new Map();
++    nextFrame = 0;
++    time = 0;
++    visibleBars = 0;
++    width = 200;
++    disconnect = vi.fn<() => void>();
++    clear = vi.fn<CanvasRenderingContext2D["clearRect"]>(() => {
++      visibleBars = 0;
++    });
++    const context = {
++      scale: vi.fn<CanvasRenderingContext2D["scale"]>(),
++      clearRect: clear,
++      beginPath: vi.fn<() => void>(),
++      roundRect: vi.fn<CanvasRenderingContext2D["roundRect"]>(),
++      fill: vi.fn<() => void>(() => {
++        visibleBars += 1;
++      }),
++      fillRect: vi.fn<CanvasRenderingContext2D["fillRect"]>(() => {
++        if (context.globalCompositeOperation !== "destination-out") {
++          visibleBars += 1;
++        }
++      }),
++      createLinearGradient: vi.fn<
++        CanvasRenderingContext2D["createLinearGradient"]
++      >(() => ({ addColorStop: vi.fn<CanvasGradient["addColorStop"]>() })),
++      globalCompositeOperation: "source-over",
++    };
++    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
++      () => ({
++        width,
++        height: 64,
++        x: 0,
++        y: 0,
++        top: 0,
++        left: 0,
++        right: width,
++        bottom: 64,
++        toJSON: () => ({}),
++      })
++    );
++    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(
++      context as unknown as CanvasRenderingContext2D
++    );
++    vi.stubGlobal("requestAnimationFrame", (onFrame: FrameRequestCallback) => {
++      const id = nextFrame;
++      nextFrame += 1;
++      frames.set(id, onFrame);
++      return id;
++    });
++    vi.stubGlobal("cancelAnimationFrame", (id: number) => frames.delete(id));
+     vi.stubGlobal(
+       "ResizeObserver",
+       class {
+-        observe = vi.fn<() => void>();
+-        disconnect = vi.fn<() => void>();
++        constructor(onResize: () => void) {
++          resize = onResize;
++          this.observe = onResize;
++        }
++        observe: () => void;
++        disconnect = disconnect;
+       }
+     );
+     vi.stubGlobal("AudioContext", createContext);
+@@ -29,29 +116,166 @@
+     vi.unstubAllGlobals();
+   });
+ 
+-  it("waits for the conversation's analyser without requesting another microphone", () => {
++  it("settles a fresh idle canvas and wakes once for coalesced resizes", () => {
++    render(<LiveWaveform analyser={null} />);
++    advance(3);
++    expect(visibleBars).toBe(0);
++    expect(frames.size).toBe(0);
++    const clears = clear.mock.calls.length;
++    width = 320;
++    act(() => {
++      resize();
++      resize();
++    });
++    expect(frames.size).toBe(1);
++    advance(3);
++    expect(clear).toHaveBeenLastCalledWith(0, 0, 320, 64);
++    expect(clear).toHaveBeenCalledTimes(clears + 1);
++    expect(frames.size).toBe(0);
++  });
++
++  it.each(["static", "scrolling"] as const)(
++    "clears the last faded bars and settles in %s mode",
++    (mode) => {
++      const { rerender } = render(
++        <LiveWaveform processing analyser={null} mode={mode} />
++      );
++      advance(5);
++      expect(visibleBars).toBeGreaterThan(0);
++      rerender(<LiveWaveform analyser={null} mode={mode} />);
++      advance(45);
++      expect(visibleBars).toBe(0);
++      expect(frames.size).toBe(0);
++      const clears = clear.mock.calls.length;
++      advance(10);
++      expect(clear).toHaveBeenCalledTimes(clears);
++    }
++  );
++
++  it("cancels the latest drawing and fade frames on unmount", () => {
++    const { rerender, unmount } = render(
++      <LiveWaveform processing analyser={null} />
++    );
++    advance(5);
++    rerender(<LiveWaveform analyser={null} />);
++    advance(4);
++    expect(visibleBars).toBeGreaterThan(0);
++    unmount();
++    expect(frames.size).toBe(0);
++    const clears = clear.mock.calls.length;
++    advance(50);
++    expect(clear).toHaveBeenCalledTimes(clears);
++    expect(disconnect).toHaveBeenCalledWith();
++  });
++
++  it.each(["processing", "active"] as const)(
++    "cancels the old fade when %s restarts",
++    (state) => {
++      const input = analyser();
++      const borrowed = input as unknown as AnalyserNode;
++      const { rerender, unmount } = render(
++        <LiveWaveform processing analyser={borrowed} />
++      );
++      advance(5);
++      rerender(<LiveWaveform analyser={borrowed} />);
++      advance(4);
++      const oldFrames = [...frames.keys()];
++      rerender(
++        <LiveWaveform
++          processing={state === "processing"}
++          active={state === "active"}
++          analyser={borrowed}
++        />
++      );
++      expect(oldFrames.filter((id) => frames.has(id))).toStrictEqual([]);
++      advance(45);
++      expect(visibleBars).toBeGreaterThan(0);
++      expect(frames.size).toBeGreaterThan(0);
++      unmount();
++      expect(frames.size).toBe(0);
++    }
++  );
++
++  it("wakes processing and active rendering after idle and clears borrowed active bars on stop", () => {
++    const input = analyser();
++    const borrowed = input as unknown as AnalyserNode;
++    const { rerender } = render(<LiveWaveform analyser={borrowed} />);
++    advance(3);
++    expect(frames.size).toBe(0);
++    rerender(<LiveWaveform processing analyser={borrowed} />);
++    advance(5);
++    expect(visibleBars).toBeGreaterThan(0);
++    rerender(<LiveWaveform active analyser={borrowed} />);
++    advance(5);
++    expect(input.getByteFrequencyData).toHaveBeenCalledWith(
++      expect.any(Uint8Array)
++    );
++    expect(visibleBars).toBeGreaterThan(0);
++    rerender(<LiveWaveform analyser={borrowed} />);
++    advance();
++    expect(visibleBars).toBe(0);
++    advance(45);
++    expect(frames.size).toBe(0);
++  });
++
++  it("waits for an explicit null analyser without requesting another microphone", () => {
+     const { unmount } = render(<LiveWaveform active analyser={null} />);
+-    unmount();
++    advance(5);
++    expect(visibleBars).toBe(0);
++    unmount();
++    expect(frames.size).toBe(0);
+     expect(getUserMedia).not.toHaveBeenCalled();
+     expect(createContext).not.toHaveBeenCalled();
+   });
+ 
+-  it("switches between borrowed analysers without closing or disconnecting the conversation", () => {
+-    const disconnectInput = vi.fn<() => void>();
+-    const disconnectOutput = vi.fn<() => void>();
+-    const input = { disconnect: disconnectInput } as unknown as AnalyserNode;
+-    const output = { disconnect: disconnectOutput } as unknown as AnalyserNode;
++  it("samples replacement analysers without releasing borrowed resources", () => {
++    const input = analyser();
++    const output = analyser();
+     const onStreamEnd = vi.fn<() => void>();
+     const { rerender, unmount } = render(
+-      <LiveWaveform active analyser={input} onStreamEnd={onStreamEnd} />
+-    );
++      <LiveWaveform
++        active
++        analyser={input as unknown as AnalyserNode}
++        onStreamEnd={onStreamEnd}
++      />
++    );
++    advance(5);
++    expect(input.getByteFrequencyData).toHaveBeenCalledWith(
++      expect.any(Uint8Array)
++    );
++    const samples = input.getByteFrequencyData.mock.calls.length;
+     rerender(
+-      <LiveWaveform active analyser={output} onStreamEnd={onStreamEnd} />
+-    );
+-    unmount();
++      <LiveWaveform
++        active
++        analyser={output as unknown as AnalyserNode}
++        onStreamEnd={onStreamEnd}
++      />
++    );
++    advance(5);
++    expect(output.getByteFrequencyData).toHaveBeenCalledWith(
++      expect.any(Uint8Array)
++    );
++    expect(input.getByteFrequencyData).toHaveBeenCalledTimes(samples);
++    expect(visibleBars).toBeGreaterThan(0);
++    unmount();
++    expect(frames.size).toBe(0);
+     expect(getUserMedia).not.toHaveBeenCalled();
+-    expect(disconnectInput).not.toHaveBeenCalled();
+-    expect(disconnectOutput).not.toHaveBeenCalled();
++    expect(createContext).not.toHaveBeenCalled();
++    expect(input.disconnect).not.toHaveBeenCalled();
++    expect(output.disconnect).not.toHaveBeenCalled();
+     expect(onStreamEnd).not.toHaveBeenCalled();
+   });
++
++  it("cleans up StrictMode replay and subsequent processing frames", () => {
++    const { unmount } = render(
++      <StrictMode>
++        <LiveWaveform processing analyser={null} />
++      </StrictMode>
++    );
++    advance(5);
++    expect(visibleBars).toBeGreaterThan(0);
++    unmount();
++    expect(frames.size).toBe(0);
++    expect(disconnect).toHaveBeenCalledTimes(2);
++  });
+ });
+--- baseline/apps/web/src/components/practice/use-persona-preview.test.ts
++++ apps/web/src/components/practice/use-persona-preview.test.ts
+@@ -1,3 +1,4 @@
++/* oxlint-disable vitest/max-expects -- Late events must preserve state and released audio across lifecycle transitions. */
+ import { act, cleanup, renderHook } from "@testing-library/react";
+ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+ 
+@@ -99,6 +100,114 @@
+     await act(() => result.current.play(leo));
+     unmount();
+     expect(clips[1]?.hasAttribute("src")).toBeFalsy();
+-    expect(clips[1]?.onended).toBeNull();
+-  });
++  });
++
++  it.each(["resolve", "reject"] as const)(
++    "ignores late events and playback %s after stop or replacement",
++    async (settlement) => {
++      const pending = Promise.withResolvers<undefined>();
++      vi.mocked(HTMLMediaElement.prototype.play).mockReturnValueOnce(
++        pending.promise
++      );
++      const { result } = renderHook(() => usePersonaPreview());
++      act(() => {
++        void result.current.play(maya);
++      });
++      expect(result.current.status).toBe("loading");
++      act(() => result.current.stop());
++      act(() => {
++        clips[0]?.dispatchEvent(new Event("ended"));
++        clips[0]?.dispatchEvent(new Event("error"));
++      });
++      expect(result.current.status).toBeNull();
++      expect(result.current.error).toBeNull();
++      const replacementPlayback = Promise.withResolvers<undefined>();
++      vi.mocked(HTMLMediaElement.prototype.play).mockReturnValueOnce(
++        replacementPlayback.promise
++      );
++      act(() => {
++        void result.current.play(leo);
++      });
++      const [, replacement] = clips;
++      act(() => {
++        clips[0]?.dispatchEvent(new Event("ended"));
++        clips[0]?.dispatchEvent(new Event("error"));
++      });
++      await act(() => {
++        if (settlement === "resolve") {
++          pending.resolve();
++        } else {
++          pending.reject(new Error("Interrupted"));
++        }
++      });
++      expect(result.current.status).toBe("loading");
++      expect(result.current.error).toBeNull();
++      expect(replacement.getAttribute("src")).toBe(leo.introductionAudio);
++      await act(() => replacementPlayback.resolve());
++      expect(result.current.status).toBe("playing");
++      act(() => replacement.dispatchEvent(new Event("ended")));
++      expect(result.current.status).toBeNull();
++    }
++  );
++
++  it.each(["resolve", "reject"] as const)(
++    "stays stopped after late playback %s",
++    async (settlement) => {
++      const pending = Promise.withResolvers<undefined>();
++      vi.mocked(HTMLMediaElement.prototype.play).mockReturnValueOnce(
++        pending.promise
++      );
++      const { result } = renderHook(() => usePersonaPreview());
++      act(() => {
++        void result.current.play(maya);
++      });
++      act(() => result.current.stop());
++      await act(() => {
++        if (settlement === "resolve") {
++          pending.resolve();
++        } else {
++          pending.reject(new Error("Interrupted"));
++        }
++      });
++      expect(result.current.status).toBeNull();
++      expect(result.current.error).toBeNull();
++      expect(clips[0]?.hasAttribute("src")).toBeFalsy();
++    }
++  );
++
++  it.each(["resolve", "reject"] as const)(
++    "releases audio and ignores late events and playback %s after unmount",
++    async (settlement) => {
++      const pending = Promise.withResolvers<undefined>();
++      vi.mocked(HTMLMediaElement.prototype.play).mockReturnValueOnce(
++        pending.promise
++      );
++      const { result, unmount } = renderHook(() => usePersonaPreview());
++      act(() => {
++        void result.current.play(maya);
++      });
++      const [audio] = clips;
++      unmount();
++      expect(audio.hasAttribute("src")).toBeFalsy();
++      expect(audio.pause).toHaveBeenCalledWith();
++      expect(audio.load).toHaveBeenCalledWith();
++      const pauses = vi.mocked(audio.pause).mock.calls.length;
++      const loads = vi.mocked(audio.load).mock.calls.length;
++      act(() => {
++        audio.dispatchEvent(new Event("ended"));
++        audio.dispatchEvent(new Event("error"));
++      });
++      await act(() => {
++        if (settlement === "resolve") {
++          pending.resolve();
++        } else {
++          pending.reject(new Error("Interrupted"));
++        }
++      });
++      expect(audio.pause).toHaveBeenCalledTimes(pauses);
++      expect(audio.load).toHaveBeenCalledTimes(loads);
++      expect(audio.hasAttribute("src")).toBeFalsy();
++      expect(clips).toHaveLength(1);
++    }
++  );
+ });

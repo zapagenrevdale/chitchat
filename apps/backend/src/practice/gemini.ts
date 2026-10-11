@@ -1,3 +1,4 @@
+import { createGoogle } from "@ai-sdk/google";
 import {
   personaRecommendationSchema,
   practiceScenePreviewSchema,
@@ -15,6 +16,10 @@ import type {
   PracticeSession,
   PracticeSetupRequest,
 } from "@chitchat/contracts";
+import type {
+  OnboardingLiveRequest,
+  OnboardingLiveSession,
+} from "@chitchat/contracts/onboarding";
 import {
   ActivityHandling,
   GoogleGenAI,
@@ -22,6 +27,7 @@ import {
   ThinkingLevel,
 } from "@google/genai";
 import type { Part, Tool } from "@google/genai";
+import { generateText, Output } from "ai";
 import sharp from "sharp";
 import { z } from "zod";
 
@@ -32,16 +38,31 @@ import {
   customSituationInstruction,
   customSituationTools,
 } from "./custom-situation";
+import { createOnboardingProvider } from "./onboarding";
+import { createOnboardingLiveSession } from "./onboarding-live";
 import { personaAvatars } from "./persona-avatars";
 import { personas } from "./personas";
 import { renderPersonaAvatar } from "./render-persona-avatar";
 import { createFeedbackProvider } from "./review";
 import { setupAnswerSchema, setupPrompt } from "./setup";
 import type { SetupAnswer } from "./setup";
-import { traceGeneration, tokenUsage } from "./tracing";
+import { traceGeneration, tokenUsage, textTokenUsage } from "./tracing";
 import type { PracticeTracing } from "./tracing";
 
 export interface PracticeProvider {
+  createOnboardingSession?: (
+    request: OnboardingLiveRequest,
+    signal: AbortSignal
+  ) => Promise<OnboardingLiveSession>;
+  onboardingTurn?: ReturnType<
+    typeof createOnboardingProvider
+  >["onboardingTurn"];
+  completeOnboarding?: ReturnType<
+    typeof createOnboardingProvider
+  >["completeOnboarding"];
+  recommendOnboarding?: ReturnType<
+    typeof createOnboardingProvider
+  >["recommendOnboarding"];
   suggestReply?: ReturnType<typeof createConversationModes>["suggestReply"];
   guidedTurn?: ReturnType<typeof createConversationModes>["guidedTurn"];
   speakTurn?: ReturnType<typeof createConversationModes>["speakTurn"];
@@ -79,12 +100,22 @@ export interface PracticeProvider {
 export function createGeminiProvider(
   apiKey: string,
   secondaryApiKey?: string,
-  tracing?: PracticeTracing
+  tracing?: PracticeTracing,
+  typesafeApiKey?: string
 ): PracticeProvider {
+  const text = createGoogle({ apiKey });
+  const fallbackText =
+    secondaryApiKey && secondaryApiKey !== apiKey
+      ? createGoogle({ apiKey: secondaryApiKey })
+      : undefined;
   // The pinned SDK's ephemeral-token transport uses v1alpha.
   const ai = new GoogleGenAI({
     apiKey,
     httpOptions: { apiVersion: "v1alpha", timeout: 20_000 },
+  });
+  const onboardingAi = new GoogleGenAI({
+    apiKey,
+    httpOptions: { apiVersion: "v1beta", timeout: 20_000 },
   });
   const imageAi = secondaryApiKey
     ? new GoogleGenAI({
@@ -158,10 +189,13 @@ export function createGeminiProvider(
       : await provision();
   }
   return {
-    ...createFeedbackProvider(ai, tracing),
+    ...createOnboardingProvider(text, typesafeApiKey),
+    ...createFeedbackProvider(ai, text, tracing),
     ...createConversationModes(
       ai,
-      secondaryApiKey === apiKey ? undefined : imageAi
+      text,
+      secondaryApiKey === apiKey ? undefined : imageAi,
+      fallbackText
     ),
     async generateScenePreview(request, signal) {
       signal.throwIfAborted();
@@ -185,20 +219,17 @@ export function createGeminiProvider(
       });
       const model = "gemini-3.1-flash-lite";
       const generate = () =>
-        ai.models.generateContent({
-          model,
-          contents,
-          config: {
-            abortSignal: signal,
-            systemInstruction,
-            // The SDK makes a single attempt unless retries are explicitly enabled.
-            httpOptions: {
-              retryOptions: { attempts: 4, initialDelay: 1, maxDelay: 4 },
-            },
-            responseMimeType: "application/json",
-            responseJsonSchema: z.toJSONSchema(practiceScenePreviewSchema),
-            maxOutputTokens: 700,
-            thinkingConfig: { thinkingLevel: ThinkingLevel.MINIMAL },
+        generateText({
+          model: text(model),
+          prompt: contents,
+          system: systemInstruction,
+          output: Output.object({ schema: practiceScenePreviewSchema }),
+          abortSignal: signal,
+          timeout: { stepMs: 20_000 },
+          maxRetries: 3,
+          maxOutputTokens: 700,
+          providerOptions: {
+            google: { thinkingConfig: { thinkingLevel: "minimal" } },
           },
         });
       const response = tracing
@@ -211,14 +242,12 @@ export function createGeminiProvider(
             generate,
             (result) => ({
               output: result.text,
-              usageDetails: tokenUsage(result.usageMetadata),
+              usageDetails: textTokenUsage(result.usage),
             })
           )
         : await generate();
       signal.throwIfAborted();
-      return practiceScenePreviewSchema.parse(
-        JSON.parse(response.text ?? "null")
-      );
+      return response.output;
     },
     async recommendPersonas(request, signal) {
       const systemInstruction =
@@ -233,16 +262,17 @@ export function createGeminiProvider(
         })),
       });
       const generate = () =>
-        ai.models.generateContent({
-          model: "gemini-3.6-flash",
-          contents,
-          config: {
-            abortSignal: signal,
-            systemInstruction,
-            responseMimeType: "application/json",
-            responseJsonSchema: z.toJSONSchema(personaRecommendationSchema),
-            maxOutputTokens: 700,
-            thinkingConfig: { thinkingLevel: ThinkingLevel.MINIMAL },
+        generateText({
+          model: text("gemini-3.6-flash"),
+          prompt: contents,
+          system: systemInstruction,
+          output: Output.object({ schema: personaRecommendationSchema }),
+          abortSignal: signal,
+          timeout: { stepMs: 20_000 },
+          maxRetries: 0,
+          maxOutputTokens: 700,
+          providerOptions: {
+            google: { thinkingConfig: { thinkingLevel: "minimal" } },
           },
         });
       const response = tracing
@@ -255,14 +285,12 @@ export function createGeminiProvider(
             generate,
             (result) => ({
               output: result.text,
-              usageDetails: tokenUsage(result.usageMetadata),
+              usageDetails: textTokenUsage(result.usage),
             })
           )
         : await generate();
       signal.throwIfAborted();
-      return personaRecommendationSchema.parse(
-        JSON.parse(response.text ?? "null")
-      );
+      return response.output;
     },
     async generatePlaceImage(place, signal) {
       if (!imageAi) {
@@ -360,6 +388,14 @@ export function createGeminiProvider(
       }
       return `data:${image.mimeType};base64,${image.data}`;
     },
+    createOnboardingSession(request, signal) {
+      return createOnboardingLiveSession(
+        onboardingAi,
+        request,
+        signal,
+        tracing
+      );
+    },
     createPlaceSession(signal) {
       const lily = personas.find(({ id }) => id === "lily");
       if (!lily) {
@@ -384,17 +420,18 @@ export function createGeminiProvider(
     },
     async interpretSetup(request, signal) {
       const generate = () =>
-        ai.models.generateContent({
-          model: "gemini-3.6-flash",
-          contents: request.text ?? "",
-          config: {
-            abortSignal: signal,
-            systemInstruction: setupPrompt(request),
-            responseMimeType: "application/json",
-            responseJsonSchema: z.toJSONSchema(setupAnswerSchema),
-            temperature: 0,
-            maxOutputTokens: 700,
-            thinkingConfig: { thinkingLevel: ThinkingLevel.MINIMAL },
+        generateText({
+          model: text("gemini-3.6-flash"),
+          prompt: request.text ?? "",
+          system: setupPrompt(request),
+          output: Output.object({ schema: setupAnswerSchema }),
+          abortSignal: signal,
+          timeout: { stepMs: 20_000 },
+          maxRetries: 0,
+          temperature: 0,
+          maxOutputTokens: 700,
+          providerOptions: {
+            google: { thinkingConfig: { thinkingLevel: "minimal" } },
           },
         });
       const response = tracing
@@ -410,12 +447,12 @@ export function createGeminiProvider(
             generate,
             (result) => ({
               output: result.text,
-              usageDetails: tokenUsage(result.usageMetadata),
+              usageDetails: textTokenUsage(result.usage),
             })
           )
         : await generate();
       signal.throwIfAborted();
-      return setupAnswerSchema.parse(JSON.parse(response.text ?? "null"));
+      return response.output;
     },
     async createSession(selection, signal) {
       const scene = resolveSelection(selection);

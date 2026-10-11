@@ -1,0 +1,69 @@
+$ turbo run typecheck lint test "--filter=@chitchat/backend"
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/backend
+   • Running typecheck, lint, test in 1 packages
+   • Remote caching disabled
+
+@chitchat/contracts:build: cache hit, replaying logs 14eff55ff9d610a4
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/db:build: cache hit, replaying logs 85a4960c281bb37a
+@chitchat/email:build: cache hit, replaying logs 28cec2141793dbcd
+@chitchat/db:build: $ prisma generate
+@chitchat/db:build: Loaded Prisma config from prisma.config.ts.
+@chitchat/db:build: 
+@chitchat/db:build: Prisma schema loaded from prisma/schema.prisma.
+@chitchat/db:build: 
+@chitchat/db:build: ✔ Generated Prisma Client (7.10.0) to ./src/generated/prisma in 23ms
+@chitchat/db:build: 
+@chitchat/email:build: $ tsc --noEmit
+@chitchat/backend:typecheck: cache miss, executing 2b097c95052c6ce1
+@chitchat/backend:lint: cache miss, executing 9490c24fa4cb7192
+@chitchat/backend:test: cache miss, executing 732746aa3ca3efe3
+@chitchat/backend:typecheck: $ tsc --noEmit
+@chitchat/backend:lint: $ ultracite check
+@chitchat/backend:test: $ vitest run
+@chitchat/backend:test: 
+@chitchat/backend:test: [1m[30m[46m RUN [49m[39m[22m [36mv5.0.0 [39m[90m/Users/genrevzapa/projects/chitchat/apps/backend[39m
+@chitchat/backend:test: 
+@chitchat/backend:lint: Checking formatting...
+@chitchat/backend:lint: 
+@chitchat/backend:lint: All matched files use the correct format.
+@chitchat/backend:lint: Finished in 64ms on 64 files using 10 threads.
+@chitchat/backend:lint: Found 0 warnings and 0 errors.
+@chitchat/backend:lint: Finished in 149ms on 59 files with 586 rules using 10 threads.
+@chitchat/backend:test:  [32m✓[39m src/practice/onboarding-benefits.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 40[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/onboarding-provider.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/scene-preview.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/onboarding-live.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/conversation-modes.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/routes.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 108[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/tracing.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/gemini.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 84[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/onboarding-turns.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/conversation-request.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 98[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/conversation-provider.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/review.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/setup-routes.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/persona-recommendations.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/onboarding-benefits-contract.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/scene-preview-retry.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 66[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/setup.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/introduction-timing.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/onboarding-completions.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/onboarding.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/app.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/feedback.test.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/transcript-body-budget.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 70[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/transcription.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [2m Test Files [22m [1m[32m24 passed[39m[22m[90m (24)[39m
+@chitchat/backend:test: [2m      Tests [22m [1m[32m251 passed[39m[22m[90m (251)[39m
+@chitchat/backend:test: [2m   Start at [22m 11:56:54
+@chitchat/backend:test: [2m   Duration [22m 1.07s[2m (import 61%, transform 23%, tests 16%, worker 1%)[22m
+@chitchat/backend:test: 
+
+ Tasks:    6 successful, 6 total
+Cached:    3 cached, 6 total
+  Time:    1.337s 
+

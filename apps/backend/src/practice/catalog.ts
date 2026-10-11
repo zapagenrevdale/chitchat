@@ -4,6 +4,7 @@ import type {
   PracticeSelection,
 } from "@chitchat/contracts";
 
+import { learnerPracticeInstruction } from "./onboarding";
 import { personaGroups, personas } from "./personas";
 
 export const places = [
@@ -205,6 +206,7 @@ Scene data: ${JSON.stringify({ place: scene.place.name, placeDescription: scene.
 When a preview or backstory is present, keep the conversation consistent with the scene the learner reviewed and the relationships they supplied. If a learnerGoal is present, give them natural opportunities to try it without mentioning a checklist, coaching, or forcing its completion. If no learnerGoal is present, let the conversation unfold freely without imposing a practice goal.
 Adapt your role to the situation (for example, a barista for ordering coffee or a receptionist for a hotel check-in) while keeping your personality and voice.
 Speak in ${selection.language ?? "English"}. Stay in this scene and character. Respond naturally to what the user says.
+${learnerPracticeInstruction(selection.learner)}
 Challenge level: ${levelInstructions[selection.difficulty ?? "balanced"]}
 Keep each reply to 1–3 short spoken sentences, usually under 60 words. Ask at most one question per turn, and don't turn every reply into an interview. Share small details about yourself too.
 During practice you are a conversation partner. Do not score or coach. The app provides feedback separately after practice. Never correct grammar, narrate actions, or use markdown. If asked, be honest that this is AI practice.

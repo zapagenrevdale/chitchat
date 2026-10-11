@@ -1,0 +1,17 @@
+$ turbo run format "--filter=@chitchat/web" -- src/lib/recorder-worklet.test.ts
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/web
+   • Running format in 1 packages
+   • Remote caching disabled
+
+@chitchat/web:format: cache bypass, force executing 92f7e008bd49d1ec
+@chitchat/web:format: $ ultracite fix src/lib/recorder-worklet.test.ts
+@chitchat/web:format: Found 0 warnings and 0 errors.
+@chitchat/web:format: Finished in 31ms on 1 file with 586 rules using 10 threads.
+@chitchat/web:format: Finished in 26ms on 1 files using 10 threads.
+
+ Tasks:    1 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    322ms 
+

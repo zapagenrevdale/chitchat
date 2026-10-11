@@ -1,0 +1,265 @@
+$ turbo run test "--filter=@chitchat/backend" -- src/practice/feedback.test.ts src/practice/transcription.test.ts src/practice/transcript-body-budget.test.ts
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/backend
+   • Running test in 1 packages
+   • Remote caching disabled
+
+@chitchat/email:build: cache miss, executing f3576fb486f40207
+@chitchat/contracts:build: cache miss, executing 2ea3885636fed53b
+@chitchat/db:build: cache miss, executing 750a46bb6d6e270c
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/email:build: $ tsc --noEmit
+@chitchat/db:build: $ prisma generate
+@chitchat/db:build: Loaded Prisma config from prisma.config.ts.
+@chitchat/db:build: 
+@chitchat/db:build: Prisma schema loaded from prisma/schema.prisma.
+@chitchat/db:build: ┌─────────────────────────────────────────────────────────┐
+@chitchat/db:build: │  Update available 7.10.0 -> 8.0.0-rc.22                 │
+@chitchat/db:build: │                                                         │
+@chitchat/db:build: │  This is a major update - please follow the guide at    │
+@chitchat/db:build: │  https://pris.ly/d/major-version-upgrade                │
+@chitchat/db:build: │                                                         │
+@chitchat/db:build: │  Run the following to update                            │
+@chitchat/db:build: │    npm i --save-dev prisma@latest                       │
+@chitchat/db:build: │    npm i @prisma/client@latest                          │
+@chitchat/db:build: └─────────────────────────────────────────────────────────┘
+@chitchat/db:build: 
+@chitchat/db:build: ✔ Generated Prisma Client (7.10.0) to ./src/generated/prisma in 21ms
+@chitchat/db:build: 
+@chitchat/backend:test: cache miss, executing be49a7b4c3fad0d9
+@chitchat/backend:test: $ vitest run src/practice/feedback.test.ts src/practice/transcription.test.ts src/practice/transcript-body-budget.test.ts
+@chitchat/backend:test: 
+@chitchat/backend:test: [1m[30m[46m RUN [49m[39m[22m [36mv5.0.0 [39m[90m/Users/genrevzapa/projects/chitchat/apps/backend[39m
+@chitchat/backend:test: 
+@chitchat/backend:test:  [31m❯[39m src/practice/transcription.test.ts [2m([22m[2m12 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[32m 22[2mms[22m[39m
+@chitchat/backend:test:    [31m❯[39m independent Gemini captions [2m(12)[22m
+@chitchat/backend:test:      [32m✓[39m constrains one-use credentials to verbatim text transcription[32m 2[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m rejects a missing token[32m 0[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m attaches captions to practice while preserving the origin guard[32m 10[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m retains Gemini practice if transcription provisioning fails[32m 1[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m omits captions when no transcription provider is configured[32m 1[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m rejects a mandatory session returned after its deadline[32m 1[2mms[22m[39m
+@chitchat/backend:test: [31m     [31m×[31m handles overall deadline during captions (late token=false)[39m[32m 3[2mms[22m[39m
+@chitchat/backend:test: [31m     [31m×[31m handles overall deadline during captions (late token=true)[39m[32m 1[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m handles caption cap during captions (late token=false)[32m 1[2mms[22m[39m
+@chitchat/backend:test: [31m     [31m×[31m handles caption cap during captions (late token=true)[39m[32m 1[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m handles client cancellation during captions (late token=false)[32m 0[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m handles client cancellation during captions (late token=true)[32m 0[2mms[22m[39m
+@chitchat/backend:test:  [31m❯[39m src/practice/feedback.test.ts [2m([22m[2m31 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[32m 33[2mms[22m[39m
+@chitchat/backend:test:    [31m❯[39m conversation feedback [2m(31)[22m
+@chitchat/backend:test:      [32m✓[39m requests a backend assessment using the transcript without a caller-supplied score[32m 12[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m does not invent a score for too little conversation[32m 1[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m does not invent a score for too little conversation[32m 1[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m does not invent a score for too little conversation[32m 1[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m does not invent a score for too little conversation[32m 1[2mms[22m[39m
+@chitchat/backend:test: [31m     [31m×[31m does not invent a score for too little conversation[39m[32m 5[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m does not invent a score for too little conversation[32m 1[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m does not invent a score for too little conversation[32m 0[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m does not invent a score for too little conversation[32m 0[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m does not invent a score for too little conversation[32m 0[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m counts adjacent transcription chunks as a single turn[32m 0[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m accepts a full transcript beyond the small setup request limit[32m 0[2mms[22m[39m
+@chitchat/backend:test: [31m     [31m×[31m assesses substantial conversation without spaces: 私は週末に公園を散歩するのが好きです。湖の近くには美しい花がたくさん咲いています。あなたは普段どこを歩きますか。[39m[32m 1[2mms[22m[39m
+@chitchat/backend:test: [31m     [31m×[31m assesses substantial conversation without spaces: 我喜欢周末和朋友一起去公园散步。湖边有很多漂亮的花，我们常常在那里聊天。你平时喜欢去什么地方？[39m[32m 0[2mms[22m[39m
+@chitchat/backend:test: [31m     [31m×[31m assesses substantial conversation without spaces: ฉันชอบเดินเล่นในสวนสาธารณะกับเพื่อนในวันหยุดเราเห็นดอกไม้สวยงามริมทะเลสาบและพูดคุยกันคุณชอบไปเดินเล่นที่ไหน[39m[32m 0[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m validates transcript limits, speakers, IDs, and scene[32m 0[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m validates transcript limits, speakers, IDs, and scene[32m 0[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m validates transcript limits, speakers, IDs, and scene[32m 0[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m validates transcript limits, speakers, IDs, and scene[32m 0[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m validates transcript limits, speakers, IDs, and scene[32m 0[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m rejects foreign origins and oversized request bodies[32m 1[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m rejects invalid scores and invented or misattributed evidence[32m 1[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m rejects invalid scores and invented or misattributed evidence[32m 0[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m rejects invalid scores and invented or misattributed evidence[32m 0[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m allows honest feedback without a positive highlight and preserves score endpoints[32m 0[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m keeps the backend scorer's insufficient-evidence decision even for a long transcript[32m 0[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m returns unavailable when the text scorer is not configured[32m 0[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m ignores caller-supplied assessments and overall scores[32m 0[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m returns speech through an independent validated endpoint[32m 2[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m rejects invalid recap input and foreign origins before TTS[32m 1[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m sanitizes independent scoring and TTS failures[32m 1[2mms[22m[39m
+@chitchat/backend:test:  [31m❯[39m src/practice/transcript-body-budget.test.ts [2m([22m[2m12 tests[22m[2m | [22m[31m9 failed[39m[2m)[22m[32m 41[2mms[22m[39m
+@chitchat/backend:test:    [31m❯[39m transcript body budget for /feedback [2m(4)[22m
+@chitchat/backend:test: [31m     [31m×[31m passes 60,000 Unicode characters to the provider (escaped=false)[39m[32m 12[2mms[22m[39m
+@chitchat/backend:test: [31m     [31m×[31m passes 60,000 Unicode characters to the provider (escaped=true)[39m[32m 5[2mms[22m[39m
+@chitchat/backend:test: [31m     [31m×[31m rejects semantic overflow below the HTTP ceiling before generation[39m[32m 1[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m rejects HTTP overflow before generation[32m 3[2mms[22m[39m
+@chitchat/backend:test:    [31m❯[39m transcript body budget for /reply-suggestions [2m(4)[22m
+@chitchat/backend:test: [31m     [31m×[31m passes 60,000 Unicode characters to the provider (escaped=false)[39m[32m 1[2mms[22m[39m
+@chitchat/backend:test: [31m     [31m×[31m passes 60,000 Unicode characters to the provider (escaped=true)[39m[32m 5[2mms[22m[39m
+@chitchat/backend:test: [31m     [31m×[31m rejects semantic overflow below the HTTP ceiling before generation[39m[32m 1[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m rejects HTTP overflow before generation[32m 2[2mms[22m[39m
+@chitchat/backend:test:    [31m❯[39m transcript body budget for /guided-turns [2m(4)[22m
+@chitchat/backend:test: [31m     [31m×[31m passes 60,000 Unicode characters to the provider (escaped=false)[39m[32m 1[2mms[22m[39m
+@chitchat/backend:test: [31m     [31m×[31m passes 60,000 Unicode characters to the provider (escaped=true)[39m[32m 6[2mms[22m[39m
+@chitchat/backend:test: [31m     [31m×[31m rejects semantic overflow below the HTTP ceiling before generation[39m[32m 1[2mms[22m[39m
+@chitchat/backend:test:      [32m✓[39m rejects HTTP overflow before generation[32m 2[2mms[22m[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 16 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/feedback.test.ts[2m > [22mconversation feedback[2m > [22mdoes not invent a score for too little conversation
+@chitchat/backend:test: [31m[1mAssertionError[22m: expected { …(8) } to strictly equal { status: 'insufficient' }[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [32m- Expected[39m
+@chitchat/backend:test: [31m+ Received[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [2m  {[22m
+@chitchat/backend:test: [32m-   "status": "insufficient",[39m
+@chitchat/backend:test: [31m+   "curiosity": {[39m
+@chitchat/backend:test: [31m+     "note": "Your question about the lake built on Theo's favorite spot.",[39m
+@chitchat/backend:test: [31m+     "score": 4,[39m
+@chitchat/backend:test: [31m+   },[39m
+@chitchat/backend:test: [31m+   "highlight": {[39m
+@chitchat/backend:test: [31m+     "messageId": 4,[39m
+@chitchat/backend:test: [31m+     "note": "A small personal detail gave you common ground.",[39m
+@chitchat/backend:test: [31m+     "quote": "I walk there on weekends too.",[39m
+@chitchat/backend:test: [31m+   },[39m
+@chitchat/backend:test: [31m+   "listening": {[39m
+@chitchat/backend:test: [31m+     "note": "You picked up the running and lake details.",[39m
+@chitchat/backend:test: [31m+     "score": 5,[39m
+@chitchat/backend:test: [31m+   },[39m
+@chitchat/backend:test: [31m+   "nextStep": {[39m
+@chitchat/backend:test: [31m+     "tip": "Add one specific detail about your own walks.",[39m
+@chitchat/backend:test: [31m+   },[39m
+@chitchat/backend:test: [31m+   "score": 8,[39m
+@chitchat/backend:test: [31m+   "sharing": {[39m
+@chitchat/backend:test: [31m+     "note": "You shared your weekend walks, with room for one more detail.",[39m
+@chitchat/backend:test: [31m+     "score": 3,[39m
+@chitchat/backend:test: [31m+   },[39m
+@chitchat/backend:test: [31m+   "status": "scored",[39m
+@chitchat/backend:test: [31m+   "summary": "You found common ground and kept the conversation moving.",[39m
+@chitchat/backend:test: [2m  }[22m
+@chitchat/backend:test: 
+@chitchat/backend:test: [36m [2m❯[22m src/practice/feedback.test.ts:[2m139:36[22m[39m
+@chitchat/backend:test:     [90m137|[39m       const response = await request({ ...body, messages });
+@chitchat/backend:test:     [90m138|[39m       expect(response.status).toBe(200);
+@chitchat/backend:test:     [90m139|[39m       await expect(response.json()).resolves.toStrictEqual({
+@chitchat/backend:test:     [90m   |[39m                                    [31m^[39m
+@chitchat/backend:test:     [90m140|[39m         status: "insufficient",
+@chitchat/backend:test:     [90m141|[39m       });
+@chitchat/backend:test: 
+@chitchat/backend:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/16]⎯[22m[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/feedback.test.ts[2m > [22mconversation feedback[2m > [22massesses substantial conversation without spaces: 私は週末に公園を散歩するのが好きです。湖の近くには美しい花がたくさん咲いています。あなたは普段どこを歩きますか。
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/feedback.test.ts[2m > [22mconversation feedback[2m > [22massesses substantial conversation without spaces: 我喜欢周末和朋友一起去公园散步。湖边有很多漂亮的花，我们常常在那里聊天。你平时喜欢去什么地方？
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/feedback.test.ts[2m > [22mconversation feedback[2m > [22massesses substantial conversation without spaces: ฉันชอบเดินเล่นในสวนสาธารณะกับเพื่อนในวันหยุดเราเห็นดอกไม้สวยงามริมทะเลสาบและพูดคุยกันคุณชอบไปเดินเล่นที่ไหน
+@chitchat/backend:test: [31m[1mAssertionError[22m: expected "vi.fn()" to be called with arguments: [ { selection: { …(3) }, …(1) }, …(1) ][90m
+@chitchat/backend:test: 
+@chitchat/backend:test: Number of calls: [1m0[22m
+@chitchat/backend:test: [31m[39m
+@chitchat/backend:test: [36m [2m❯[22m src/practice/feedback.test.ts:[2m181:32[22m[39m
+@chitchat/backend:test:     [90m179|[39m     const response = await request({ ...body, messages });
+@chitchat/backend:test:     [90m180|[39m     expect(response.status).toBe(200);
+@chitchat/backend:test:     [90m181|[39m     expect(assessConversation).toHaveBeenCalledWith(
+@chitchat/backend:test:     [90m   |[39m                                [31m^[39m
+@chitchat/backend:test:     [90m182|[39m       { ...body, messages },
+@chitchat/backend:test:     [90m183|[39m       expect.any(AbortSignal)
+@chitchat/backend:test: 
+@chitchat/backend:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/16]⎯[22m[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/transcript-body-budget.test.ts[2m > [22mtranscript body budget for /feedback[2m > [22mpasses 60,000 Unicode characters to the provider (escaped=false)
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/transcript-body-budget.test.ts[2m > [22mtranscript body budget for /feedback[2m > [22mpasses 60,000 Unicode characters to the provider (escaped=true)
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/transcript-body-budget.test.ts[2m > [22mtranscript body budget for /reply-suggestions[2m > [22mpasses 60,000 Unicode characters to the provider (escaped=false)
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/transcript-body-budget.test.ts[2m > [22mtranscript body budget for /reply-suggestions[2m > [22mpasses 60,000 Unicode characters to the provider (escaped=true)
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/transcript-body-budget.test.ts[2m > [22mtranscript body budget for /guided-turns[2m > [22mpasses 60,000 Unicode characters to the provider (escaped=false)
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/transcript-body-budget.test.ts[2m > [22mtranscript body budget for /guided-turns[2m > [22mpasses 60,000 Unicode characters to the provider (escaped=true)
+@chitchat/backend:test: [31m[1mAssertionError[22m: expected 413 to be 200 // Object.is equality[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [32m- Expected[39m
+@chitchat/backend:test: [31m+ Received[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [32m- 200[39m
+@chitchat/backend:test: [31m+ 413[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [36m [2m❯[22m src/practice/transcript-body-budget.test.ts:[2m48:29[22m[39m
+@chitchat/backend:test:     [90m 46|[39m     expect(new TextEncoder().encode(payload).length).toBeGreaterThan(1…
+@chitchat/backend:test:     [90m 47|[39m     const response = await request(payload);
+@chitchat/backend:test:     [90m 48|[39m     expect(response.status).toBe(200);
+@chitchat/backend:test:     [90m   |[39m                             [31m^[39m
+@chitchat/backend:test:     [90m 49|[39m     expect(generate).toHaveBeenCalledWith(transcript, expect.any(Abort…
+@chitchat/backend:test:     [90m 50|[39m     await expect(response.json()).resolves.toStrictEqual(result);
+@chitchat/backend:test: 
+@chitchat/backend:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/16]⎯[22m[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/transcript-body-budget.test.ts[2m > [22mtranscript body budget for /feedback[2m > [22mrejects semantic overflow below the HTTP ceiling before generation
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/transcript-body-budget.test.ts[2m > [22mtranscript body budget for /reply-suggestions[2m > [22mrejects semantic overflow below the HTTP ceiling before generation
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/transcript-body-budget.test.ts[2m > [22mtranscript body budget for /guided-turns[2m > [22mrejects semantic overflow below the HTTP ceiling before generation
+@chitchat/backend:test: [31m[1mAssertionError[22m: expected 413 to be 400 // Object.is equality[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [32m- Expected[39m
+@chitchat/backend:test: [31m+ Received[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [32m- 400[39m
+@chitchat/backend:test: [31m+ 413[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [36m [2m❯[22m src/practice/transcript-body-budget.test.ts:[2m60:29[22m[39m
+@chitchat/backend:test:     [90m 58|[39m     }));
+@chitchat/backend:test:     [90m 59|[39m     const response = await request(JSON.stringify({ ...transcript, mes…
+@chitchat/backend:test:     [90m 60|[39m     expect(response.status).toBe(400);
+@chitchat/backend:test:     [90m   |[39m                             [31m^[39m
+@chitchat/backend:test:     [90m 61|[39m     expect(generate).not.toHaveBeenCalled();
+@chitchat/backend:test:     [90m 62|[39m   });
+@chitchat/backend:test: 
+@chitchat/backend:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/16]⎯[22m[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/transcription.test.ts[2m > [22mindependent Gemini captions[2m > [22mhandles overall deadline during captions (late token=false)
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/transcription.test.ts[2m > [22mindependent Gemini captions[2m > [22mhandles overall deadline during captions (late token=true)
+@chitchat/backend:test: [31m[1mAssertionError[22m: expected 502 to be 201 // Object.is equality[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [32m- Expected[39m
+@chitchat/backend:test: [31m+ Received[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [32m- 201[39m
+@chitchat/backend:test: [31m+ 502[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [36m [2m❯[22m src/practice/transcription.test.ts:[2m174:31[22m[39m
+@chitchat/backend:test:     [90m172|[39m       });
+@chitchat/backend:test:     [90m173|[39m     } else {
+@chitchat/backend:test:     [90m174|[39m       expect(response.status).toBe(201);
+@chitchat/backend:test:     [90m   |[39m                               [31m^[39m
+@chitchat/backend:test:     [90m175|[39m       await expect(response.json()).resolves.toStrictEqual({ ...sessio…
+@chitchat/backend:test:     [90m176|[39m     }
+@chitchat/backend:test: 
+@chitchat/backend:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/16]⎯[22m[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [41m[1m FAIL [22m[49m src/practice/transcription.test.ts[2m > [22mindependent Gemini captions[2m > [22mhandles caption cap during captions (late token=true)
+@chitchat/backend:test: [31m[1mAssertionError[22m: expected { token: 'auth_tokens/test', …(3) } to strictly equal { token: 'auth_tokens/test', …(3) }[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [32m- Expected[39m
+@chitchat/backend:test: [31m+ Received[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [2m  {[22m
+@chitchat/backend:test: [2m    "expiresAt": 123456,[22m
+@chitchat/backend:test: [2m    "model": "gemini-3.1-flash-live-preview",[22m
+@chitchat/backend:test: [2m    "token": "auth_tokens/test",[22m
+@chitchat/backend:test: [32m-   "transcriptionToken": null,[39m
+@chitchat/backend:test: [31m+   "transcriptionToken": "auth_tokens/late",[39m
+@chitchat/backend:test: [2m  }[22m
+@chitchat/backend:test: 
+@chitchat/backend:test: [36m [2m❯[22m src/practice/transcription.test.ts:[2m175:36[22m[39m
+@chitchat/backend:test:     [90m173|[39m     } else {
+@chitchat/backend:test:     [90m174|[39m       expect(response.status).toBe(201);
+@chitchat/backend:test:     [90m175|[39m       await expect(response.json()).resolves.toStrictEqual({ ...sessio…
+@chitchat/backend:test:     [90m   |[39m                                    [31m^[39m
+@chitchat/backend:test:     [90m176|[39m     }
+@chitchat/backend:test:     [90m177|[39m   });
+@chitchat/backend:test: 
+@chitchat/backend:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/16]⎯[22m[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: 
+@chitchat/backend:test: [2m Test Files [22m [1m[31m3 failed[39m[22m[90m (3)[39m
+@chitchat/backend:test: [2m      Tests [22m [1m[31m16 failed[39m[22m[2m | [22m[1m[32m39 passed[39m[22m[90m (55)[39m
+@chitchat/backend:test: [2m   Start at [22m 11:14:10
+@chitchat/backend:test: [2m   Duration [22m 239ms[2m (import 47%, transform 34%, tests 18%, worker 1%)[22m
+@chitchat/backend:test: 
+@chitchat/backend:test: error: script "test" exited with code 1
+@chitchat/backend#test:  ERROR  command (/Users/genrevzapa/projects/chitchat/apps/backend) /Users/genrevzapa/.bun/bin/bun run test src/practice/feedback.test.ts src/practice/transcription.test.ts src/practice/transcript-body-budget.test.ts exited (1)
+
+ Tasks:    3 successful, 4 total
+Cached:    0 cached, 4 total
+  Time:    831ms 
+Failed:    @chitchat/backend#test
+
+ ERROR  run failed: command  exited (1)
+error: script "test" exited with code 1

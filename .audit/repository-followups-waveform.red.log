@@ -1,0 +1,168 @@
+$ turbo run test "--filter=@chitchat/web" -- src/components/practice/use-persona-preview.test.ts src/components/practice/live-waveform.test.tsx
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/web
+   • Running test in 1 packages
+   • Remote caching disabled
+
+@chitchat/contracts:build: cache miss, executing c84bd444ca9015de
+@chitchat/web:i18n:compile: cache miss, executing 1b97e8e430b4c9a8
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/web:i18n:compile: $ paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy baseLocale
+@chitchat/web:i18n:compile: ℹ [paraglide-js] Compiling inlang project ...
+@chitchat/web:i18n:compile: ✔ [paraglide-js] Successfully compiled inlang project.
+@chitchat/web:test: cache miss, executing e42ef27d4289e391
+@chitchat/web:test: $ vitest run src/components/practice/use-persona-preview.test.ts src/components/practice/live-waveform.test.tsx
+@chitchat/web:test: 
+@chitchat/web:test: [1m[30m[46m RUN [49m[39m[22m [36mv5.0.0 [39m[90m/Users/genrevzapa/projects/chitchat/apps/web[39m
+@chitchat/web:test: 
+@chitchat/web:test:  [32m✓[39m src/components/practice/use-persona-preview.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+@chitchat/web:test:  [31m❯[39m src/components/practice/live-waveform.test.tsx [2m([22m[2m10 tests[22m[2m | [22m[31m8 failed[39m[2m)[22m[32m 69[2mms[22m[39m
+@chitchat/web:test:    [31m❯[39m shared conversation waveform [2m(10)[22m
+@chitchat/web:test: [31m     [31m×[31m settles a fresh idle canvas and wakes once for coalesced resizes[39m[32m 44[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m clears the last faded bars and settles in static mode[39m[32m 6[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m clears the last faded bars and settles in scrolling mode[39m[32m 4[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m cancels the latest drawing and fade frames on unmount[39m[32m 3[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m cancels the old fade when processing restarts[39m[32m 3[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m cancels the old fade when active restarts[39m[32m 2[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m wakes processing and active rendering after idle and clears borrowed active bars on stop[39m[32m 1[2mms[22m[39m
+@chitchat/web:test:      [32m✓[39m waits for an explicit null analyser without requesting another microphone[32m 1[2mms[22m[39m
+@chitchat/web:test:      [32m✓[39m samples replacement analysers without releasing borrowed resources[32m 2[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m cleans up StrictMode replay and subsequent processing frames[39m[32m 2[2mms[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 8 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+@chitchat/web:test: 
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/components/practice/live-waveform.test.tsx[2m > [22mshared conversation waveform[2m > [22msettles a fresh idle canvas and wakes once for coalesced resizes
+@chitchat/web:test: [31m[1mAssertionError[22m: expected 1 to be +0 // Object.is equality[39m
+@chitchat/web:test: 
+@chitchat/web:test: [32m- Expected[39m
+@chitchat/web:test: [31m+ Received[39m
+@chitchat/web:test: 
+@chitchat/web:test: [32m- 0[39m
+@chitchat/web:test: [31m+ 1[39m
+@chitchat/web:test: 
+@chitchat/web:test: [36m [2m❯[22m src/components/practice/live-waveform.test.tsx:[2m92:25[22m[39m
+@chitchat/web:test:     [90m 90|[39m     advance(3);
+@chitchat/web:test:     [90m 91|[39m     expect(visibleBars).toBe(0);
+@chitchat/web:test:     [90m 92|[39m     expect(frames.size).toBe(0);
+@chitchat/web:test:     [90m   |[39m                         [31m^[39m
+@chitchat/web:test:     [90m 93|[39m     const clears = clear.mock.calls.length;
+@chitchat/web:test:     [90m 94|[39m     width = 320;
+@chitchat/web:test: 
+@chitchat/web:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/components/practice/live-waveform.test.tsx[2m > [22mshared conversation waveform[2m > [22mclears the last faded bars and settles in static mode
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/components/practice/live-waveform.test.tsx[2m > [22mshared conversation waveform[2m > [22mclears the last faded bars and settles in scrolling mode
+@chitchat/web:test: [31m[1mAssertionError[22m: expected 50 to be +0 // Object.is equality[39m
+@chitchat/web:test: 
+@chitchat/web:test: [32m- Expected[39m
+@chitchat/web:test: [31m+ Received[39m
+@chitchat/web:test: 
+@chitchat/web:test: [32m- 0[39m
+@chitchat/web:test: [31m+ 50[39m
+@chitchat/web:test: 
+@chitchat/web:test: [36m [2m❯[22m src/components/practice/live-waveform.test.tsx:[2m109:25[22m[39m
+@chitchat/web:test:     [90m107|[39m     rerender(<LiveWaveform analyser={null} mode={mode} />);
+@chitchat/web:test:     [90m108|[39m     advance(45);
+@chitchat/web:test:     [90m109|[39m     expect(visibleBars).toBe(0);
+@chitchat/web:test:     [90m   |[39m                         [31m^[39m
+@chitchat/web:test:     [90m110|[39m     expect(frames.size).toBe(0);
+@chitchat/web:test:     [90m111|[39m     const clears = clear.mock.calls.length;
+@chitchat/web:test: 
+@chitchat/web:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/components/practice/live-waveform.test.tsx[2m > [22mshared conversation waveform[2m > [22mcancels the latest drawing and fade frames on unmount
+@chitchat/web:test: [31m[1mAssertionError[22m: expected 1 to be +0 // Object.is equality[39m
+@chitchat/web:test: 
+@chitchat/web:test: [32m- Expected[39m
+@chitchat/web:test: [31m+ Received[39m
+@chitchat/web:test: 
+@chitchat/web:test: [32m- 0[39m
+@chitchat/web:test: [31m+ 1[39m
+@chitchat/web:test: 
+@chitchat/web:test: [36m [2m❯[22m src/components/practice/live-waveform.test.tsx:[2m123:25[22m[39m
+@chitchat/web:test:     [90m121|[39m     expect(visibleBars).toBeGreaterThan(0);
+@chitchat/web:test:     [90m122|[39m     unmount();
+@chitchat/web:test:     [90m123|[39m     expect(frames.size).toBe(0);
+@chitchat/web:test:     [90m   |[39m                         [31m^[39m
+@chitchat/web:test:     [90m124|[39m     const clears = clear.mock.calls.length;
+@chitchat/web:test:     [90m125|[39m     advance(50);
+@chitchat/web:test: 
+@chitchat/web:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/components/practice/live-waveform.test.tsx[2m > [22mshared conversation waveform[2m > [22mcancels the old fade when processing restarts
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/components/practice/live-waveform.test.tsx[2m > [22mshared conversation waveform[2m > [22mcancels the old fade when active restarts
+@chitchat/web:test: [31m[1mAssertionError[22m: expected [ 20 ] to deeply equal [][39m
+@chitchat/web:test: 
+@chitchat/web:test: [32m- Expected[39m
+@chitchat/web:test: [31m+ Received[39m
+@chitchat/web:test: 
+@chitchat/web:test: [32m- [][39m
+@chitchat/web:test: [31m+ [[39m
+@chitchat/web:test: [31m+   20,[39m
+@chitchat/web:test: [31m+ ][39m
+@chitchat/web:test: 
+@chitchat/web:test: [36m [2m❯[22m src/components/practice/live-waveform.test.tsx:[2m139:54[22m[39m
+@chitchat/web:test:     [90m137|[39m     const oldFrames = [...frames.keys()];
+@chitchat/web:test:     [90m138|[39m     rerender(<LiveWaveform processing={state === "processing"} active=…
+@chitchat/web:test:     [90m139|[39m     expect(oldFrames.filter((id) => frames.has(id))).toEqual([]);
+@chitchat/web:test:     [90m   |[39m                                                      [31m^[39m
+@chitchat/web:test:     [90m140|[39m     advance(45);
+@chitchat/web:test:     [90m141|[39m     expect(visibleBars).toBeGreaterThan(0);
+@chitchat/web:test: 
+@chitchat/web:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/components/practice/live-waveform.test.tsx[2m > [22mshared conversation waveform[2m > [22mwakes processing and active rendering after idle and clears borrowed active bars on stop
+@chitchat/web:test: [31m[1mAssertionError[22m: expected 1 to be +0 // Object.is equality[39m
+@chitchat/web:test: 
+@chitchat/web:test: [32m- Expected[39m
+@chitchat/web:test: [31m+ Received[39m
+@chitchat/web:test: 
+@chitchat/web:test: [32m- 0[39m
+@chitchat/web:test: [31m+ 1[39m
+@chitchat/web:test: 
+@chitchat/web:test: [36m [2m❯[22m src/components/practice/live-waveform.test.tsx:[2m152:25[22m[39m
+@chitchat/web:test:     [90m150|[39m     const { rerender } = render(<LiveWaveform analyser={borrowed} />);
+@chitchat/web:test:     [90m151|[39m     advance(3);
+@chitchat/web:test:     [90m152|[39m     expect(frames.size).toBe(0);
+@chitchat/web:test:     [90m   |[39m                         [31m^[39m
+@chitchat/web:test:     [90m153|[39m     rerender(<LiveWaveform processing analyser={borrowed} />);
+@chitchat/web:test:     [90m154|[39m     advance(5);
+@chitchat/web:test: 
+@chitchat/web:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/components/practice/live-waveform.test.tsx[2m > [22mshared conversation waveform[2m > [22mcleans up StrictMode replay and subsequent processing frames
+@chitchat/web:test: [31m[1mAssertionError[22m: expected 1 to be +0 // Object.is equality[39m
+@chitchat/web:test: 
+@chitchat/web:test: [32m- Expected[39m
+@chitchat/web:test: [31m+ Received[39m
+@chitchat/web:test: 
+@chitchat/web:test: [32m- 0[39m
+@chitchat/web:test: [31m+ 1[39m
+@chitchat/web:test: 
+@chitchat/web:test: [36m [2m❯[22m src/components/practice/live-waveform.test.tsx:[2m204:25[22m[39m
+@chitchat/web:test:     [90m202|[39m     expect(visibleBars).toBeGreaterThan(0);
+@chitchat/web:test:     [90m203|[39m     unmount();
+@chitchat/web:test:     [90m204|[39m     expect(frames.size).toBe(0);
+@chitchat/web:test:     [90m   |[39m                         [31m^[39m
+@chitchat/web:test:     [90m205|[39m     expect(disconnect).toHaveBeenCalledTimes(2);
+@chitchat/web:test:     [90m206|[39m   });
+@chitchat/web:test: 
+@chitchat/web:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: 
+@chitchat/web:test: [2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+@chitchat/web:test: [2m      Tests [22m [1m[31m8 failed[39m[22m[2m | [22m[1m[32m10 passed[39m[22m[90m (18)[39m
+@chitchat/web:test: [2m   Start at [22m 11:50:02
+@chitchat/web:test: [2m   Duration [22m 485ms[2m (environment 63%, setup 11%, tests 11%, transform 9%, import 7%)[22m
+@chitchat/web:test: 
+@chitchat/web:test: error: script "test" exited with code 1
+@chitchat/web#test:  ERROR  command (/Users/genrevzapa/projects/chitchat/apps/web) /Users/genrevzapa/.bun/bin/bun run test src/components/practice/use-persona-preview.test.ts src/components/practice/live-waveform.test.tsx exited (1)
+
+ Tasks:    2 successful, 3 total
+Cached:    0 cached, 3 total
+  Time:    1.465s 
+Failed:    @chitchat/web#test
+
+ ERROR  run failed: command  exited (1)
+error: script "test" exited with code 1

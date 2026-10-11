@@ -1,10 +1,13 @@
 // The two transport mocks expose callbacks to exercise late events deterministically.
 /* eslint-disable max-classes-per-file, class-methods-use-this, promise/prefer-await-to-callbacks */
+/* eslint-disable vitest/max-expects, no-await-in-loop */
+import { guidedTurnRequestSchema, guidedTurnSchema } from "@chitchat/contracts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { generateGuidedTurn, speakPracticeTurn } from "./practice-api";
 import type { PracticeAudio } from "./practice-audio";
 import { PracticeGuided } from "./practice-guided";
+import type { PracticeMessage } from "./practice-live";
 import type { PracticeTranscription } from "./practice-transcription";
 
 const speech = vi.hoisted(() => ({
@@ -67,6 +70,25 @@ const selection = {
 const turn = { text: "What do you do after work?", reply: "I go for a walk" };
 async function flush() {
   await vi.advanceTimersByTimeAsync(0);
+}
+
+function recentExchanges(history: PracticeMessage[]) {
+  const exchanges: PracticeMessage[][] = [];
+  for (const message of history) {
+    if (message.speaker === "partner") {
+      exchanges.push([message]);
+    } else {
+      exchanges.at(-1)?.push(message);
+    }
+  }
+  while (
+    exchanges.flat().length > 300 ||
+    exchanges.flat().reduce((sum, message) => sum + message.text.length, 0) >
+      60_000
+  ) {
+    exchanges.shift();
+  }
+  return exchanges.flat();
 }
 async function setup() {
   const callbacks = {
@@ -212,5 +234,180 @@ describe("Guided turn lifecycle", () => {
       "The microphone disconnected."
     );
     expect(speech.dispose).toHaveBeenCalledOnce();
+  });
+
+  it.each([
+    {
+      name: "short completed exchanges",
+      count: 160,
+      long: false,
+      mixed: false,
+      skips: false,
+    },
+    {
+      name: "maximum-length exchanges",
+      count: 80,
+      long: true,
+      mixed: false,
+      skips: false,
+    },
+    {
+      name: "skipped exchanges",
+      count: 310,
+      long: false,
+      mixed: false,
+      skips: true,
+    },
+    {
+      name: "mixed exchanges",
+      count: 320,
+      long: true,
+      mixed: true,
+      skips: false,
+    },
+    {
+      name: "non-BMP exchanges",
+      count: 80,
+      long: true,
+      mixed: false,
+      skips: false,
+      unicode: true,
+    },
+  ])(
+    "keeps a whole recent suffix for $name and preserves the full recap",
+    async ({ count, long, mixed, skips, unicode }) => {
+      const response = guidedTurnSchema.parse(
+        long
+          ? { text: (unicode ? "😀" : "p").repeat(600), reply: "r".repeat(240) }
+          : turn
+      );
+      vi.mocked(generateGuidedTurn).mockResolvedValue(response);
+      const { guided, callbacks } = await setup();
+      let completed = 0;
+      let skipped = 0;
+      for (let index = 0; index < count; index += 1) {
+        const shouldSkip = skips || (mixed && index % 3 === 0);
+        if (shouldSkip) {
+          guided.skip();
+          skipped += 1;
+          await flush();
+        } else {
+          speech.segments.at(-1)?.onSegment?.(`${index}`, response.reply, true);
+          completed += 1;
+          await vi.advanceTimersByTimeAsync(1200);
+        }
+        const request = vi.mocked(generateGuidedTurn).mock.lastCall?.[0];
+        expect(request).toBeDefined();
+        expect(guidedTurnRequestSchema.safeParse(request).success).toBeTruthy();
+        const history = callbacks.onMessage.mock.calls
+          .map(([message]) => message)
+          .slice(0, -1);
+        expect(request?.messages).toStrictEqual(recentExchanges(history));
+        expect(request?.skipped).toBe(shouldSkip);
+        speech.drain?.();
+        await flush();
+      }
+      const messages = callbacks.onMessage.mock.calls.map(
+        ([message]) => message
+      );
+      expect(messages.map(({ id }) => id)).toStrictEqual(
+        Array.from({ length: completed * 2 + skipped + 1 }, (_, index) => index)
+      );
+      expect(callbacks.onProgress.mock.lastCall?.[0]).toMatchObject({
+        completed,
+        skipped,
+        phase: "listening",
+      });
+      expect(
+        callbacks.onError.mock.calls.filter(([error]) => error)
+      ).toStrictEqual([]);
+      const beforeRetry = callbacks.onMessage.mock.calls.length;
+      vi.mocked(generateGuidedTurn).mockRejectedValueOnce(
+        new Error("unavailable")
+      );
+      guided.skip();
+      await flush();
+      const failedRequest = vi.mocked(generateGuidedTurn).mock.lastCall?.[0];
+      expect(
+        guidedTurnRequestSchema.safeParse(failedRequest).success
+      ).toBeTruthy();
+      expect(callbacks.onProgress.mock.lastCall?.[0].phase).toBe("error");
+      expect(callbacks.onMessage).toHaveBeenCalledTimes(beforeRetry);
+      vi.mocked(speakPracticeTurn).mockRejectedValueOnce(
+        new Error("unavailable")
+      );
+      guided.retry();
+      await flush();
+      expect(vi.mocked(generateGuidedTurn).mock.lastCall?.[0]).toStrictEqual(
+        failedRequest
+      );
+      expect(callbacks.onMessage).toHaveBeenCalledTimes(beforeRetry);
+      const generations = vi.mocked(generateGuidedTurn).mock.calls.length;
+      guided.retry();
+      await flush();
+      expect(generateGuidedTurn).toHaveBeenCalledTimes(generations);
+      expect(callbacks.onMessage).toHaveBeenCalledTimes(beforeRetry + 1);
+      expect(callbacks.onMessage.mock.lastCall?.[0].id).toBe(beforeRetry);
+      speech.drain?.();
+      await flush();
+      expect(callbacks.onProgress.mock.lastCall?.[0]).toMatchObject({
+        completed,
+        skipped: skipped + 1,
+        phase: "listening",
+      });
+      guided.finish();
+      expect(callbacks.onState).toHaveBeenLastCalledWith("ended");
+    }
+  );
+});
+
+const message = (id: number, text: string) => ({
+  id,
+  speaker: "partner" as const,
+  text,
+});
+
+describe("guided transcript contract boundaries", () => {
+  it("accepts 300 messages and rejects one extra", () => {
+    const messages = Array.from({ length: 300 }, (_, index) =>
+      message(index, "p")
+    );
+    expect(
+      guidedTurnRequestSchema.safeParse({ selection, messages }).success
+    ).toBeTruthy();
+    expect(
+      guidedTurnRequestSchema.safeParse({
+        selection,
+        messages: [...messages, message(300, "p")],
+      }).success
+    ).toBeFalsy();
+  });
+
+  it("counts characters per message and UTF-16 units in aggregate", () => {
+    const text = "😀".repeat(8000);
+    expect(
+      guidedTurnRequestSchema.safeParse({
+        selection,
+        messages: [message(0, text)],
+      }).success
+    ).toBeTruthy();
+    expect(
+      guidedTurnRequestSchema.safeParse({
+        selection,
+        messages: [message(0, `${text}x`)],
+      }).success
+    ).toBeFalsy();
+    const messages = Array.from({ length: 8 }, (_, index) =>
+      message(index, "😀".repeat(index === 7 ? 2000 : 4000))
+    );
+    expect(
+      guidedTurnRequestSchema.safeParse({ selection, messages }).success
+    ).toBeTruthy();
+    expect(
+      guidedTurnRequestSchema.safeParse({
+        selection,
+        messages: [...messages, message(8, "x")],
+      }).success
+    ).toBeFalsy();
   });
 });

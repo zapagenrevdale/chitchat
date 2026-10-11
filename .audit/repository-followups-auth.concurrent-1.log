@@ -1,0 +1,31 @@
+
+   • Packages in scope: @chitchat/backend
+   • Running test:auth in 1 packages
+   • Remote caching disabled
+
+@chitchat/email:build: cache hit, replaying logs 28cec2141793dbcd
+@chitchat/email:build: $ tsc --noEmit
+@chitchat/db:build: cache hit, replaying logs 85a4960c281bb37a
+@chitchat/db:build: $ prisma generate
+@chitchat/db:build: Loaded Prisma config from prisma.config.ts.
+@chitchat/db:build: 
+@chitchat/db:build: Prisma schema loaded from prisma/schema.prisma.
+@chitchat/db:build: 
+@chitchat/db:build: ✔ Generated Prisma Client (7.10.0) to ./src/generated/prisma in 23ms
+@chitchat/db:build: 
+@chitchat/contracts:build: cache hit, replaying logs 14eff55ff9d610a4
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/backend:test:auth: cache bypass, force executing 7433a09227e24a5e
+@chitchat/backend:test:auth: $ bun --no-env-file --no-install src/integration/auth-integration.ts
+@chitchat/backend:test:auth: auth integration created cc_auth_2f1782e90a7a4c948998313268b34c1a
+@chitchat/backend:test:auth: auth integration migrations passed
+@chitchat/backend:test:auth: auth integration journey passed
+@chitchat/backend:test:auth: auth integration dropped cc_auth_2f1782e90a7a4c948998313268b34c1a
+
+ Tasks:    4 successful, 4 total
+Cached:    3 cached, 4 total
+  Time:    1.174s 
+
+
+$ turbo run test:auth --filter=@chitchat/backend
+• turbo 2.10.12

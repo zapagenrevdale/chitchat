@@ -1,0 +1,31 @@
+{
+  "concurrent": {
+    "databases": [
+      "cc_auth_2f1782e90a7a4c948998313268b34c1a",
+      "cc_auth_31bd0df86b0842a7b2faba477e9864ab"
+    ],
+    "bothPassed": true,
+    "catalogRestored": true
+  },
+  "cookieMutation": {
+    "assertion": "Session cookie must authenticate /api/me",
+    "observedFailure": true,
+    "cleanupConfirmed": true
+  },
+  "failedChild": {
+    "failedDatabase": "cc_auth_d2cd943e44094112ab22b3c171da9186",
+    "retainedDatabase": "cc_auth_9736f0c6a61b4adc8350bd29fc97f299",
+    "originalFailurePreserved": true,
+    "onlyOwnedDatabaseRemoved": true
+  },
+  "invalidPrerequisite": {
+    "exitCode": 1,
+    "clearError": true,
+    "noDatabaseCreated": true
+  },
+  "termination": {
+    "exitCode": 1,
+    "cleanupConfirmed": true
+  },
+  "finalCatalogRestored": true
+}

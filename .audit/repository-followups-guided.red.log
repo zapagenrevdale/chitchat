@@ -1,0 +1,71 @@
+$ turbo run test "--filter=@chitchat/web" -- src/lib/practice-guided.test.ts
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/web
+   • Running test in 1 packages
+   • Remote caching disabled
+
+@chitchat/contracts:build: cache miss, executing f1213aed7106bb1e
+@chitchat/web:i18n:compile: cache miss, executing a5ae6773193b7ec7
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/web:i18n:compile: $ paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy baseLocale
+@chitchat/web:i18n:compile: ℹ [paraglide-js] Compiling inlang project ...
+@chitchat/web:i18n:compile: ✔ [paraglide-js] Successfully compiled inlang project.
+@chitchat/web:test: cache miss, executing b985c09e3d0fbfa1
+@chitchat/web:test: $ vitest run src/lib/practice-guided.test.ts
+@chitchat/web:test: 
+@chitchat/web:test: [1m[30m[46m RUN [49m[39m[22m [36mv5.0.0 [39m[90m/Users/genrevzapa/projects/chitchat/apps/web[39m
+@chitchat/web:test: 
+@chitchat/web:test:  [31m❯[39m src/lib/practice-guided.test.ts [2m([22m[2m10 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[32m 115[2mms[22m[39m
+@chitchat/web:test:    [31m❯[39m Guided turn lifecycle [2m(10)[22m
+@chitchat/web:test:      [32m✓[39m waits for playback, finalized words, and quiet; submits once[32m 4[2mms[22m[39m
+@chitchat/web:test:      [32m✓[39m keeps missing words open and accepts a later repair[32m 1[2mms[22m[39m
+@chitchat/web:test:      [32m✓[39m ignores old recognition after retry and never invents speech for skip[32m 1[2mms[22m[39m
+@chitchat/web:test:      [32m✓[39m does not accept muted speech and releases resources on exit[32m 1[2mms[22m[39m
+@chitchat/web:test:      [32m✓[39m retries failed TTS without regenerating or duplicating the partner turn[32m 0[2mms[22m[39m
+@chitchat/web:test:      [32m✓[39m ends and releases audio when the microphone fails[32m 0[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m keeps a whole recent suffix for short completed exchanges and preserves the full recap[39m[32m 44[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m keeps a whole recent suffix for maximum-length exchanges and preserves the full recap[39m[32m 15[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m keeps a whole recent suffix for skipped exchanges and preserves the full recap[39m[32m 35[2mms[22m[39m
+@chitchat/web:test: [31m     [31m×[31m keeps a whole recent suffix for mixed exchanges and preserves the full recap[39m[32m 14[2mms[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+@chitchat/web:test: 
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/lib/practice-guided.test.ts[2m > [22mGuided turn lifecycle[2m > [22mkeeps a whole recent suffix for short completed exchanges and preserves the full recap
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/lib/practice-guided.test.ts[2m > [22mGuided turn lifecycle[2m > [22mkeeps a whole recent suffix for maximum-length exchanges and preserves the full recap
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/lib/practice-guided.test.ts[2m > [22mGuided turn lifecycle[2m > [22mkeeps a whole recent suffix for skipped exchanges and preserves the full recap
+@chitchat/web:test: [41m[1m FAIL [22m[49m src/lib/practice-guided.test.ts[2m > [22mGuided turn lifecycle[2m > [22mkeeps a whole recent suffix for mixed exchanges and preserves the full recap
+@chitchat/web:test: [31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+@chitchat/web:test: 
+@chitchat/web:test: [32m- Expected[39m
+@chitchat/web:test: [31m+ Received[39m
+@chitchat/web:test: 
+@chitchat/web:test: [32m- true[39m
+@chitchat/web:test: [31m+ false[39m
+@chitchat/web:test: 
+@chitchat/web:test: [36m [2m❯[22m src/lib/practice-guided.test.ts:[2m244:66[22m[39m
+@chitchat/web:test:     [90m242|[39m       const request = vi.mocked(generateGuidedTurn).mock.lastCall?.[0];
+@chitchat/web:test:     [90m243|[39m       expect(request).toBeDefined();
+@chitchat/web:test:     [90m244|[39m       expect(guidedTurnRequestSchema.safeParse(request).success).toBe(…
+@chitchat/web:test:     [90m   |[39m                                                                  [31m^[39m
+@chitchat/web:test:     [90m245|[39m       const history = callbacks.onMessage.mock.calls.map(([message]) =…
+@chitchat/web:test:     [90m246|[39m       const exchanges: typeof history[] = [];
+@chitchat/web:test: 
+@chitchat/web:test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: 
+@chitchat/web:test: [2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+@chitchat/web:test: [2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m6 passed[39m[22m[90m (10)[39m
+@chitchat/web:test: [2m   Start at [22m 11:48:26
+@chitchat/web:test: [2m   Duration [22m 956ms[2m (environment 65%, tests 13%, setup 10%, import 7%, transform 5%)[22m
+@chitchat/web:test: 
+@chitchat/web:test: error: script "test" exited with code 1
+@chitchat/web#test:  ERROR  command (/Users/genrevzapa/projects/chitchat/apps/web) /Users/genrevzapa/.bun/bin/bun run test src/lib/practice-guided.test.ts exited (1)
+
+ Tasks:    2 successful, 3 total
+Cached:    0 cached, 3 total
+  Time:    1.996s 
+Failed:    @chitchat/web#test
+
+ ERROR  run failed: command  exited (1)
+error: script "test" exited with code 1

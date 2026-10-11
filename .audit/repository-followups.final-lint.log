@@ -1,0 +1,66 @@
+$ turbo run lint
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/backend, @chitchat/contracts, @chitchat/db, @chitchat/email, @chitchat/web, @chitchat/worktree
+   • Running lint in 6 packages
+   • Remote caching disabled
+
+@chitchat/contracts:build: cache hit, replaying logs 14eff55ff9d610a4
+@chitchat/contracts:lint: cache miss, executing 45495c773b6df3f2
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/backend:lint: cache hit, replaying logs 9490c24fa4cb7192
+@chitchat/backend:lint: $ ultracite check
+@chitchat/backend:lint: Checking formatting...
+@chitchat/backend:lint: 
+@chitchat/backend:lint: All matched files use the correct format.
+@chitchat/backend:lint: Finished in 64ms on 64 files using 10 threads.
+@chitchat/backend:lint: Found 0 warnings and 0 errors.
+@chitchat/backend:lint: Finished in 149ms on 59 files with 586 rules using 10 threads.
+@chitchat/db:lint: cache hit, replaying logs 5cb73d7b7477b357
+@chitchat/worktree:lint: cache hit, replaying logs 8ebdf0797458d858
+@chitchat/email:lint: cache hit, replaying logs 2705501f84c4d027
+@chitchat/worktree:lint: $ ultracite check
+@chitchat/worktree:lint: Checking formatting...
+@chitchat/worktree:lint: 
+@chitchat/worktree:lint: All matched files use the correct format.
+@chitchat/worktree:lint: Finished in 50ms on 13 files using 10 threads.
+@chitchat/worktree:lint: Found 0 warnings and 0 errors.
+@chitchat/worktree:lint: Finished in 219ms on 10 files with 586 rules using 10 threads.
+@chitchat/email:lint: $ ultracite check
+@chitchat/email:lint: Checking formatting...
+@chitchat/email:lint: 
+@chitchat/email:lint: All matched files use the correct format.
+@chitchat/email:lint: Finished in 54ms on 6 files using 10 threads.
+@chitchat/email:lint: Found 0 warnings and 0 errors.
+@chitchat/email:lint: Finished in 210ms on 2 files with 586 rules using 10 threads.
+@chitchat/db:lint: $ ultracite check
+@chitchat/db:lint: Checking formatting...
+@chitchat/db:lint: 
+@chitchat/db:lint: All matched files use the correct format.
+@chitchat/db:lint: Finished in 52ms on 6 files using 10 threads.
+@chitchat/db:lint: Found 0 warnings and 0 errors.
+@chitchat/db:lint: Finished in 84ms on 2 files with 586 rules using 10 threads.
+@chitchat/contracts:lint: $ ultracite check
+@chitchat/web:i18n:compile: cache hit, replaying logs 76ec0cbb524cb23f
+@chitchat/web:i18n:compile: $ paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy baseLocale
+@chitchat/web:i18n:compile: ℹ [paraglide-js] Compiling inlang project ...
+@chitchat/web:i18n:compile: ✔ [paraglide-js] Successfully compiled inlang project.
+@chitchat/web:lint: cache miss, executing 4ed5dc291e2ae4f4
+@chitchat/web:lint: $ ultracite check
+@chitchat/contracts:lint: Checking formatting...
+@chitchat/contracts:lint: 
+@chitchat/web:lint: Checking formatting...
+@chitchat/web:lint: 
+@chitchat/contracts:lint: All matched files use the correct format.
+@chitchat/contracts:lint: Finished in 78ms on 9 files using 10 threads.
+@chitchat/contracts:lint: Found 0 warnings and 0 errors.
+@chitchat/contracts:lint: Finished in 129ms on 6 files with 586 rules using 10 threads.
+@chitchat/web:lint: All matched files use the correct format.
+@chitchat/web:lint: Finished in 816ms on 157 files using 10 threads.
+@chitchat/web:lint: Found 0 warnings and 0 errors.
+@chitchat/web:lint: Finished in 750ms on 94 files with 586 rules using 10 threads.
+
+ Tasks:    8 successful, 8 total
+Cached:    6 cached, 8 total
+  Time:    2.386s 
+

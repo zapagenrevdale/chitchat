@@ -1,0 +1,6 @@
+{
+  "exitCode": 2,
+  "blocker": "Error: Refusing to overwrite evidence for .audit/repository-followups-browser.after-fix.log",
+  "failures": [],
+  "evidence": null
+}

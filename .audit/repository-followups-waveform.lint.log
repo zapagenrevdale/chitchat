@@ -1,0 +1,26 @@
+$ turbo run lint "--filter=@chitchat/web" -- src/components/ui/live-waveform.tsx src/components/practice/live-waveform.test.tsx src/components/practice/use-persona-preview.test.ts
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/web
+   • Running lint in 1 packages
+   • Remote caching disabled
+
+@chitchat/contracts:build: cache miss, executing f364aa59812cef3c
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/web:i18n:compile: cache hit, replaying logs 520d9dd2dda46799
+@chitchat/web:i18n:compile: $ paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy baseLocale
+@chitchat/web:i18n:compile: ℹ [paraglide-js] Compiling inlang project ...
+@chitchat/web:i18n:compile: ✔ [paraglide-js] Successfully compiled inlang project.
+@chitchat/web:lint: cache miss, executing 9fcb8dd04034a7d4
+@chitchat/web:lint: $ ultracite check src/components/ui/live-waveform.tsx src/components/practice/live-waveform.test.tsx src/components/practice/use-persona-preview.test.ts
+@chitchat/web:lint: Checking formatting...
+@chitchat/web:lint: 
+@chitchat/web:lint: All matched files use the correct format.
+@chitchat/web:lint: Finished in 397ms on 3 files using 10 threads.
+@chitchat/web:lint: Found 0 warnings and 0 errors.
+@chitchat/web:lint: Finished in 168ms on 2 files with 586 rules using 10 threads.
+
+ Tasks:    3 successful, 3 total
+Cached:    1 cached, 3 total
+  Time:    1.259s 
+

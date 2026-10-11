@@ -1,0 +1,103 @@
+$ turbo run build
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/backend, @chitchat/contracts, @chitchat/db, @chitchat/email, @chitchat/web, @chitchat/worktree
+   • Running build in 6 packages
+   • Remote caching disabled
+
+@chitchat/contracts:build: cache hit, replaying logs 14eff55ff9d610a4
+@chitchat/db:build: cache hit, replaying logs 85a4960c281bb37a
+@chitchat/db:build: $ prisma generate
+@chitchat/db:build: Loaded Prisma config from prisma.config.ts.
+@chitchat/db:build: 
+@chitchat/db:build: Prisma schema loaded from prisma/schema.prisma.
+@chitchat/db:build: 
+@chitchat/db:build: ✔ Generated Prisma Client (7.10.0) to ./src/generated/prisma in 23ms
+@chitchat/db:build: 
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/email:build: cache hit, replaying logs 28cec2141793dbcd
+@chitchat/email:build: $ tsc --noEmit
+@chitchat/backend:build: cache miss, executing 7b3f15fe4b541079
+@chitchat/web:i18n:compile: cache hit, replaying logs 76ec0cbb524cb23f
+@chitchat/web:i18n:compile: $ paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy baseLocale
+@chitchat/web:i18n:compile: ℹ [paraglide-js] Compiling inlang project ...
+@chitchat/web:i18n:compile: ✔ [paraglide-js] Successfully compiled inlang project.
+@chitchat/backend:build: $ bun build src/index.ts --target bun --packages external --outdir dist
+@chitchat/web:build: cache miss, executing 69c8a9a3ff9f099e
+@chitchat/web:build: $ vite build
+@chitchat/backend:build: Bundled 27 modules in 15ms
+@chitchat/backend:build: 
+@chitchat/backend:build:   index.js  130.1 KB  (entry point)
+@chitchat/backend:build: 
+@chitchat/web:build: vite v8.3.0 building client environment for production...
+@chitchat/web:build: ℹ [paraglide-js] Compilation skipped — inputs unchanged (message-modules)
+@chitchat/web:build: transforming...
+@chitchat/web:build: ✓ 2846 modules transformed.
+@chitchat/web:build: rendering chunks...
+@chitchat/web:build: computing gzip size...
+@chitchat/web:build: dist/client/.assetsignore                                                   0.02 kB
+@chitchat/web:build: dist/client/assets/geist-cyrillic-ext-wght-normal-DjL33-gN.woff2            7.42 kB
+@chitchat/web:build: dist/client/assets/geist-vietnamese-wght-normal-6IgcOCM7.woff2              8.00 kB
+@chitchat/web:build: dist/client/assets/shantell-sans-vietnamese-wght-normal-0TYE14Fi.woff2     11.48 kB
+@chitchat/web:build: dist/client/assets/geist-cyrillic-wght-normal-BEAKL7Jp.woff2               15.08 kB
+@chitchat/web:build: dist/client/assets/geist-latin-ext-wght-normal-DC-KSUi6.woff2              16.51 kB
+@chitchat/web:build: dist/client/assets/geist-latin-wght-normal-BgDaEnEv.woff2                  29.40 kB
+@chitchat/web:build: dist/client/assets/shantell-sans-cyrillic-ext-wght-normal-C5IA4B3w.woff2   30.70 kB
+@chitchat/web:build: dist/client/assets/shantell-sans-latin-ext-wght-normal-CkCuiz5d.woff2      37.19 kB
+@chitchat/web:build: dist/client/assets/shantell-sans-cyrillic-wght-normal-C3g4RRlc.woff2       58.67 kB
+@chitchat/web:build: dist/client/assets/shantell-sans-latin-wght-normal-B8jqu5lV.woff2          79.29 kB
+@chitchat/web:build: dist/client/assets/chat-input-BMZZuRzW.css                                  1.44 kB │ gzip:   0.45 kB
+@chitchat/web:build: dist/client/assets/routes-BJwzQpOX.css                                      3.18 kB │ gzip:   0.96 kB
+@chitchat/web:build: dist/client/assets/styles-Doj2bR2D.css                                     74.45 kB │ gzip:  12.81 kB
+@chitchat/web:build: dist/client/assets/theme-BIaPMXVp.js                                       61.95 kB │ gzip:  19.43 kB
+@chitchat/web:build: dist/client/assets/chat-input-DFi1gUrt.js                                 182.32 kB │ gzip:  56.98 kB
+@chitchat/web:build: dist/client/assets/routes-D8rY2mgk.js                                     365.41 kB │ gzip: 130.91 kB
+@chitchat/web:build: dist/client/assets/index-Dm3irXtK.js                                      523.93 kB │ gzip: 169.45 kB
+@chitchat/web:build: 
+@chitchat/web:build: [plugin builtin:vite-reporter] 
+@chitchat/web:build: (!) Some chunks are larger than 500 kB after minification. Consider:
+@chitchat/web:build: - Using dynamic import() to code-split the application
+@chitchat/web:build: - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+@chitchat/web:build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+@chitchat/web:build: ✓ built in 1.12s
+@chitchat/web:build: vite v8.3.0 building ssr environment for production...
+@chitchat/web:build: ℹ [paraglide-js] Compilation skipped — inputs unchanged (message-modules)
+@chitchat/web:build: transforming...
+@chitchat/web:build: ✓ 2895 modules transformed.
+@chitchat/web:build: rendering chunks...
+@chitchat/web:build: Using secrets defined in .env
+@chitchat/web:build: computing gzip size...
+@chitchat/web:build: dist/server/.dev.vars                                                       0.08 kB
+@chitchat/web:build: dist/server/wrangler.json                                                   1.32 kB │ gzip:   0.66 kB
+@chitchat/web:build: dist/server/assets/geist-cyrillic-ext-wght-normal-DjL33-gN.woff2            7.42 kB
+@chitchat/web:build: dist/server/assets/geist-vietnamese-wght-normal-6IgcOCM7.woff2              8.00 kB
+@chitchat/web:build: dist/server/.vite/manifest.json                                             8.35 kB │ gzip:   1.09 kB
+@chitchat/web:build: dist/server/assets/shantell-sans-vietnamese-wght-normal-0TYE14Fi.woff2     11.48 kB
+@chitchat/web:build: dist/server/assets/geist-cyrillic-wght-normal-BEAKL7Jp.woff2               15.08 kB
+@chitchat/web:build: dist/server/assets/geist-latin-ext-wght-normal-DC-KSUi6.woff2              16.51 kB
+@chitchat/web:build: dist/server/assets/geist-latin-wght-normal-BgDaEnEv.woff2                  29.40 kB
+@chitchat/web:build: dist/server/assets/shantell-sans-cyrillic-ext-wght-normal-C5IA4B3w.woff2   30.70 kB
+@chitchat/web:build: dist/server/assets/shantell-sans-latin-ext-wght-normal-CkCuiz5d.woff2      37.19 kB
+@chitchat/web:build: dist/server/assets/shantell-sans-cyrillic-wght-normal-C3g4RRlc.woff2       58.67 kB
+@chitchat/web:build: dist/server/assets/shantell-sans-latin-wght-normal-B8jqu5lV.woff2          79.29 kB
+@chitchat/web:build: dist/server/assets/chat-input-BMZZuRzW.css                                  1.44 kB │ gzip:   0.45 kB
+@chitchat/web:build: dist/server/assets/routes-BJwzQpOX.css                                      3.18 kB │ gzip:   0.96 kB
+@chitchat/web:build: dist/server/assets/styles-Doj2bR2D.css                                     74.45 kB │ gzip:  12.81 kB
+@chitchat/web:build: dist/server/assets/start-CQICg9kK.js                                        0.21 kB │ gzip:   0.17 kB
+@chitchat/web:build: dist/server/assets/empty-plugin-adapters-BvkFAcbg.js                        0.28 kB │ gzip:   0.18 kB
+@chitchat/web:build: dist/server/assets/_tanstack-start-manifest_v-C3uPnznq.js                   0.94 kB │ gzip:   0.42 kB
+@chitchat/web:build: dist/server/assets/react-dom-C3aH5Bal.js                                    7.20 kB │ gzip:   2.07 kB
+@chitchat/web:build: dist/server/assets/jsx-runtime-DhdIm-cZ.js                                 19.35 kB │ gzip:   5.15 kB
+@chitchat/web:build: dist/server/assets/theme-PASPRQbS.js                                      127.45 kB │ gzip:  28.70 kB
+@chitchat/web:build: dist/server/assets/Match-CaR34gjP.js                                      159.26 kB │ gzip:  39.76 kB
+@chitchat/web:build: dist/server/assets/chat-input-bglfoO9T.js                                 377.83 kB │ gzip:  86.14 kB
+@chitchat/web:build: dist/server/assets/router-KqaiRZ_N.js                                     506.04 kB │ gzip: 128.98 kB
+@chitchat/web:build: dist/server/index.js                                                      694.15 kB │ gzip: 142.27 kB
+@chitchat/web:build: dist/server/assets/routes-BO4sgY8X.js                                     770.38 kB │ gzip: 163.76 kB
+@chitchat/web:build: 
+@chitchat/web:build: ✓ built in 984ms
+
+ Tasks:    6 successful, 6 total
+Cached:    4 cached, 6 total
+  Time:    5.139s 
+

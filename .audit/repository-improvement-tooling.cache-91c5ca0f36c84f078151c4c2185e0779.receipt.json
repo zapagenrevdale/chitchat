@@ -1,0 +1,8 @@
+{
+  "result": "PASS",
+  "backup": ".audit/repository-improvement-tooling.cache-91c5ca0f36c84f078151c4c2185e0779.backup",
+  "original": ".audit/repository-improvement-tooling.cache-91c5ca0f36c84f078151c4c2185e0779.original",
+  "restoredFileCount": 12,
+  "clientSha256": "fd2d6f48e1f21b2b515c90edcd12022263507eb07ec3bad92bb07dae89516aca",
+  "cacheHit": true
+}

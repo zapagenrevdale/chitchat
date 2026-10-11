@@ -1,5 +1,6 @@
 import type { PracticeLanguage, PracticeOptions } from "@chitchat/contracts";
 import { presetPlaces as places } from "@chitchat/contracts";
+import type { OnboardingProfile } from "@chitchat/contracts/onboarding";
 import { useQuery } from "@tanstack/react-query";
 import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useId, useRef, useState } from "react";
@@ -19,8 +20,40 @@ import { usePractice } from "./use-practice";
 const spring = { type: "spring", bounce: 0, duration: 0.4 } as const;
 type DesignStep = "place" | "situation" | "persona" | "complete";
 
-export function PracticeDesign() {
-  const [language, setLanguage] = useState<PracticeLanguage>("English");
+function profileLanguage(profile?: OnboardingProfile): PracticeLanguage {
+  return profile?.language ?? "English";
+}
+
+function profileLearner(profile?: OnboardingProfile) {
+  return profile ? { name: profile.name, skills: profile.skills } : undefined;
+}
+
+function EditGoals({
+  onEdit,
+  disabled,
+}: {
+  onEdit?: () => void;
+  disabled: boolean;
+}) {
+  return onEdit ? (
+    <Button variant="ghost" size="sm" disabled={disabled} onClick={onEdit}>
+      Your goals
+    </Button>
+  ) : null;
+}
+
+export function PracticeDesign({
+  profile,
+  onEditProfile,
+  onLanguageChange,
+}: {
+  profile?: OnboardingProfile;
+  onEditProfile?: () => void;
+  onLanguageChange?: (language: PracticeLanguage) => void;
+} = {}) {
+  const [language, setLanguage] = useState<PracticeLanguage>(
+    profileLanguage(profile)
+  );
   const [step, setStep] = useState<DesignStep>("place");
   const [placeIndex, setPlaceIndex] = useState(0);
   const [situationId, setSituationId] = useState<string | null>(null);
@@ -272,16 +305,23 @@ export function PracticeDesign() {
       className="relative flex min-h-dvh flex-col items-center gap-10 px-4 py-8 sm:gap-12 sm:py-12"
     >
       {practice.state === "idle" && (
-        <PracticeLanguagePicker
-          value={language}
-          onChange={setLanguage}
-          disabled={customChoice.active}
-        />
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <PracticeLanguagePicker
+            value={language}
+            onChange={(value) => {
+              setLanguage(value);
+              onLanguageChange?.(value);
+            }}
+            disabled={customChoice.active}
+          />
+          <EditGoals onEdit={onEditProfile} disabled={customChoice.active} />
+        </div>
       )}
       {renderChecklist()}
       <div className="flex w-full flex-1 flex-col items-center justify-center">
         {step === "complete" && selectedSituation && selectedPersona && (
           <PracticeReady
+            learner={profileLearner(profile)}
             language={language}
             practice={practice}
             selectedPlace={selectedPlace}

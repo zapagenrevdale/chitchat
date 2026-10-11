@@ -10,7 +10,7 @@ function voiceHint(listening: boolean, supported: boolean) {
     return "Listening… Your words will appear here. You can edit them before continuing.";
   }
   if (supported) {
-    return "Say as much as you like. We'll fill in the choices you mention. Speech uses your browser's recognition service.";
+    return "Say as much as you like. We'll fill in the choices you mention. Speech is transcribed by Gemini.";
   }
   return "Type your answer to fill in several choices at once. Voice input isn't available in this browser.";
 }
@@ -29,6 +29,11 @@ export function SetupAnswer({
   const [text, setText] = useState("");
   const speech = useSetupSpeech(setText);
   const { cancel } = speech;
+  const speechBusy = speech.listening || speech.starting || speech.stopping;
+  let voiceLabel = speech.listening ? "Finish speaking" : "Tell us your choice";
+  if (speech.starting || speech.stopping) {
+    voiceLabel = "Cancel voice input";
+  }
   useEffect(() => {
     if (busy || previewing) {
       cancel();
@@ -40,7 +45,7 @@ export function SetupAnswer({
       className="setup-answer"
       onSubmit={(event) => {
         event.preventDefault();
-        if (text.trim() && !busy && !speech.listening) {
+        if (text.trim() && !busy && !speechBusy) {
           onAnswer(text.trim());
         }
       }}
@@ -52,7 +57,7 @@ export function SetupAnswer({
           value={text}
           maxLength={500}
           rows={2}
-          disabled={busy || speech.listening}
+          disabled={busy || speechBusy}
           onChange={(event) => setText(event.target.value)}
           placeholder="“Order coffee at a café, with easy questions”"
           aria-describedby="setup-voice-hint"
@@ -63,7 +68,9 @@ export function SetupAnswer({
             variant="ghost"
             disabled={!speech.supported || busy}
             onClick={() => {
-              if (speech.listening) {
+              if (speech.starting || speech.stopping) {
+                speech.cancel();
+              } else if (speech.listening) {
                 speech.stop();
               } else {
                 onVoiceStart?.();
@@ -77,12 +84,9 @@ export function SetupAnswer({
             ) : (
               <Mic aria-hidden="true" />
             )}
-            {speech.listening ? "Finish speaking" : "Tell us your choice"}
+            {voiceLabel}
           </Button>
-          <Button
-            type="submit"
-            disabled={!text.trim() || busy || speech.listening}
-          >
+          <Button type="submit" disabled={!text.trim() || busy || speechBusy}>
             {busy ? "Reading answer…" : "Use answer"}
             <ArrowUp aria-hidden="true" />
           </Button>

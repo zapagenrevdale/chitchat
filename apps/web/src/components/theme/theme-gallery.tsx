@@ -29,6 +29,8 @@ import { PracticeLanguagePicker } from "@/components/practice/practice-language"
 import { SelectChoiceButton } from "@/components/practice/select-choice-button";
 import { TalkButton } from "@/components/practice/talk-button";
 import { Badge } from "@/components/reui/badge";
+import { ChatInputPreview } from "@/components/theme/chat-input-preview";
+import { WatercolorWavePreview } from "@/components/theme/watercolor-wave-preview";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -57,6 +59,7 @@ const sections = [
   "Avatars",
   "Voice",
   "Forms",
+  "Chat",
   "Feedback",
 ];
 const personas = ["alex", "jamie", "dani", "felix", "vera", "lily"];
@@ -559,12 +562,19 @@ export function ThemeGallery() {
             description="The circular talk control, Chit’s animated icon, and audio waveforms. These are visual previews; they don’t access your microphone or start a conversation."
           >
             <VoicePreview />
+            <WatercolorWavePreview />
           </Section>
           <Section
             title="Forms"
             description="Language, conversation mode, and text inputs with their help, error, and disabled states."
           >
             <FormPreview />
+          </Section>
+          <Section
+            title="Chat"
+            description="A little room to talk. A conversation thread and a spacious input with its controls tucked below."
+          >
+            <ChatInputPreview />
           </Section>
           <Section
             title="Feedback"

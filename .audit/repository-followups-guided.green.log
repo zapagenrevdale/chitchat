@@ -1,0 +1,34 @@
+$ turbo run test "--filter=@chitchat/web" -- src/lib/practice-guided.test.ts src/lib/playback-worklet.test.ts src/lib/recorder-worklet.test.ts
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/web
+   • Running test in 1 packages
+   • Remote caching disabled
+
+@chitchat/contracts:build: cache hit, replaying logs 915e65d46defab88
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/web:i18n:compile: cache hit, replaying logs 135615eeaf859803
+@chitchat/web:i18n:compile: $ paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy baseLocale
+@chitchat/web:i18n:compile: ℹ [paraglide-js] Compiling inlang project ...
+@chitchat/web:i18n:compile: ✔ [paraglide-js] Successfully compiled inlang project.
+@chitchat/web:test: cache miss, executing afb5585fb1f6b6d4
+@chitchat/web:test: $ vitest run src/lib/practice-guided.test.ts src/lib/playback-worklet.test.ts src/lib/recorder-worklet.test.ts
+@chitchat/web:test: 
+@chitchat/web:test: [1m[30m[46m RUN [49m[39m[22m [36mv5.0.0 [39m[90m/Users/genrevzapa/projects/chitchat/apps/web[39m
+@chitchat/web:test: 
+@chitchat/web:test:  [32m✓[39m src/lib/playback-worklet.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/lib/recorder-worklet.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 71[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/lib/practice-guided.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 913[2mms[22m[39m
+@chitchat/web:test:    [32m✓[39m Guided turn lifecycle [2m(11)[22m
+@chitchat/web:test:      [33m[2m✓[22m[39m keeps a whole recent suffix for mixed exchanges and preserves the full recap[33m 455[2mms[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+@chitchat/web:test: [2m      Tests [22m [1m[32m21 passed[39m[22m[90m (21)[39m
+@chitchat/web:test: [2m   Start at [22m 11:52:40
+@chitchat/web:test: [2m   Duration [22m 2.00s[2m (environment 53%, tests 28%, setup 9%, transform 6%, import 4%)[22m
+@chitchat/web:test: 
+
+ Tasks:    3 successful, 3 total
+Cached:    2 cached, 3 total
+  Time:    2.303s 
+

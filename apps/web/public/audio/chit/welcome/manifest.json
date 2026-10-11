@@ -1,0 +1,3515 @@
+[
+  {
+    "code": "en",
+    "language": "English",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "text": "Welcome! We'll practice everyday conversations to help you build fluency and confidence. Tell me, what made you want to start practicing?",
+    "seconds": 10.8,
+    "file": "/audio/chit/welcome/en.mp3",
+    "generatedAt": "2026-09-26T02:01:00.963Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Welcome! ",
+        "start": 0.3,
+        "end": 1.1
+      },
+      {
+        "text": "We'll ",
+        "start": 1.7,
+        "end": 1.9
+      },
+      {
+        "text": "practice ",
+        "start": 1.9,
+        "end": 2.5
+      },
+      {
+        "text": "everyday ",
+        "start": 2.5,
+        "end": 3.2
+      },
+      {
+        "text": "conversations ",
+        "start": 3.2,
+        "end": 4.3
+      },
+      {
+        "text": "to ",
+        "start": 4.4,
+        "end": 4.5
+      },
+      {
+        "text": "help ",
+        "start": 4.5,
+        "end": 4.7
+      },
+      {
+        "text": "you ",
+        "start": 4.7,
+        "end": 4.8
+      },
+      {
+        "text": "build ",
+        "start": 4.8,
+        "end": 5.1
+      },
+      {
+        "text": "fluency ",
+        "start": 5.1,
+        "end": 5.9
+      },
+      {
+        "text": "and ",
+        "start": 5.9,
+        "end": 6.1
+      },
+      {
+        "text": "confidence. ",
+        "start": 6.1,
+        "end": 6.8
+      },
+      {
+        "text": "Tell ",
+        "start": 7.5,
+        "end": 7.6
+      },
+      {
+        "text": "me, ",
+        "start": 7.6,
+        "end": 8
+      },
+      {
+        "text": "what ",
+        "start": 8.5,
+        "end": 8.7
+      },
+      {
+        "text": "made ",
+        "start": 8.7,
+        "end": 8.9
+      },
+      {
+        "text": "you ",
+        "start": 8.9,
+        "end": 9
+      },
+      {
+        "text": "want ",
+        "start": 9,
+        "end": 9.2
+      },
+      {
+        "text": "to ",
+        "start": 9.2,
+        "end": 9.3
+      },
+      {
+        "text": "start ",
+        "start": 9.3,
+        "end": 9.7
+      },
+      {
+        "text": "practicing?",
+        "start": 9.7,
+        "end": 10.8
+      }
+    ]
+  },
+  {
+    "code": "ko",
+    "language": "Korean",
+    "text": "반가워요! 유창함과 자신감을 기를 수 있도록 일상 대화를 연습해 봐요. 연습을 시작하게 된 계기가 무엇인가요?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 10.68,
+    "file": "/audio/chit/welcome/ko.mp3",
+    "generatedAt": "2026-09-26T06:45:58.671Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "반가워요! ",
+        "start": 0.3,
+        "end": 1
+      },
+      {
+        "text": "유창함과 ",
+        "start": 1.8,
+        "end": 2.6
+      },
+      {
+        "text": "자신감을 ",
+        "start": 2.6,
+        "end": 3.3
+      },
+      {
+        "text": "기를 ",
+        "start": 3.3,
+        "end": 3.6
+      },
+      {
+        "text": "수 ",
+        "start": 3.6,
+        "end": 3.7
+      },
+      {
+        "text": "있도록 ",
+        "start": 3.7,
+        "end": 4.3
+      },
+      {
+        "text": "일상 ",
+        "start": 4.6,
+        "end": 5
+      },
+      {
+        "text": "대화를 ",
+        "start": 5,
+        "end": 5.4
+      },
+      {
+        "text": "연습해 ",
+        "start": 5.4,
+        "end": 5.9
+      },
+      {
+        "text": "봐요. ",
+        "start": 5.9,
+        "end": 6.1
+      },
+      {
+        "text": "연습을 ",
+        "start": 7.4,
+        "end": 8
+      },
+      {
+        "text": "시작하게 ",
+        "start": 8,
+        "end": 8.5
+      },
+      {
+        "text": "된 ",
+        "start": 8.5,
+        "end": 8.7
+      },
+      {
+        "text": "계기가 ",
+        "start": 8.7,
+        "end": 9.4
+      },
+      {
+        "text": "무엇인가요?",
+        "start": 9.5,
+        "end": 10.3
+      }
+    ]
+  },
+  {
+    "code": "fil",
+    "language": "Filipino",
+    "text": "Mabuhay! Magsasanay tayo ng pang-araw-araw na pag-uusap para matulungan kang maging matatas at mas kampante. Sabihin mo sa akin, ano ang nagtulak sa iyo para magsimulang magsanay?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 15.32,
+    "file": "/audio/chit/welcome/fil.mp3",
+    "generatedAt": "2026-09-26T06:46:17.197Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Mabuhay! ",
+        "start": 0.3,
+        "end": 1.2
+      },
+      {
+        "text": "Magsasanay ",
+        "start": 1.9,
+        "end": 2.7
+      },
+      {
+        "text": "tayo ",
+        "start": 2.7,
+        "end": 3
+      },
+      {
+        "text": "ng ",
+        "start": 3,
+        "end": 3.3
+      },
+      {
+        "text": "pang-araw-araw ",
+        "start": 3.3,
+        "end": 4.3
+      },
+      {
+        "text": "na ",
+        "start": 4.3,
+        "end": 4.4
+      },
+      {
+        "text": "pag-uusap ",
+        "start": 4.4,
+        "end": 5.6
+      },
+      {
+        "text": "para ",
+        "start": 5.7,
+        "end": 5.9
+      },
+      {
+        "text": "matulungan ",
+        "start": 5.9,
+        "end": 6.5
+      },
+      {
+        "text": "kang ",
+        "start": 6.5,
+        "end": 6.6
+      },
+      {
+        "text": "maging ",
+        "start": 6.6,
+        "end": 7.1
+      },
+      {
+        "text": "matatas ",
+        "start": 7.1,
+        "end": 8.1
+      },
+      {
+        "text": "at ",
+        "start": 8.2,
+        "end": 8.4
+      },
+      {
+        "text": "mas ",
+        "start": 8.4,
+        "end": 8.6
+      },
+      {
+        "text": "kampante. ",
+        "start": 8.6,
+        "end": 9.4
+      },
+      {
+        "text": "Sabihin ",
+        "start": 10.4,
+        "end": 10.7
+      },
+      {
+        "text": "mo ",
+        "start": 10.7,
+        "end": 10.8
+      },
+      {
+        "text": "sa ",
+        "start": 10.8,
+        "end": 11
+      },
+      {
+        "text": "akin, ",
+        "start": 11,
+        "end": 11.3
+      },
+      {
+        "text": "ano ",
+        "start": 12,
+        "end": 12.3
+      },
+      {
+        "text": "ang ",
+        "start": 12.3,
+        "end": 12.4
+      },
+      {
+        "text": "nagtulak ",
+        "start": 12.4,
+        "end": 13
+      },
+      {
+        "text": "sa ",
+        "start": 13,
+        "end": 13.1
+      },
+      {
+        "text": "iyo ",
+        "start": 13.1,
+        "end": 13.3
+      },
+      {
+        "text": "para ",
+        "start": 13.3,
+        "end": 13.8
+      },
+      {
+        "text": "magsimulang ",
+        "start": 13.8,
+        "end": 14.4
+      },
+      {
+        "text": "magsanay?",
+        "start": 14.4,
+        "end": 15
+      }
+    ]
+  },
+  {
+    "code": "es",
+    "language": "Spanish",
+    "text": "¡Hola! Practicaremos conversaciones cotidianas para ayudarte a desarrollar fluidez y confianza. Dime, ¿qué te motivó a empezar a practicar?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 12.32,
+    "file": "/audio/chit/welcome/es.mp3",
+    "generatedAt": "2026-09-26T06:46:33.269Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "¡Hola! ",
+        "start": 0.3,
+        "end": 0.8
+      },
+      {
+        "text": "Practicaremos ",
+        "start": 1.6,
+        "end": 2.3
+      },
+      {
+        "text": "conversaciones ",
+        "start": 2.3,
+        "end": 3.2
+      },
+      {
+        "text": "cotidianas ",
+        "start": 3.2,
+        "end": 4.2
+      },
+      {
+        "text": "para ",
+        "start": 4.3,
+        "end": 4.5
+      },
+      {
+        "text": "ayudarte ",
+        "start": 4.5,
+        "end": 5
+      },
+      {
+        "text": "a ",
+        "start": 5,
+        "end": 5.1
+      },
+      {
+        "text": "desarrollar ",
+        "start": 5.1,
+        "end": 5.8
+      },
+      {
+        "text": "fluidez ",
+        "start": 5.8,
+        "end": 6.6
+      },
+      {
+        "text": "y ",
+        "start": 6.7,
+        "end": 6.8
+      },
+      {
+        "text": "confianza. ",
+        "start": 6.8,
+        "end": 7.5
+      },
+      {
+        "text": "Dime, ¿",
+        "start": 8.6,
+        "end": 9
+      },
+      {
+        "text": "qué ",
+        "start": 9.9,
+        "end": 10.1
+      },
+      {
+        "text": "te ",
+        "start": 10.1,
+        "end": 10.2
+      },
+      {
+        "text": "motivó ",
+        "start": 10.2,
+        "end": 10.8
+      },
+      {
+        "text": "a ",
+        "start": 10.8,
+        "end": 10.9
+      },
+      {
+        "text": "empezar ",
+        "start": 10.9,
+        "end": 11.3
+      },
+      {
+        "text": "a ",
+        "start": 11.3,
+        "end": 11.4
+      },
+      {
+        "text": "practicar?",
+        "start": 11.4,
+        "end": 12
+      }
+    ]
+  },
+  {
+    "code": "fr",
+    "language": "French",
+    "text": "Bienvenue ! Nous pratiquerons des conversations du quotidien pour vous aider à gagner en fluidité et en confiance. Dites-moi, qu'est-ce qui vous a donné envie de commencer ?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 12.04,
+    "file": "/audio/chit/welcome/fr.mp3",
+    "generatedAt": "2026-09-26T06:46:50.371Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Bienvenue ! ",
+        "start": 0.3,
+        "end": 1
+      },
+      {
+        "text": "Nous ",
+        "start": 1.8,
+        "end": 2
+      },
+      {
+        "text": "pratiquerons ",
+        "start": 2,
+        "end": 2.8
+      },
+      {
+        "text": "des ",
+        "start": 2.8,
+        "end": 2.9
+      },
+      {
+        "text": "conversations ",
+        "start": 2.9,
+        "end": 3.6
+      },
+      {
+        "text": "du ",
+        "start": 3.6,
+        "end": 3.8
+      },
+      {
+        "text": "quotidien ",
+        "start": 3.8,
+        "end": 4.6
+      },
+      {
+        "text": "pour ",
+        "start": 4.7,
+        "end": 4.8
+      },
+      {
+        "text": "vous ",
+        "start": 4.8,
+        "end": 5
+      },
+      {
+        "text": "aider ",
+        "start": 5,
+        "end": 5.4
+      },
+      {
+        "text": "à ",
+        "start": 5.4,
+        "end": 5.5
+      },
+      {
+        "text": "gagner ",
+        "start": 5.5,
+        "end": 6
+      },
+      {
+        "text": "en ",
+        "start": 6,
+        "end": 6.1
+      },
+      {
+        "text": "fluidité ",
+        "start": 6.1,
+        "end": 7.1
+      },
+      {
+        "text": "et ",
+        "start": 7.1,
+        "end": 7.2
+      },
+      {
+        "text": "en ",
+        "start": 7.2,
+        "end": 7.3
+      },
+      {
+        "text": "confiance. ",
+        "start": 7.3,
+        "end": 8
+      },
+      {
+        "text": "Dites-moi, ",
+        "start": 8.8,
+        "end": 9.4
+      },
+      {
+        "text": "qu'est-ce ",
+        "start": 9.8,
+        "end": 10
+      },
+      {
+        "text": "qui ",
+        "start": 10,
+        "end": 10.2
+      },
+      {
+        "text": "vous ",
+        "start": 10.2,
+        "end": 10.4
+      },
+      {
+        "text": "a ",
+        "start": 10.4,
+        "end": 10.4
+      },
+      {
+        "text": "donné ",
+        "start": 10.4,
+        "end": 10.7
+      },
+      {
+        "text": "envie ",
+        "start": 10.7,
+        "end": 11
+      },
+      {
+        "text": "de ",
+        "start": 11,
+        "end": 11.2
+      },
+      {
+        "text": "commencer ?",
+        "start": 11.2,
+        "end": 11.7
+      }
+    ]
+  },
+  {
+    "code": "zh",
+    "language": "Chinese",
+    "text": "欢迎！ 我们将练习日常对话，帮助你建立流利度和自信。告诉我，是什么让你想要开始练习的？",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 11.12,
+    "file": "/audio/chit/welcome/zh.mp3",
+    "generatedAt": "2026-09-26T06:47:07.014Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "欢",
+        "start": 0.3,
+        "end": 0.8
+      },
+      {
+        "text": "迎！ ",
+        "start": 0.8,
+        "end": 1
+      },
+      {
+        "text": "我",
+        "start": 1.7,
+        "end": 1.8
+      },
+      {
+        "text": "们",
+        "start": 1.8,
+        "end": 1.9
+      },
+      {
+        "text": "将",
+        "start": 1.9,
+        "end": 2.1
+      },
+      {
+        "text": "练",
+        "start": 2.1,
+        "end": 2.3
+      },
+      {
+        "text": "习",
+        "start": 2.3,
+        "end": 2.7
+      },
+      {
+        "text": "日",
+        "start": 2.8,
+        "end": 2.9
+      },
+      {
+        "text": "常",
+        "start": 2.9,
+        "end": 3.2
+      },
+      {
+        "text": "对",
+        "start": 3.2,
+        "end": 3.3
+      },
+      {
+        "text": "话，",
+        "start": 3.3,
+        "end": 3.7
+      },
+      {
+        "text": "帮",
+        "start": 4.2,
+        "end": 4.3
+      },
+      {
+        "text": "助",
+        "start": 4.3,
+        "end": 4.4
+      },
+      {
+        "text": "你",
+        "start": 4.4,
+        "end": 4.6
+      },
+      {
+        "text": "建",
+        "start": 4.6,
+        "end": 4.9
+      },
+      {
+        "text": "立",
+        "start": 4.9,
+        "end": 5.1
+      },
+      {
+        "text": "流",
+        "start": 5.1,
+        "end": 5.4
+      },
+      {
+        "text": "利",
+        "start": 5.4,
+        "end": 5.6
+      },
+      {
+        "text": "度",
+        "start": 5.6,
+        "end": 6
+      },
+      {
+        "text": "和",
+        "start": 6,
+        "end": 6.2
+      },
+      {
+        "text": "自",
+        "start": 6.2,
+        "end": 6.5
+      },
+      {
+        "text": "信。",
+        "start": 6.5,
+        "end": 6.7
+      },
+      {
+        "text": "告",
+        "start": 7.7,
+        "end": 7.9
+      },
+      {
+        "text": "诉",
+        "start": 7.9,
+        "end": 8
+      },
+      {
+        "text": "我，",
+        "start": 8,
+        "end": 8.3
+      },
+      {
+        "text": "是",
+        "start": 8.7,
+        "end": 9
+      },
+      {
+        "text": "什",
+        "start": 9,
+        "end": 9.1
+      },
+      {
+        "text": "么",
+        "start": 9.1,
+        "end": 9.4
+      },
+      {
+        "text": "让",
+        "start": 9.4,
+        "end": 9.6
+      },
+      {
+        "text": "你",
+        "start": 9.6,
+        "end": 9.6
+      },
+      {
+        "text": "想",
+        "start": 9.6,
+        "end": 9.8
+      },
+      {
+        "text": "要",
+        "start": 9.8,
+        "end": 9.9
+      },
+      {
+        "text": "开",
+        "start": 9.9,
+        "end": 10.1
+      },
+      {
+        "text": "始",
+        "start": 10.1,
+        "end": 10.2
+      },
+      {
+        "text": "练",
+        "start": 10.2,
+        "end": 10.5
+      },
+      {
+        "text": "习",
+        "start": 10.5,
+        "end": 10.6
+      },
+      {
+        "text": "的？",
+        "start": 10.6,
+        "end": 10.8
+      }
+    ]
+  },
+  {
+    "code": "de",
+    "language": "German",
+    "text": "Willkommen! Wir üben Alltagsgespräche, damit du flüssiger und selbstbewusster sprechen lernst. Sag mir, warum möchtest du mit dem Üben anfangen?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 11.52,
+    "file": "/audio/chit/welcome/de.mp3",
+    "generatedAt": "2026-09-26T06:47:24.194Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Willkommen! ",
+        "start": 0.3,
+        "end": 0.9
+      },
+      {
+        "text": "Wir ",
+        "start": 1.9,
+        "end": 2.2
+      },
+      {
+        "text": "üben ",
+        "start": 2.2,
+        "end": 2.5
+      },
+      {
+        "text": "Alltagsgespräche, ",
+        "start": 2.5,
+        "end": 4
+      },
+      {
+        "text": "damit ",
+        "start": 4.1,
+        "end": 4.4
+      },
+      {
+        "text": "du ",
+        "start": 4.4,
+        "end": 4.6
+      },
+      {
+        "text": "flüssiger ",
+        "start": 4.6,
+        "end": 5.2
+      },
+      {
+        "text": "und ",
+        "start": 5.2,
+        "end": 5.5
+      },
+      {
+        "text": "selbstbewusster ",
+        "start": 5.5,
+        "end": 6.3
+      },
+      {
+        "text": "sprechen ",
+        "start": 6.3,
+        "end": 6.7
+      },
+      {
+        "text": "lernst. ",
+        "start": 6.7,
+        "end": 7.1
+      },
+      {
+        "text": "Sag ",
+        "start": 8.2,
+        "end": 8.4
+      },
+      {
+        "text": "mir, ",
+        "start": 8.4,
+        "end": 9.1
+      },
+      {
+        "text": "warum ",
+        "start": 9.2,
+        "end": 9.6
+      },
+      {
+        "text": "möchtest ",
+        "start": 9.6,
+        "end": 10
+      },
+      {
+        "text": "du ",
+        "start": 10,
+        "end": 10.1
+      },
+      {
+        "text": "mit ",
+        "start": 10.1,
+        "end": 10.3
+      },
+      {
+        "text": "dem ",
+        "start": 10.3,
+        "end": 10.4
+      },
+      {
+        "text": "Üben ",
+        "start": 10.4,
+        "end": 10.7
+      },
+      {
+        "text": "anfangen?",
+        "start": 10.7,
+        "end": 11.2
+      }
+    ]
+  },
+  {
+    "code": "pt",
+    "language": "Portuguese",
+    "text": "Olá! Vamos praticar conversas do dia a dia para te ajudar a ganhar fluência e confiança. Me conte, o que te motivou a começar a praticar?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 11.92,
+    "file": "/audio/chit/welcome/pt.mp3",
+    "generatedAt": "2026-09-26T06:47:41.054Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Olá! ",
+        "start": 0.3,
+        "end": 0.9
+      },
+      {
+        "text": "Vamos ",
+        "start": 1.6,
+        "end": 1.9
+      },
+      {
+        "text": "praticar ",
+        "start": 1.9,
+        "end": 2.4
+      },
+      {
+        "text": "conversas ",
+        "start": 2.4,
+        "end": 3
+      },
+      {
+        "text": "do ",
+        "start": 3,
+        "end": 3.2
+      },
+      {
+        "text": "dia ",
+        "start": 3.2,
+        "end": 3.5
+      },
+      {
+        "text": "a ",
+        "start": 3.5,
+        "end": 3.5
+      },
+      {
+        "text": "dia ",
+        "start": 3.5,
+        "end": 4.1
+      },
+      {
+        "text": "para ",
+        "start": 4.2,
+        "end": 4.4
+      },
+      {
+        "text": "te ",
+        "start": 4.4,
+        "end": 4.5
+      },
+      {
+        "text": "ajudar ",
+        "start": 4.5,
+        "end": 4.9
+      },
+      {
+        "text": "a ",
+        "start": 4.9,
+        "end": 5
+      },
+      {
+        "text": "ganhar ",
+        "start": 5,
+        "end": 5.3
+      },
+      {
+        "text": "fluência ",
+        "start": 5.3,
+        "end": 6.1
+      },
+      {
+        "text": "e ",
+        "start": 6.2,
+        "end": 6.3
+      },
+      {
+        "text": "confiança. ",
+        "start": 6.3,
+        "end": 7
+      },
+      {
+        "text": "Me ",
+        "start": 8.2,
+        "end": 8.4
+      },
+      {
+        "text": "conte, ",
+        "start": 8.4,
+        "end": 8.8
+      },
+      {
+        "text": "o ",
+        "start": 9.5,
+        "end": 9.6
+      },
+      {
+        "text": "que ",
+        "start": 9.6,
+        "end": 9.7
+      },
+      {
+        "text": "te ",
+        "start": 9.7,
+        "end": 9.9
+      },
+      {
+        "text": "motivou ",
+        "start": 9.9,
+        "end": 10.5
+      },
+      {
+        "text": "a ",
+        "start": 10.5,
+        "end": 10.6
+      },
+      {
+        "text": "começar ",
+        "start": 10.6,
+        "end": 11
+      },
+      {
+        "text": "a ",
+        "start": 11,
+        "end": 11
+      },
+      {
+        "text": "praticar?",
+        "start": 11,
+        "end": 11.6
+      }
+    ]
+  },
+  {
+    "code": "it",
+    "language": "Italian",
+    "text": "Benvenuto! Faremo pratica con conversazioni quotidiane per aiutarti a migliorare fluidità e sicurezza. Dimmi, cosa ti ha spinto a iniziare?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 12.36,
+    "file": "/audio/chit/welcome/it.mp3",
+    "generatedAt": "2026-09-26T06:47:58.201Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Benvenuto! ",
+        "start": 0.4,
+        "end": 1.2
+      },
+      {
+        "text": "Faremo ",
+        "start": 2.2,
+        "end": 2.6
+      },
+      {
+        "text": "pratica ",
+        "start": 2.6,
+        "end": 3.2
+      },
+      {
+        "text": "con ",
+        "start": 3.3,
+        "end": 3.5
+      },
+      {
+        "text": "conversazioni ",
+        "start": 3.5,
+        "end": 4.4
+      },
+      {
+        "text": "quotidiane ",
+        "start": 4.4,
+        "end": 5.2
+      },
+      {
+        "text": "per ",
+        "start": 5.6,
+        "end": 5.7
+      },
+      {
+        "text": "aiutarti ",
+        "start": 5.7,
+        "end": 6.3
+      },
+      {
+        "text": "a ",
+        "start": 6.3,
+        "end": 6.3
+      },
+      {
+        "text": "migliorare ",
+        "start": 6.3,
+        "end": 6.8
+      },
+      {
+        "text": "fluidità ",
+        "start": 6.8,
+        "end": 7.6
+      },
+      {
+        "text": "e ",
+        "start": 7.7,
+        "end": 7.8
+      },
+      {
+        "text": "sicurezza. ",
+        "start": 7.8,
+        "end": 8.6
+      },
+      {
+        "text": "Dimmi, ",
+        "start": 9.5,
+        "end": 9.9
+      },
+      {
+        "text": "cosa ",
+        "start": 10.5,
+        "end": 10.7
+      },
+      {
+        "text": "ti ",
+        "start": 10.7,
+        "end": 10.9
+      },
+      {
+        "text": "ha ",
+        "start": 10.9,
+        "end": 10.9
+      },
+      {
+        "text": "spinto ",
+        "start": 10.9,
+        "end": 11.4
+      },
+      {
+        "text": "a ",
+        "start": 11.4,
+        "end": 11.5
+      },
+      {
+        "text": "iniziare?",
+        "start": 11.5,
+        "end": 12.1
+      }
+    ]
+  },
+  {
+    "code": "hi",
+    "language": "Hindi",
+    "text": "नमस्ते! हम रोजमर्रा की बातचीत का अभ्यास करेंगे ताकि आप धाराप्रवाह बोल सकें और आपका आत्मविश्वास बढ़े। मुझे बताएं, आप अभ्यास क्यों शुरू करना चाहते हैं?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 13.4,
+    "file": "/audio/chit/welcome/hi.mp3",
+    "generatedAt": "2026-09-26T06:48:32.344Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "नमस्ते! ",
+        "start": 0.3,
+        "end": 0.9
+      },
+      {
+        "text": "हम ",
+        "start": 1.7,
+        "end": 2
+      },
+      {
+        "text": "रोजमर्रा ",
+        "start": 2,
+        "end": 2.7
+      },
+      {
+        "text": "की ",
+        "start": 2.7,
+        "end": 2.9
+      },
+      {
+        "text": "बातचीत ",
+        "start": 2.9,
+        "end": 3.4
+      },
+      {
+        "text": "का ",
+        "start": 3.4,
+        "end": 3.6
+      },
+      {
+        "text": "अभ्यास ",
+        "start": 3.6,
+        "end": 4.1
+      },
+      {
+        "text": "करेंगे ",
+        "start": 4.1,
+        "end": 4.5
+      },
+      {
+        "text": "ताकि ",
+        "start": 5.1,
+        "end": 5.5
+      },
+      {
+        "text": "आप ",
+        "start": 5.5,
+        "end": 5.7
+      },
+      {
+        "text": "धारा",
+        "start": 5.7,
+        "end": 6.1
+      },
+      {
+        "text": "प्रवाह ",
+        "start": 6.1,
+        "end": 6.4
+      },
+      {
+        "text": "बोल ",
+        "start": 6.4,
+        "end": 6.6
+      },
+      {
+        "text": "सकें ",
+        "start": 6.6,
+        "end": 7
+      },
+      {
+        "text": "और ",
+        "start": 7.4,
+        "end": 7.5
+      },
+      {
+        "text": "आपका ",
+        "start": 7.5,
+        "end": 8
+      },
+      {
+        "text": "आत्मविश्वास ",
+        "start": 8,
+        "end": 8.8
+      },
+      {
+        "text": "बढ़े। ",
+        "start": 8.8,
+        "end": 9
+      },
+      {
+        "text": "मुझे ",
+        "start": 9.9,
+        "end": 10.1
+      },
+      {
+        "text": "बताएं, ",
+        "start": 10.1,
+        "end": 10.5
+      },
+      {
+        "text": "आप ",
+        "start": 11,
+        "end": 11.2
+      },
+      {
+        "text": "अभ्यास ",
+        "start": 11.2,
+        "end": 11.8
+      },
+      {
+        "text": "क्यों ",
+        "start": 11.8,
+        "end": 12
+      },
+      {
+        "text": "शुरू ",
+        "start": 12,
+        "end": 12.3
+      },
+      {
+        "text": "करना ",
+        "start": 12.3,
+        "end": 12.6
+      },
+      {
+        "text": "चाहते ",
+        "start": 12.6,
+        "end": 13
+      },
+      {
+        "text": "हैं?",
+        "start": 13,
+        "end": 13.1
+      }
+    ]
+  },
+  {
+    "code": "da",
+    "language": "Danish",
+    "text": "Velkommen! Vi vil øve hverdagssamtaler for at hjælpe dig med at opbygge flydende tale og selvtillid. Fortæl mig, hvad fik dig til at ville starte med at øve dig?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 11.36,
+    "file": "/audio/chit/welcome/da.mp3",
+    "generatedAt": "2026-09-26T06:48:49.179Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Velkommen! ",
+        "start": 0.3,
+        "end": 0.9
+      },
+      {
+        "text": "Vi ",
+        "start": 1.8,
+        "end": 1.9
+      },
+      {
+        "text": "vil ",
+        "start": 1.9,
+        "end": 2.1
+      },
+      {
+        "text": "øve ",
+        "start": 2.1,
+        "end": 2.3
+      },
+      {
+        "text": "hverdagssamtaler ",
+        "start": 2.3,
+        "end": 3.5
+      },
+      {
+        "text": "for ",
+        "start": 3.6,
+        "end": 3.8
+      },
+      {
+        "text": "at ",
+        "start": 3.8,
+        "end": 3.9
+      },
+      {
+        "text": "hjælpe ",
+        "start": 3.9,
+        "end": 4.1
+      },
+      {
+        "text": "dig ",
+        "start": 4.1,
+        "end": 4.3
+      },
+      {
+        "text": "med ",
+        "start": 4.3,
+        "end": 4.5
+      },
+      {
+        "text": "at ",
+        "start": 4.5,
+        "end": 4.5
+      },
+      {
+        "text": "opbygge ",
+        "start": 4.5,
+        "end": 5
+      },
+      {
+        "text": "flydende ",
+        "start": 5,
+        "end": 5.7
+      },
+      {
+        "text": "tale ",
+        "start": 5.7,
+        "end": 6.2
+      },
+      {
+        "text": "og ",
+        "start": 6.3,
+        "end": 6.4
+      },
+      {
+        "text": "selvtillid. ",
+        "start": 6.4,
+        "end": 6.9
+      },
+      {
+        "text": "Fortæl ",
+        "start": 7.9,
+        "end": 8.2
+      },
+      {
+        "text": "mig, ",
+        "start": 8.2,
+        "end": 8.3
+      },
+      {
+        "text": "hvad ",
+        "start": 9.1,
+        "end": 9.2
+      },
+      {
+        "text": "fik ",
+        "start": 9.2,
+        "end": 9.4
+      },
+      {
+        "text": "dig ",
+        "start": 9.4,
+        "end": 9.5
+      },
+      {
+        "text": "til ",
+        "start": 9.5,
+        "end": 9.7
+      },
+      {
+        "text": "at ",
+        "start": 9.7,
+        "end": 9.8
+      },
+      {
+        "text": "ville ",
+        "start": 9.8,
+        "end": 10
+      },
+      {
+        "text": "starte ",
+        "start": 10,
+        "end": 10.4
+      },
+      {
+        "text": "med ",
+        "start": 10.4,
+        "end": 10.6
+      },
+      {
+        "text": "at ",
+        "start": 10.6,
+        "end": 10.7
+      },
+      {
+        "text": "øve ",
+        "start": 10.7,
+        "end": 10.9
+      },
+      {
+        "text": "dig?",
+        "start": 10.9,
+        "end": 11
+      }
+    ]
+  },
+  {
+    "code": "nl",
+    "language": "Dutch",
+    "text": "Welkom! We oefenen alledaagse gesprekken om je te helpen vloeiender en zelfverzekerder te worden. Vertel eens, waarom wil je gaan oefenen?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 10.84,
+    "file": "/audio/chit/welcome/nl.mp3",
+    "generatedAt": "2026-09-26T06:49:04.568Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Welkom! ",
+        "start": 0.7,
+        "end": 1.4
+      },
+      {
+        "text": "We ",
+        "start": 2.1,
+        "end": 2.4
+      },
+      {
+        "text": "oefenen ",
+        "start": 2.4,
+        "end": 2.8
+      },
+      {
+        "text": "alledaagse ",
+        "start": 2.8,
+        "end": 3.6
+      },
+      {
+        "text": "gesprekken ",
+        "start": 3.6,
+        "end": 4.2
+      },
+      {
+        "text": "om ",
+        "start": 4.4,
+        "end": 4.5
+      },
+      {
+        "text": "je ",
+        "start": 4.5,
+        "end": 4.6
+      },
+      {
+        "text": "te ",
+        "start": 4.6,
+        "end": 4.7
+      },
+      {
+        "text": "helpen ",
+        "start": 4.7,
+        "end": 5.2
+      },
+      {
+        "text": "vloeiender ",
+        "start": 5.2,
+        "end": 6
+      },
+      {
+        "text": "en ",
+        "start": 6,
+        "end": 6.2
+      },
+      {
+        "text": "zelfverzekerder ",
+        "start": 6.2,
+        "end": 7
+      },
+      {
+        "text": "te ",
+        "start": 7,
+        "end": 7.1
+      },
+      {
+        "text": "worden. ",
+        "start": 7.1,
+        "end": 7.4
+      },
+      {
+        "text": "Vertel ",
+        "start": 8.2,
+        "end": 8.6
+      },
+      {
+        "text": "eens, ",
+        "start": 8.6,
+        "end": 8.7
+      },
+      {
+        "text": "waarom ",
+        "start": 9.3,
+        "end": 9.7
+      },
+      {
+        "text": "wil ",
+        "start": 9.7,
+        "end": 9.8
+      },
+      {
+        "text": "je ",
+        "start": 9.8,
+        "end": 9.9
+      },
+      {
+        "text": "gaan ",
+        "start": 9.9,
+        "end": 10.1
+      },
+      {
+        "text": "oefenen?",
+        "start": 10.1,
+        "end": 10.5
+      }
+    ]
+  },
+  {
+    "code": "el",
+    "language": "Greek",
+    "text": "Καλώς ήρθες! Θα εξασκούμαστε σε καθημερινές συζητήσεις για να σε βοηθήσω να αποκτήσεις ευχέρεια και αυτοπεποίθηση. Πες μου, τι σε έκανε να ξεκινήσεις την εξάσκηση;",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 11.68,
+    "file": "/audio/chit/welcome/el.mp3",
+    "generatedAt": "2026-09-26T06:49:20.325Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Καλώς ",
+        "start": 0.4,
+        "end": 0.8
+      },
+      {
+        "text": "ήρθες! ",
+        "start": 0.8,
+        "end": 1.4
+      },
+      {
+        "text": "Θα ",
+        "start": 1.8,
+        "end": 1.9
+      },
+      {
+        "text": "εξασκούμαστε ",
+        "start": 1.9,
+        "end": 2.6
+      },
+      {
+        "text": "σε ",
+        "start": 2.6,
+        "end": 2.7
+      },
+      {
+        "text": "καθημερινές ",
+        "start": 2.7,
+        "end": 3.4
+      },
+      {
+        "text": "συζητήσεις ",
+        "start": 3.4,
+        "end": 4.3
+      },
+      {
+        "text": "για ",
+        "start": 4.4,
+        "end": 4.5
+      },
+      {
+        "text": "να ",
+        "start": 4.5,
+        "end": 4.6
+      },
+      {
+        "text": "σε ",
+        "start": 4.6,
+        "end": 4.7
+      },
+      {
+        "text": "βοηθήσω ",
+        "start": 4.7,
+        "end": 5.2
+      },
+      {
+        "text": "να ",
+        "start": 5.2,
+        "end": 5.3
+      },
+      {
+        "text": "αποκτήσεις ",
+        "start": 5.3,
+        "end": 6
+      },
+      {
+        "text": "ευχέρεια ",
+        "start": 6.1,
+        "end": 6.9
+      },
+      {
+        "text": "και ",
+        "start": 7,
+        "end": 7.1
+      },
+      {
+        "text": "αυτοπεποίθηση. ",
+        "start": 7.1,
+        "end": 7.9
+      },
+      {
+        "text": "Πες ",
+        "start": 8.6,
+        "end": 8.8
+      },
+      {
+        "text": "μου, ",
+        "start": 8.8,
+        "end": 8.8
+      },
+      {
+        "text": "τι ",
+        "start": 9.4,
+        "end": 9.5
+      },
+      {
+        "text": "σε ",
+        "start": 9.5,
+        "end": 9.6
+      },
+      {
+        "text": "έκανε ",
+        "start": 9.6,
+        "end": 9.9
+      },
+      {
+        "text": "να ",
+        "start": 9.9,
+        "end": 10
+      },
+      {
+        "text": "ξεκινήσεις ",
+        "start": 10,
+        "end": 10.6
+      },
+      {
+        "text": "την ",
+        "start": 10.6,
+        "end": 10.7
+      },
+      {
+        "text": "εξάσκηση;",
+        "start": 10.7,
+        "end": 11.3
+      }
+    ]
+  },
+  {
+    "code": "id",
+    "language": "Indonesian",
+    "text": "Selamat datang! Kita akan berlatih percakapan sehari-hari untuk membantu Anda membangun kefasihan dan kepercayaan diri. Katakan pada saya, apa yang membuat Anda ingin mulai berlatih?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 16.96,
+    "file": "/audio/chit/welcome/id.mp3",
+    "generatedAt": "2026-09-26T06:49:55.332Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Selamat ",
+        "start": 0.4,
+        "end": 0.8
+      },
+      {
+        "text": "datang! ",
+        "start": 0.8,
+        "end": 1.6
+      },
+      {
+        "text": "Kita ",
+        "start": 2.6,
+        "end": 3.1
+      },
+      {
+        "text": "akan ",
+        "start": 3.1,
+        "end": 3.4
+      },
+      {
+        "text": "berlatih ",
+        "start": 3.4,
+        "end": 4
+      },
+      {
+        "text": "percakapan ",
+        "start": 4,
+        "end": 4.7
+      },
+      {
+        "text": "sehari-hari ",
+        "start": 4.7,
+        "end": 5.6
+      },
+      {
+        "text": "untuk ",
+        "start": 6.1,
+        "end": 6.5
+      },
+      {
+        "text": "membantu ",
+        "start": 6.5,
+        "end": 7
+      },
+      {
+        "text": "Anda ",
+        "start": 7,
+        "end": 7.4
+      },
+      {
+        "text": "membangun ",
+        "start": 7.4,
+        "end": 8.1
+      },
+      {
+        "text": "kefasihan ",
+        "start": 8.1,
+        "end": 9
+      },
+      {
+        "text": "dan ",
+        "start": 9.2,
+        "end": 9.4
+      },
+      {
+        "text": "kepercayaan ",
+        "start": 9.4,
+        "end": 10.1
+      },
+      {
+        "text": "diri. ",
+        "start": 10.1,
+        "end": 10.4
+      },
+      {
+        "text": "Katakan ",
+        "start": 11.9,
+        "end": 12.3
+      },
+      {
+        "text": "pada ",
+        "start": 12.3,
+        "end": 12.5
+      },
+      {
+        "text": "saya, ",
+        "start": 12.5,
+        "end": 12.9
+      },
+      {
+        "text": "apa ",
+        "start": 13.9,
+        "end": 14.2
+      },
+      {
+        "text": "yang ",
+        "start": 14.2,
+        "end": 14.4
+      },
+      {
+        "text": "membuat ",
+        "start": 14.4,
+        "end": 14.8
+      },
+      {
+        "text": "Anda ",
+        "start": 14.8,
+        "end": 15.3
+      },
+      {
+        "text": "ingin ",
+        "start": 15.3,
+        "end": 15.6
+      },
+      {
+        "text": "mulai ",
+        "start": 15.6,
+        "end": 15.9
+      },
+      {
+        "text": "berlatih?",
+        "start": 15.9,
+        "end": 16.5
+      }
+    ]
+  },
+  {
+    "code": "nb",
+    "language": "Norwegian",
+    "text": "Velkommen! Vi skal øve på hverdagssamtaler for å hjelpe deg med å bygge flyt og selvtillit. Fortell meg, hva gjorde at du ville begynne å øve?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 12.32,
+    "file": "/audio/chit/welcome/nb.mp3",
+    "generatedAt": "2026-09-26T06:50:11.919Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Velkommen! ",
+        "start": 0.4,
+        "end": 1.4
+      },
+      {
+        "text": "Vi ",
+        "start": 2.3,
+        "end": 2.6
+      },
+      {
+        "text": "skal ",
+        "start": 2.6,
+        "end": 2.8
+      },
+      {
+        "text": "øve ",
+        "start": 2.8,
+        "end": 3.2
+      },
+      {
+        "text": "på ",
+        "start": 3.2,
+        "end": 3.4
+      },
+      {
+        "text": "hverdagssamtaler ",
+        "start": 3.4,
+        "end": 4.8
+      },
+      {
+        "text": "for ",
+        "start": 4.9,
+        "end": 5.1
+      },
+      {
+        "text": "å ",
+        "start": 5.1,
+        "end": 5.1
+      },
+      {
+        "text": "hjelpe ",
+        "start": 5.1,
+        "end": 5.5
+      },
+      {
+        "text": "deg ",
+        "start": 5.5,
+        "end": 5.7
+      },
+      {
+        "text": "med ",
+        "start": 5.7,
+        "end": 5.9
+      },
+      {
+        "text": "å ",
+        "start": 5.9,
+        "end": 5.9
+      },
+      {
+        "text": "bygge ",
+        "start": 5.9,
+        "end": 6.3
+      },
+      {
+        "text": "flyt ",
+        "start": 6.3,
+        "end": 7
+      },
+      {
+        "text": "og ",
+        "start": 7,
+        "end": 7.2
+      },
+      {
+        "text": "selvtillit. ",
+        "start": 7.2,
+        "end": 8
+      },
+      {
+        "text": "Fortell ",
+        "start": 9,
+        "end": 9.3
+      },
+      {
+        "text": "meg, ",
+        "start": 9.3,
+        "end": 9.5
+      },
+      {
+        "text": "hva ",
+        "start": 10.1,
+        "end": 10.3
+      },
+      {
+        "text": "gjorde ",
+        "start": 10.3,
+        "end": 10.6
+      },
+      {
+        "text": "at ",
+        "start": 10.6,
+        "end": 10.7
+      },
+      {
+        "text": "du ",
+        "start": 10.7,
+        "end": 10.8
+      },
+      {
+        "text": "ville ",
+        "start": 10.8,
+        "end": 11
+      },
+      {
+        "text": "begynne ",
+        "start": 11,
+        "end": 11.5
+      },
+      {
+        "text": "å ",
+        "start": 11.5,
+        "end": 11.6
+      },
+      {
+        "text": "øve?",
+        "start": 11.6,
+        "end": 12
+      }
+    ]
+  },
+  {
+    "code": "fa",
+    "language": "Persian",
+    "text": "خوش آمدی! ما گفتگوهای روزمره را تمرین می‌کنیم تا به تو در روانی کلام و اعتمادبه‌نفس کمک کنیم. بگو ببینم، چه چیزی باعث شد بخواهی تمرین را شروع کنی؟",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 13.44,
+    "file": "/audio/chit/welcome/fa.mp3",
+    "generatedAt": "2026-09-26T06:50:29.718Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "خوش ",
+        "start": 0.3,
+        "end": 0.6
+      },
+      {
+        "text": "آمدی! ",
+        "start": 0.6,
+        "end": 1.2
+      },
+      {
+        "text": "ما ",
+        "start": 1.8,
+        "end": 2
+      },
+      {
+        "text": "گفتگوهای ",
+        "start": 2,
+        "end": 2.8
+      },
+      {
+        "text": "روزمره ",
+        "start": 2.8,
+        "end": 3.6
+      },
+      {
+        "text": "را ",
+        "start": 3.6,
+        "end": 3.7
+      },
+      {
+        "text": "تمرین ",
+        "start": 3.7,
+        "end": 4.2
+      },
+      {
+        "text": "می‌کنیم ",
+        "start": 4.2,
+        "end": 4.8
+      },
+      {
+        "text": "تا ",
+        "start": 5.1,
+        "end": 5.2
+      },
+      {
+        "text": "به ",
+        "start": 5.2,
+        "end": 5.4
+      },
+      {
+        "text": "تو ",
+        "start": 5.4,
+        "end": 5.6
+      },
+      {
+        "text": "در ",
+        "start": 5.6,
+        "end": 5.8
+      },
+      {
+        "text": "روانی ",
+        "start": 5.8,
+        "end": 6.4
+      },
+      {
+        "text": "کلام ",
+        "start": 6.4,
+        "end": 6.9
+      },
+      {
+        "text": "و ",
+        "start": 6.9,
+        "end": 7.1
+      },
+      {
+        "text": "اعتماد",
+        "start": 7.1,
+        "end": 7.6
+      },
+      {
+        "text": "به‌",
+        "start": 7.6,
+        "end": 7.7
+      },
+      {
+        "text": "نفس ",
+        "start": 7.7,
+        "end": 8
+      },
+      {
+        "text": "کمک ",
+        "start": 8,
+        "end": 8.3
+      },
+      {
+        "text": "کنیم. ",
+        "start": 8.3,
+        "end": 8.6
+      },
+      {
+        "text": "بگو ",
+        "start": 9.6,
+        "end": 9.8
+      },
+      {
+        "text": "ببینم، ",
+        "start": 9.8,
+        "end": 10.3
+      },
+      {
+        "text": "چه ",
+        "start": 10.6,
+        "end": 10.7
+      },
+      {
+        "text": "چیزی ",
+        "start": 10.7,
+        "end": 11
+      },
+      {
+        "text": "باعث ",
+        "start": 11,
+        "end": 11.3
+      },
+      {
+        "text": "شد ",
+        "start": 11.3,
+        "end": 11.5
+      },
+      {
+        "text": "بخواهی ",
+        "start": 11.5,
+        "end": 12
+      },
+      {
+        "text": "تمرین ",
+        "start": 12,
+        "end": 12.4
+      },
+      {
+        "text": "را ",
+        "start": 12.4,
+        "end": 12.5
+      },
+      {
+        "text": "شروع ",
+        "start": 12.5,
+        "end": 12.8
+      },
+      {
+        "text": "کنی؟",
+        "start": 12.8,
+        "end": 13.1
+      }
+    ]
+  },
+  {
+    "code": "pl",
+    "language": "Polish",
+    "text": "Witaj! Będziemy ćwiczyć codzienne rozmowy, aby pomóc Ci budować płynność i pewność siebie. Powiedz, co sprawiło, że chcesz zacząć ćwiczyć?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 11.4,
+    "file": "/audio/chit/welcome/pl.mp3",
+    "generatedAt": "2026-09-26T06:50:45.250Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Witaj! ",
+        "start": 0.3,
+        "end": 0.9
+      },
+      {
+        "text": "Będziemy ",
+        "start": 1.6,
+        "end": 2
+      },
+      {
+        "text": "ćwiczyć ",
+        "start": 2,
+        "end": 2.6
+      },
+      {
+        "text": "codzienne ",
+        "start": 2.6,
+        "end": 3.2
+      },
+      {
+        "text": "rozmowy, ",
+        "start": 3.2,
+        "end": 4
+      },
+      {
+        "text": "aby ",
+        "start": 4.2,
+        "end": 4.4
+      },
+      {
+        "text": "pomóc ",
+        "start": 4.4,
+        "end": 4.8
+      },
+      {
+        "text": "Ci ",
+        "start": 4.8,
+        "end": 5
+      },
+      {
+        "text": "budować ",
+        "start": 5,
+        "end": 5.5
+      },
+      {
+        "text": "płynność ",
+        "start": 5.5,
+        "end": 6.5
+      },
+      {
+        "text": "i ",
+        "start": 6.5,
+        "end": 6.6
+      },
+      {
+        "text": "pewność ",
+        "start": 6.6,
+        "end": 7.2
+      },
+      {
+        "text": "siebie. ",
+        "start": 7.2,
+        "end": 7.6
+      },
+      {
+        "text": "Powiedz, ",
+        "start": 8.4,
+        "end": 9
+      },
+      {
+        "text": "co ",
+        "start": 9,
+        "end": 9.2
+      },
+      {
+        "text": "sprawiło, ",
+        "start": 9.2,
+        "end": 9.7
+      },
+      {
+        "text": "że ",
+        "start": 9.7,
+        "end": 9.8
+      },
+      {
+        "text": "chcesz ",
+        "start": 9.8,
+        "end": 10.1
+      },
+      {
+        "text": "zacząć ",
+        "start": 10.1,
+        "end": 10.5
+      },
+      {
+        "text": "ćwiczyć?",
+        "start": 10.5,
+        "end": 11.1
+      }
+    ]
+  },
+  {
+    "code": "ru",
+    "language": "Russian",
+    "text": "Привет! Мы будем практиковать повседневные разговоры, чтобы помочь вам развить беглость и уверенность. Расскажите, что побудило вас начать заниматься?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 11.2,
+    "file": "/audio/chit/welcome/ru.mp3",
+    "generatedAt": "2026-09-26T06:51:03.011Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Привет! ",
+        "start": 0.3,
+        "end": 0.9
+      },
+      {
+        "text": "Мы ",
+        "start": 1.6,
+        "end": 1.7
+      },
+      {
+        "text": "будем ",
+        "start": 1.7,
+        "end": 2
+      },
+      {
+        "text": "практиковать ",
+        "start": 2,
+        "end": 2.6
+      },
+      {
+        "text": "повседневные ",
+        "start": 2.6,
+        "end": 3.5
+      },
+      {
+        "text": "разговоры, ",
+        "start": 3.5,
+        "end": 4.3
+      },
+      {
+        "text": "чтобы ",
+        "start": 4.4,
+        "end": 4.8
+      },
+      {
+        "text": "помочь ",
+        "start": 4.8,
+        "end": 5.2
+      },
+      {
+        "text": "вам ",
+        "start": 5.2,
+        "end": 5.4
+      },
+      {
+        "text": "развить ",
+        "start": 5.4,
+        "end": 6
+      },
+      {
+        "text": "беглость ",
+        "start": 6,
+        "end": 6.6
+      },
+      {
+        "text": "и ",
+        "start": 6.7,
+        "end": 6.8
+      },
+      {
+        "text": "уверенность. ",
+        "start": 6.8,
+        "end": 7.5
+      },
+      {
+        "text": "Расскажите, ",
+        "start": 8.1,
+        "end": 8.7
+      },
+      {
+        "text": "что ",
+        "start": 9,
+        "end": 9.3
+      },
+      {
+        "text": "побудило ",
+        "start": 9.3,
+        "end": 9.8
+      },
+      {
+        "text": "вас ",
+        "start": 9.8,
+        "end": 9.9
+      },
+      {
+        "text": "начать ",
+        "start": 9.9,
+        "end": 10.3
+      },
+      {
+        "text": "заниматься?",
+        "start": 10.3,
+        "end": 10.9
+      }
+    ]
+  },
+  {
+    "code": "th",
+    "language": "Thai",
+    "text": "สวัสดี! เราจะมาฝึกบทสนทนาในชีวิตประจำวันเพื่อช่วยให้คุณคล่องแคล่วและมั่นใจยิ่งขึ้น บอกฉันหน่อยสิว่าอะไรเป็นแรงบันดาลใจให้คุณเริ่มฝึก?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 12.4,
+    "file": "/audio/chit/welcome/th.mp3",
+    "generatedAt": "2026-09-26T06:51:38.439Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "สวัสดี! ",
+        "start": 0.4,
+        "end": 1.2
+      },
+      {
+        "text": "เรา",
+        "start": 1.8,
+        "end": 2
+      },
+      {
+        "text": "จะ",
+        "start": 2,
+        "end": 2.1
+      },
+      {
+        "text": "มา",
+        "start": 2.1,
+        "end": 2.2
+      },
+      {
+        "text": "ฝึก",
+        "start": 2.2,
+        "end": 2.5
+      },
+      {
+        "text": "บท",
+        "start": 2.5,
+        "end": 2.7
+      },
+      {
+        "text": "สนทนา",
+        "start": 2.7,
+        "end": 3.2
+      },
+      {
+        "text": "ใน",
+        "start": 3.2,
+        "end": 3.4
+      },
+      {
+        "text": "ชีวิต",
+        "start": 3.4,
+        "end": 3.7
+      },
+      {
+        "text": "ประจำ",
+        "start": 3.7,
+        "end": 4
+      },
+      {
+        "text": "วัน",
+        "start": 4,
+        "end": 4.6
+      },
+      {
+        "text": "เพื่อ",
+        "start": 4.8,
+        "end": 5
+      },
+      {
+        "text": "ช่วย",
+        "start": 5,
+        "end": 5.2
+      },
+      {
+        "text": "ให้",
+        "start": 5.2,
+        "end": 5.3
+      },
+      {
+        "text": "คุณ",
+        "start": 5.3,
+        "end": 5.6
+      },
+      {
+        "text": "คล่อง",
+        "start": 5.6,
+        "end": 6
+      },
+      {
+        "text": "แคล่ว",
+        "start": 6,
+        "end": 6.3
+      },
+      {
+        "text": "และ",
+        "start": 6.3,
+        "end": 6.5
+      },
+      {
+        "text": "มั่น",
+        "start": 6.5,
+        "end": 6.8
+      },
+      {
+        "text": "ใจ",
+        "start": 6.8,
+        "end": 7
+      },
+      {
+        "text": "ยิ่ง",
+        "start": 7,
+        "end": 7.1
+      },
+      {
+        "text": "ขึ้น ",
+        "start": 7.1,
+        "end": 7.6
+      },
+      {
+        "text": "บอก",
+        "start": 8.3,
+        "end": 8.5
+      },
+      {
+        "text": "ฉัน",
+        "start": 8.5,
+        "end": 8.6
+      },
+      {
+        "text": "หน่อย",
+        "start": 8.6,
+        "end": 8.8
+      },
+      {
+        "text": "สิ",
+        "start": 8.8,
+        "end": 9.3
+      },
+      {
+        "text": "ว่า",
+        "start": 9.4,
+        "end": 9.7
+      },
+      {
+        "text": "อะไร",
+        "start": 9.7,
+        "end": 10.1
+      },
+      {
+        "text": "เป็น",
+        "start": 10.1,
+        "end": 10.3
+      },
+      {
+        "text": "แรง",
+        "start": 10.3,
+        "end": 10.5
+      },
+      {
+        "text": "บันดาล",
+        "start": 10.5,
+        "end": 10.9
+      },
+      {
+        "text": "ใจ",
+        "start": 10.9,
+        "end": 11.2
+      },
+      {
+        "text": "ให้",
+        "start": 11.2,
+        "end": 11.3
+      },
+      {
+        "text": "คุณ",
+        "start": 11.3,
+        "end": 11.5
+      },
+      {
+        "text": "เริ่ม",
+        "start": 11.5,
+        "end": 11.8
+      },
+      {
+        "text": "ฝึก?",
+        "start": 11.8,
+        "end": 12
+      }
+    ]
+  },
+  {
+    "code": "tr",
+    "language": "Turkish",
+    "text": "Hoş geldin! Akıcılığını ve öz güvenini artırmana yardımcı olmak için günlük sohbetler pratik yapacağız. Söyle bakalım, pratik yapmaya başlamanı sağlayan şey neydi?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 12.72,
+    "file": "/audio/chit/welcome/tr.mp3",
+    "generatedAt": "2026-09-26T06:51:54.700Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Hoş ",
+        "start": 0.4,
+        "end": 0.5
+      },
+      {
+        "text": "geldin! ",
+        "start": 0.5,
+        "end": 1
+      },
+      {
+        "text": "Akıcılığını ",
+        "start": 1.8,
+        "end": 2.9
+      },
+      {
+        "text": "ve ",
+        "start": 3,
+        "end": 3.2
+      },
+      {
+        "text": "öz güvenini ",
+        "start": 3.2,
+        "end": 4
+      },
+      {
+        "text": "artırmana ",
+        "start": 4,
+        "end": 4.6
+      },
+      {
+        "text": "yardımcı ",
+        "start": 4.6,
+        "end": 5.1
+      },
+      {
+        "text": "olmak ",
+        "start": 5.1,
+        "end": 5.5
+      },
+      {
+        "text": "için ",
+        "start": 5.5,
+        "end": 5.9
+      },
+      {
+        "text": "günlük ",
+        "start": 6.1,
+        "end": 6.5
+      },
+      {
+        "text": "sohbetler ",
+        "start": 6.5,
+        "end": 7.1
+      },
+      {
+        "text": "pratik ",
+        "start": 7.1,
+        "end": 7.4
+      },
+      {
+        "text": "yapacağız. ",
+        "start": 7.4,
+        "end": 7.9
+      },
+      {
+        "text": "Söyle ",
+        "start": 8.7,
+        "end": 8.9
+      },
+      {
+        "text": "bakalım, ",
+        "start": 8.9,
+        "end": 9.4
+      },
+      {
+        "text": "pratik ",
+        "start": 9.8,
+        "end": 10.1
+      },
+      {
+        "text": "yapmaya ",
+        "start": 10.1,
+        "end": 10.5
+      },
+      {
+        "text": "başlamanı ",
+        "start": 10.5,
+        "end": 11.1
+      },
+      {
+        "text": "sağlayan ",
+        "start": 11.1,
+        "end": 11.6
+      },
+      {
+        "text": "şey ",
+        "start": 11.6,
+        "end": 11.9
+      },
+      {
+        "text": "neydi?",
+        "start": 11.9,
+        "end": 12.4
+      }
+    ]
+  },
+  {
+    "code": "uk",
+    "language": "Ukrainian",
+    "text": "Вітаємо! Ми будемо практикувати повсякденні розмови, щоб допомогти вам говорити вільніше та впевненіше. Скажіть, що спонукало вас почати практику?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 12.8,
+    "file": "/audio/chit/welcome/uk.mp3",
+    "generatedAt": "2026-09-26T06:52:11.632Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Вітаємо! ",
+        "start": 0.3,
+        "end": 1.1
+      },
+      {
+        "text": "Ми ",
+        "start": 1.9,
+        "end": 2.1
+      },
+      {
+        "text": "будемо ",
+        "start": 2.1,
+        "end": 2.5
+      },
+      {
+        "text": "практикувати ",
+        "start": 2.5,
+        "end": 3.3
+      },
+      {
+        "text": "повсякденні ",
+        "start": 3.3,
+        "end": 4.1
+      },
+      {
+        "text": "розмови, ",
+        "start": 4.1,
+        "end": 4.7
+      },
+      {
+        "text": "щоб ",
+        "start": 5,
+        "end": 5.2
+      },
+      {
+        "text": "допомогти ",
+        "start": 5.2,
+        "end": 5.7
+      },
+      {
+        "text": "вам ",
+        "start": 5.7,
+        "end": 6
+      },
+      {
+        "text": "говорити ",
+        "start": 6,
+        "end": 6.6
+      },
+      {
+        "text": "вільніше ",
+        "start": 6.6,
+        "end": 7.5
+      },
+      {
+        "text": "та ",
+        "start": 7.5,
+        "end": 7.6
+      },
+      {
+        "text": "впевненіше. ",
+        "start": 7.6,
+        "end": 8.5
+      },
+      {
+        "text": "Скажіть, ",
+        "start": 9.5,
+        "end": 10
+      },
+      {
+        "text": "що ",
+        "start": 10.4,
+        "end": 10.6
+      },
+      {
+        "text": "спонукало ",
+        "start": 10.6,
+        "end": 11.2
+      },
+      {
+        "text": "вас ",
+        "start": 11.2,
+        "end": 11.5
+      },
+      {
+        "text": "почати ",
+        "start": 11.5,
+        "end": 11.9
+      },
+      {
+        "text": "практику?",
+        "start": 11.9,
+        "end": 12.4
+      }
+    ]
+  },
+  {
+    "code": "vi",
+    "language": "Vietnamese",
+    "text": "Chào bạn! Chúng ta sẽ luyện tập các hội thoại hàng ngày để giúp bạn thêm tự tin và lưu loát. Nói cho tôi biết, điều gì khiến bạn muốn bắt đầu luyện tập?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 11.56,
+    "file": "/audio/chit/welcome/vi.mp3",
+    "generatedAt": "2026-09-26T06:52:29.786Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Chào ",
+        "start": 0.3,
+        "end": 0.4
+      },
+      {
+        "text": "bạn! ",
+        "start": 0.4,
+        "end": 0.8
+      },
+      {
+        "text": "Chúng ",
+        "start": 1.5,
+        "end": 1.7
+      },
+      {
+        "text": "ta ",
+        "start": 1.7,
+        "end": 2
+      },
+      {
+        "text": "sẽ ",
+        "start": 2,
+        "end": 2.2
+      },
+      {
+        "text": "luyện ",
+        "start": 2.2,
+        "end": 2.4
+      },
+      {
+        "text": "tập ",
+        "start": 2.4,
+        "end": 2.7
+      },
+      {
+        "text": "các ",
+        "start": 2.7,
+        "end": 2.9
+      },
+      {
+        "text": "hội ",
+        "start": 2.9,
+        "end": 3.1
+      },
+      {
+        "text": "thoại ",
+        "start": 3.1,
+        "end": 3.4
+      },
+      {
+        "text": "hàng ",
+        "start": 3.4,
+        "end": 3.6
+      },
+      {
+        "text": "ngày ",
+        "start": 3.6,
+        "end": 4.2
+      },
+      {
+        "text": "để ",
+        "start": 4.3,
+        "end": 4.5
+      },
+      {
+        "text": "giúp ",
+        "start": 4.5,
+        "end": 4.7
+      },
+      {
+        "text": "bạn ",
+        "start": 4.7,
+        "end": 5.1
+      },
+      {
+        "text": "thêm ",
+        "start": 5.1,
+        "end": 5.4
+      },
+      {
+        "text": "tự ",
+        "start": 5.4,
+        "end": 5.5
+      },
+      {
+        "text": "tin ",
+        "start": 5.5,
+        "end": 6
+      },
+      {
+        "text": "và ",
+        "start": 6.1,
+        "end": 6.4
+      },
+      {
+        "text": "lưu ",
+        "start": 6.4,
+        "end": 6.5
+      },
+      {
+        "text": "loát. ",
+        "start": 6.5,
+        "end": 7
+      },
+      {
+        "text": "Nói ",
+        "start": 8,
+        "end": 8.2
+      },
+      {
+        "text": "cho ",
+        "start": 8.2,
+        "end": 8.3
+      },
+      {
+        "text": "tôi ",
+        "start": 8.3,
+        "end": 8.4
+      },
+      {
+        "text": "biết, ",
+        "start": 8.4,
+        "end": 9.2
+      },
+      {
+        "text": "điều ",
+        "start": 9.2,
+        "end": 9.4
+      },
+      {
+        "text": "gì ",
+        "start": 9.4,
+        "end": 9.7
+      },
+      {
+        "text": "khiến ",
+        "start": 9.7,
+        "end": 10
+      },
+      {
+        "text": "bạn ",
+        "start": 10,
+        "end": 10.3
+      },
+      {
+        "text": "muốn ",
+        "start": 10.3,
+        "end": 10.5
+      },
+      {
+        "text": "bắt ",
+        "start": 10.5,
+        "end": 10.7
+      },
+      {
+        "text": "đầu ",
+        "start": 10.7,
+        "end": 10.9
+      },
+      {
+        "text": "luyện ",
+        "start": 10.9,
+        "end": 11.1
+      },
+      {
+        "text": "tập?",
+        "start": 11.1,
+        "end": 11.3
+      }
+    ]
+  },
+  {
+    "code": "ja",
+    "language": "Japanese",
+    "text": "こんにちは！ 日常会話を練習して、自信と流暢さを身につけていきましょう。あなたが練習を始めようと思ったきっかけを教えてください。",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 11.68,
+    "file": "/audio/chit/welcome/ja.mp3",
+    "generatedAt": "2026-09-26T06:53:48.196Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "こんにちは！ ",
+        "start": 0.3,
+        "end": 0.9
+      },
+      {
+        "text": "日常",
+        "start": 1.8,
+        "end": 2.3
+      },
+      {
+        "text": "会話",
+        "start": 2.3,
+        "end": 2.7
+      },
+      {
+        "text": "を",
+        "start": 2.7,
+        "end": 2.8
+      },
+      {
+        "text": "練習",
+        "start": 2.8,
+        "end": 3.2
+      },
+      {
+        "text": "し",
+        "start": 3.2,
+        "end": 3.3
+      },
+      {
+        "text": "て、",
+        "start": 3.3,
+        "end": 3.6
+      },
+      {
+        "text": "自信",
+        "start": 3.9,
+        "end": 4.4
+      },
+      {
+        "text": "と",
+        "start": 4.4,
+        "end": 4.5
+      },
+      {
+        "text": "流暢",
+        "start": 4.5,
+        "end": 5
+      },
+      {
+        "text": "さ",
+        "start": 5,
+        "end": 5.2
+      },
+      {
+        "text": "を",
+        "start": 5.2,
+        "end": 5.3
+      },
+      {
+        "text": "身",
+        "start": 5.3,
+        "end": 5.5
+      },
+      {
+        "text": "に",
+        "start": 5.5,
+        "end": 5.5
+      },
+      {
+        "text": "つけ",
+        "start": 5.5,
+        "end": 5.8
+      },
+      {
+        "text": "て",
+        "start": 5.8,
+        "end": 5.8
+      },
+      {
+        "text": "いき",
+        "start": 5.8,
+        "end": 6
+      },
+      {
+        "text": "ましょう。",
+        "start": 6,
+        "end": 6.4
+      },
+      {
+        "text": "あなた",
+        "start": 7.6,
+        "end": 8
+      },
+      {
+        "text": "が",
+        "start": 8,
+        "end": 8.1
+      },
+      {
+        "text": "練習",
+        "start": 8.1,
+        "end": 8.7
+      },
+      {
+        "text": "を",
+        "start": 8.7,
+        "end": 8.7
+      },
+      {
+        "text": "始めよう",
+        "start": 8.7,
+        "end": 9.3
+      },
+      {
+        "text": "と",
+        "start": 9.3,
+        "end": 9.4
+      },
+      {
+        "text": "思っ",
+        "start": 9.4,
+        "end": 9.7
+      },
+      {
+        "text": "た",
+        "start": 9.7,
+        "end": 9.8
+      },
+      {
+        "text": "きっかけ",
+        "start": 9.8,
+        "end": 10.3
+      },
+      {
+        "text": "を",
+        "start": 10.3,
+        "end": 10.5
+      },
+      {
+        "text": "教え",
+        "start": 10.5,
+        "end": 10.8
+      },
+      {
+        "text": "て",
+        "start": 10.8,
+        "end": 10.9
+      },
+      {
+        "text": "ください。",
+        "start": 10.9,
+        "end": 11.3
+      }
+    ]
+  },
+  {
+    "code": "ar",
+    "language": "Arabic",
+    "text": "أهلاً! سنتدرب على محادثات يومية لمساعدتك على بناء الطلاقة والثقة. أخبرني، ما الذي دفعك للبدء في التدريب؟",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 11,
+    "file": "/audio/chit/welcome/ar.mp3",
+    "generatedAt": "2026-09-26T06:54:46.552Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "أهلاً! ",
+        "start": 0.3,
+        "end": 0.8
+      },
+      {
+        "text": "سنتدرب ",
+        "start": 1.4,
+        "end": 2.2
+      },
+      {
+        "text": "على ",
+        "start": 2.2,
+        "end": 2.4
+      },
+      {
+        "text": "محادثات ",
+        "start": 2.4,
+        "end": 3.2
+      },
+      {
+        "text": "يومية ",
+        "start": 3.2,
+        "end": 3.9
+      },
+      {
+        "text": "لمساعدتك ",
+        "start": 3.9,
+        "end": 4.9
+      },
+      {
+        "text": "على ",
+        "start": 4.9,
+        "end": 5.1
+      },
+      {
+        "text": "بناء ",
+        "start": 5.1,
+        "end": 5.5
+      },
+      {
+        "text": "الطلاقة ",
+        "start": 5.5,
+        "end": 6.2
+      },
+      {
+        "text": "والثقة. ",
+        "start": 6.2,
+        "end": 6.7
+      },
+      {
+        "text": "أخبرني، ",
+        "start": 7.4,
+        "end": 8
+      },
+      {
+        "text": "ما ",
+        "start": 8.6,
+        "end": 8.7
+      },
+      {
+        "text": "الذي ",
+        "start": 8.7,
+        "end": 9
+      },
+      {
+        "text": "دفعك ",
+        "start": 9,
+        "end": 9.5
+      },
+      {
+        "text": "للبدء ",
+        "start": 9.5,
+        "end": 9.9
+      },
+      {
+        "text": "في ",
+        "start": 9.9,
+        "end": 10
+      },
+      {
+        "text": "التدريب؟",
+        "start": 10,
+        "end": 10.7
+      }
+    ]
+  },
+  {
+    "code": "sv",
+    "language": "Swedish",
+    "text": "Välkommen! Vi kommer att öva på vardagliga samtal för att hjälpa dig att bygga flyt och självförtroende. Säg mig, vad fick dig att vilja börja öva?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 13.28,
+    "file": "/audio/chit/welcome/sv.mp3",
+    "generatedAt": "2026-09-26T06:55:03.822Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "Välkommen! ",
+        "start": 0.3,
+        "end": 1.3
+      },
+      {
+        "text": "Vi ",
+        "start": 2.7,
+        "end": 2.9
+      },
+      {
+        "text": "kommer ",
+        "start": 2.9,
+        "end": 3.2
+      },
+      {
+        "text": "att ",
+        "start": 3.2,
+        "end": 3.4
+      },
+      {
+        "text": "öva ",
+        "start": 3.4,
+        "end": 3.8
+      },
+      {
+        "text": "på ",
+        "start": 3.8,
+        "end": 4
+      },
+      {
+        "text": "vardagliga ",
+        "start": 4,
+        "end": 4.8
+      },
+      {
+        "text": "samtal ",
+        "start": 4.8,
+        "end": 5.6
+      },
+      {
+        "text": "för ",
+        "start": 5.9,
+        "end": 6
+      },
+      {
+        "text": "att ",
+        "start": 6,
+        "end": 6.1
+      },
+      {
+        "text": "hjälpa ",
+        "start": 6.1,
+        "end": 6.5
+      },
+      {
+        "text": "dig ",
+        "start": 6.5,
+        "end": 6.7
+      },
+      {
+        "text": "att ",
+        "start": 6.7,
+        "end": 6.8
+      },
+      {
+        "text": "bygga ",
+        "start": 6.8,
+        "end": 7
+      },
+      {
+        "text": "flyt ",
+        "start": 7,
+        "end": 7.6
+      },
+      {
+        "text": "och ",
+        "start": 7.6,
+        "end": 7.8
+      },
+      {
+        "text": "självförtroende. ",
+        "start": 7.8,
+        "end": 8.6
+      },
+      {
+        "text": "Säg ",
+        "start": 10,
+        "end": 10.3
+      },
+      {
+        "text": "mig, ",
+        "start": 10.3,
+        "end": 10.5
+      },
+      {
+        "text": "vad ",
+        "start": 11.2,
+        "end": 11.4
+      },
+      {
+        "text": "fick ",
+        "start": 11.4,
+        "end": 11.7
+      },
+      {
+        "text": "dig ",
+        "start": 11.7,
+        "end": 11.8
+      },
+      {
+        "text": "att ",
+        "start": 11.8,
+        "end": 12
+      },
+      {
+        "text": "vilja ",
+        "start": 12,
+        "end": 12.3
+      },
+      {
+        "text": "börja ",
+        "start": 12.3,
+        "end": 12.6
+      },
+      {
+        "text": "öva?",
+        "start": 12.6,
+        "end": 13
+      }
+    ]
+  },
+  {
+    "code": "he",
+    "language": "Hebrew",
+    "text": "שלום! נתרגל שיחות רגילות כדי לעזור לך לדבר בשטף ובביטחון. ספר לי, מה גרם לך לרצות להתחיל?",
+    "voice": "Aoede",
+    "model": "gemini-3.1-flash-tts-preview",
+    "seconds": 9.88,
+    "file": "/audio/chit/welcome/he.mp3",
+    "generatedAt": "2026-09-26T06:56:03.825Z",
+    "timingModel": "gemini-3.5-transcribe",
+    "words": [
+      {
+        "text": "שלום! ",
+        "start": 0.4,
+        "end": 0.8
+      },
+      {
+        "text": "נתרגל ",
+        "start": 1.5,
+        "end": 2
+      },
+      {
+        "text": "שיחות ",
+        "start": 2,
+        "end": 2.5
+      },
+      {
+        "text": "רגילות ",
+        "start": 2.5,
+        "end": 3.2
+      },
+      {
+        "text": "כדי ",
+        "start": 3.2,
+        "end": 3.5
+      },
+      {
+        "text": "לעזור ",
+        "start": 3.5,
+        "end": 3.9
+      },
+      {
+        "text": "לך ",
+        "start": 3.9,
+        "end": 4.2
+      },
+      {
+        "text": "לדבר ",
+        "start": 4.2,
+        "end": 4.6
+      },
+      {
+        "text": "בשטף ",
+        "start": 4.6,
+        "end": 5.4
+      },
+      {
+        "text": "ובביטחון. ",
+        "start": 5.4,
+        "end": 6.1
+      },
+      {
+        "text": "ספר ",
+        "start": 7,
+        "end": 7.2
+      },
+      {
+        "text": "לי, ",
+        "start": 7.2,
+        "end": 7.4
+      },
+      {
+        "text": "מה ",
+        "start": 7.9,
+        "end": 8.1
+      },
+      {
+        "text": "גרם ",
+        "start": 8.1,
+        "end": 8.4
+      },
+      {
+        "text": "לך ",
+        "start": 8.4,
+        "end": 8.6
+      },
+      {
+        "text": "לרצות ",
+        "start": 8.6,
+        "end": 9
+      },
+      {
+        "text": "להתחיל?",
+        "start": 9,
+        "end": 9.5
+      }
+    ]
+  }
+]

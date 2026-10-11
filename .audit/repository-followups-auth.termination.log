@@ -1,0 +1,3 @@
+auth integration created cc_auth_b6ca61cc4e994b0996b376f9fb4c512b
+auth integration dropped cc_auth_b6ca61cc4e994b0996b376f9fb4c512b
+Authentication integration failed during migrations (interrupted).

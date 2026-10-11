@@ -12,6 +12,128 @@ function createAnalyser() {
   return { ...createNode(), fftSize: 256 };
 }
 
+function createCancellationFixture() {
+  const inputResume = Promise.withResolvers<null>();
+  const outputResume = Promise.withResolvers<null>();
+  const acquisitionStarted = Promise.withResolvers<null>();
+  const tracks = [{ stop: vi.fn<() => void>() }, { stop: vi.fn<() => void>() }];
+  const stream = { getTracks: () => tracks };
+  const acquisition = Promise.withResolvers<typeof stream>();
+  const resume = vi
+    .fn<() => Promise<null>>()
+    .mockReturnValueOnce(inputResume.promise)
+    .mockReturnValueOnce(outputResume.promise);
+  const addModule = vi.fn<() => Promise<void>>().mockResolvedValue();
+  const worklet = vi.fn<() => void>();
+  const getUserMedia = vi.fn<() => Promise<typeof stream>>(() => {
+    acquisitionStarted.resolve(null);
+    return acquisition.promise;
+  });
+  vi.stubGlobal(
+    "AudioContext",
+    class {
+      destination = {};
+      audioWorklet = { addModule };
+      resume = resume;
+      close = vi.fn<() => Promise<void>>().mockResolvedValue();
+      createAnalyser = createAnalyser;
+    }
+  );
+  vi.stubGlobal("AudioWorkletNode", worklet);
+  vi.stubGlobal("navigator", { mediaDevices: { getUserMedia } });
+  return {
+    audio: new PracticeAudio(vi.fn<(playing: boolean) => void>()),
+    inputResume,
+    outputResume,
+    acquisition,
+    acquisitionStarted,
+    stream,
+    tracks,
+    resume,
+    addModule,
+    worklet,
+    getUserMedia,
+  };
+}
+
+describe("audio startup cancellation", () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  it("rejects an already-aborted startup without resuming audio or requesting the microphone", async () => {
+    const fixture = createCancellationFixture();
+    const controller = new AbortController();
+    controller.abort();
+    fixture.inputResume.resolve(null);
+    fixture.outputResume.resolve(null);
+    fixture.acquisition.resolve(fixture.stream);
+    try {
+      await expect(
+        fixture.audio.prepare(controller.signal, vi.fn(), vi.fn())
+      ).rejects.toBe(controller.signal.reason);
+      expect(fixture.getUserMedia).not.toHaveBeenCalled();
+      expect(fixture.resume).not.toHaveBeenCalled();
+      expect(fixture.addModule).not.toHaveBeenCalled();
+      expect(fixture.worklet).not.toHaveBeenCalled();
+    } finally {
+      fixture.audio.dispose();
+    }
+  });
+
+  it.each(["input", "output"])(
+    "does not request the microphone after cancellation while %s audio resumes",
+    async (pendingContext) => {
+      const fixture = createCancellationFixture();
+      const controller = new AbortController();
+      const pendingResume =
+        pendingContext === "input" ? fixture.inputResume : fixture.outputResume;
+      const otherResume =
+        pendingContext === "input" ? fixture.outputResume : fixture.inputResume;
+      otherResume.resolve(null);
+      fixture.acquisition.resolve(fixture.stream);
+      try {
+        const preparation = fixture.audio.prepare(
+          controller.signal,
+          vi.fn(),
+          vi.fn()
+        );
+        controller.abort();
+        pendingResume.resolve(null);
+        await expect(preparation).rejects.toBe(controller.signal.reason);
+        expect(fixture.getUserMedia).not.toHaveBeenCalled();
+        expect(fixture.addModule).not.toHaveBeenCalled();
+        expect(fixture.worklet).not.toHaveBeenCalled();
+      } finally {
+        fixture.audio.dispose();
+      }
+    }
+  );
+
+  it("stops every acquired track without starting worklets when canceled during microphone acquisition", async () => {
+    const fixture = createCancellationFixture();
+    const controller = new AbortController();
+    fixture.inputResume.resolve(null);
+    fixture.outputResume.resolve(null);
+    try {
+      const preparation = fixture.audio.prepare(
+        controller.signal,
+        vi.fn(),
+        vi.fn()
+      );
+      await fixture.acquisitionStarted.promise;
+      controller.abort();
+      fixture.acquisition.resolve(fixture.stream);
+      await expect(preparation).rejects.toBe(controller.signal.reason);
+      for (const track of fixture.tracks) {
+        expect(track.stop).toHaveBeenCalledOnce();
+      }
+      expect(fixture.addModule).not.toHaveBeenCalled();
+      expect(fixture.worklet).not.toHaveBeenCalled();
+    } finally {
+      fixture.audio.dispose();
+    }
+  });
+});
+
 describe("streaming PCM audio", () => {
   it("encodes signed little-endian samples without a WAV header", () => {
     const data = encodePcm(new Float32Array([-2, -0.5, 0, 0.5, 2]));
@@ -137,6 +259,115 @@ describe("microphone capture during speech playback", () => {
     expect(contexts).toHaveLength(2);
     for (const context of contexts) {
       expect(context.close).toHaveBeenCalledOnce();
+    }
+  });
+});
+
+function createOutputFixture() {
+  const port = Object.assign(new EventTarget(), {
+    start: vi.fn<() => void>(),
+    close: vi.fn<() => void>(),
+    postMessage: vi.fn<(message: object) => void>(),
+  });
+  vi.stubGlobal(
+    "AudioContext",
+    class {
+      sampleRate = 24_000;
+      state = "running";
+      destination = {};
+      audioWorklet = {
+        addModule: vi.fn<() => Promise<void>>().mockResolvedValue(),
+      };
+      resume = vi.fn<() => Promise<void>>().mockResolvedValue();
+      close = vi.fn<() => Promise<void>>().mockResolvedValue();
+      createAnalyser = createAnalyser;
+    }
+  );
+  vi.stubGlobal(
+    "AudioWorkletNode",
+    class extends EventTarget {
+      port = port;
+      connect = vi.fn<() => void>();
+      disconnect = vi.fn<() => void>();
+    }
+  );
+  const onProgress =
+    vi.fn<NonNullable<ConstructorParameters<typeof PracticeAudio>[1]>>();
+  return {
+    audio: new PracticeAudio(vi.fn<(playing: boolean) => void>(), onProgress),
+    onProgress,
+    notify: (data: object) =>
+      port.dispatchEvent(new MessageEvent("message", { data })),
+  };
+}
+
+describe("consumed PCM positions", () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  it("reports monotonic consumed positions bounded by submitted samples", async () => {
+    const { audio, notify, onProgress } = createOutputFixture();
+    try {
+      await audio.prepareOutput(vi.fn());
+      audio.play(encodePcm(new Float32Array(3)), "audio/pcm;rate=24000");
+      expect(audio.getPlaybackPosition()).toStrictEqual({
+        generation: 0,
+        consumedSamples: 0,
+        submittedSamples: 3,
+        sampleRate: 24_000,
+      });
+      notify({ type: "progress", generation: 0, consumedSamples: 2 });
+      expect(onProgress).toHaveBeenLastCalledWith({
+        generation: 0,
+        consumedSamples: 2,
+        submittedSamples: 3,
+        sampleRate: 24_000,
+      });
+      for (const consumedSamples of [1, 4, -1, 1.5, Number.NaN]) {
+        notify({ type: "progress", generation: 0, consumedSamples });
+      }
+      expect(onProgress).toHaveBeenCalledOnce();
+      expect(audio.getPlaybackPosition().consumedSamples).toBe(2);
+    } finally {
+      audio.dispose();
+    }
+  });
+
+  it("resets counters, filters stale generations, and cancels old drain callbacks", async () => {
+    const { audio, notify, onProgress } = createOutputFixture();
+    try {
+      await audio.prepareOutput(vi.fn());
+      audio.play(encodePcm(new Float32Array(3)), "audio/pcm;rate=24000");
+      const oldDrain = vi.fn<() => void>();
+      audio.drainPlayback(oldDrain);
+      notify({ type: "progress", generation: 0, consumedSamples: 2 });
+      audio.stopPlayback();
+      expect(audio.getPlaybackPosition()).toStrictEqual({
+        generation: 1,
+        consumedSamples: 0,
+        submittedSamples: 0,
+        sampleRate: 24_000,
+      });
+      notify({ type: "progress", generation: 0, consumedSamples: 3 });
+      notify({ type: "drained", generation: 0 });
+      notify({ type: "drained", generation: 1 });
+      expect({
+        progress: onProgress.mock.calls.length,
+        drains: oldDrain.mock.calls.length,
+      }).toStrictEqual({ progress: 1, drains: 0 });
+      audio.play(encodePcm(new Float32Array(3)), "audio/pcm;rate=24000");
+      const newDrain = vi.fn<() => void>();
+      audio.drainPlayback(newDrain);
+      notify({ type: "progress", generation: 1, consumedSamples: 3 });
+      notify({ type: "drained", generation: 1 });
+      expect(onProgress).toHaveBeenLastCalledWith({
+        generation: 1,
+        consumedSamples: 3,
+        submittedSamples: 3,
+        sampleRate: 24_000,
+      });
+      expect(newDrain).toHaveBeenCalledOnce();
+    } finally {
+      audio.dispose();
     }
   });
 });

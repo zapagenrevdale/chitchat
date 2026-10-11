@@ -1,0 +1,836 @@
+--- baseline/apps/web/src/components/onboarding/onboarding-conversation.tsx
++++ current/apps/web/src/components/onboarding/onboarding-conversation.tsx
+@@ -203,6 +203,7 @@
+   name,
+   language,
+   onMessages,
++  onResolved,
+   onReady,
+   onRestart,
+   onSwitch,
+@@ -211,6 +212,7 @@
+   name: string;
+   language: PracticeLanguage;
+   onMessages: (messages: OnboardingMessage[]) => void;
++  onResolved: (turn: OnboardingTurn & { status: "ready" | "choose" }) => void;
+   onReady: (turn: OnboardingTurn) => void;
+   onRestart: () => void;
+   onSwitch: () => void;
+@@ -224,6 +226,7 @@
+     name,
+     language,
+     onMessages,
++    onResolved,
+     autoStart: true,
+   });
+   useEffect(() => {
+@@ -244,6 +247,7 @@
+     speaking: m.voice_speaking,
+     ready: m.voice_ready,
+     idle: m.voice_paused,
++    interrupted: m.voice_paused,
+   }[live.phase]({}, { locale });
+   const avatarState = {
+     connecting: "thinking",
+@@ -252,6 +256,7 @@
+     speaking: "speaking",
+     ready: "idle",
+     idle: "idle",
++    interrupted: "idle",
+   }[live.phase] as "thinking" | "listening" | "speaking" | "idle";
+   const reply = lastReply(live.messages);
+   const latest = live.messages.at(-1);
+@@ -309,7 +314,7 @@
+             {m.continue_button({}, { locale })}
+           </Button>
+         )}
+-        {live.error && (
++        {(live.error || live.phase === "interrupted") && (
+           <Button className="mt-2" onClick={onRestart}>
+             {m.voice_restart({}, { locale })}
+           </Button>
+--- baseline/apps/web/src/components/onboarding/onboarding-recovery.test.tsx
++++ current/apps/web/src/components/onboarding/onboarding-recovery.test.tsx
+@@ -0,0 +1,404 @@
++import type {
++  OnboardingDraft,
++  OnboardingMessage,
++  OnboardingTurn,
++} from "@chitchat/contracts/onboarding";
++import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
++import {
++  act,
++  cleanup,
++  fireEvent,
++  render,
++  screen,
++} from "@testing-library/react";
++import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
++
++import type { OnboardingLive } from "@/lib/onboarding-live";
++import {
++  freshOnboardingDraft,
++  onboardingStorageKeys,
++  readOnboarding,
++} from "@/lib/onboarding-storage";
++
++import en from "../../../messages/en.json";
++import { Onboarding } from "./onboarding";
++
++const sessions = vi.hoisted(
++  () =>
++    [] as {
++      callbacks: ConstructorParameters<typeof OnboardingLive>[0];
++      close: ReturnType<typeof vi.fn>;
++      pause: ReturnType<typeof vi.fn>;
++      resume: ReturnType<typeof vi.fn>;
++    }[]
++);
++vi.mock(import("@/lib/onboarding-live"), () => ({
++  OnboardingLive: class {
++    constructor(callbacks: ConstructorParameters<typeof OnboardingLive>[0]) {
++      sessions.push({
++        callbacks,
++        close: this.close,
++        pause: this.pause,
++        resume: this.resume,
++      });
++    }
++    start = vi.fn<OnboardingLive["start"]>().mockResolvedValue();
++    close = vi.fn<() => void>();
++    pause = vi.fn<() => void>(() => sessions.at(-1)?.callbacks.onPhase("idle"));
++    resume = vi.fn<() => void>(() =>
++      sessions.at(-1)?.callbacks.onPhase("listening")
++    );
++    getInputVolume = vi.fn<() => number>().mockReturnValue(0);
++    getAnalyser = vi.fn<OnboardingLive["getAnalyser"]>();
++  } as unknown as typeof OnboardingLive,
++}));
++const ready: OnboardingTurn = {
++  status: "ready",
++  reply: "Let's practice making friends.",
++  goal: "Make friends",
++  suggestedSkills: ["listening"],
++  benefits: {
++    ids: ["start-conversations", "listen-and-connect", "keep-it-going"],
++    personalized: true,
++  },
++};
++const clarify: OnboardingTurn = {
++  status: "clarify",
++  reply: "Where do you meet people?",
++  goal: "",
++  suggestedSkills: [],
++};
++const choose: OnboardingTurn = {
++  status: "choose",
++  reply: "Choose what you want to practice.",
++  goal: "",
++  suggestedSkills: [],
++};
++const network = vi.fn<typeof fetch>();
++function mount(changes: Partial<OnboardingDraft> = {}, editing = false) {
++  return render(
++    <QueryClientProvider
++      client={
++        new QueryClient({ defaultOptions: { queries: { retry: false } } })
++      }
++    >
++      <Onboarding
++        initial={{
++          ...freshOnboardingDraft(),
++          name: "Alex",
++          step: "motivation",
++          conversationMode: "text",
++          skills: ["wit"],
++          ...changes,
++        }}
++        onComplete={() => {}}
++        onCancel={editing ? () => {} : undefined}
++      />
++    </QueryClientProvider>
++  );
++}
++function submit(text = "Make friends") {
++  fireEvent.change(screen.getByRole("textbox", { name: en.motivation_label }), {
++    target: { value: text },
++  });
++  fireEvent.click(screen.getByRole("button", { name: en.continue_button }));
++}
++function hide() {
++  act(() => window.dispatchEvent(new Event("pagehide")));
++}
++function show() {
++  act(() =>
++    window.dispatchEvent(
++      new PageTransitionEvent("pageshow", { persisted: true })
++    )
++  );
++}
++function voice(editing = false) {
++  const view = mount({}, editing);
++  fireEvent.click(screen.getByRole("button", { name: en.mode_switch_voice }));
++  return view;
++}
++function latest() {
++  const session = sessions.at(-1);
++  if (!session) {
++    throw new Error("Missing voice controller");
++  }
++  return session;
++}
++function openTranscript() {
++  fireEvent.click(
++    screen.getByRole("button", {
++      name: `${en.voice_connecting}. ${en.voice_show_transcript}`,
++    })
++  );
++}
++function raw(): OnboardingDraft {
++  return JSON.parse(
++    localStorage.getItem(onboardingStorageKeys.draft) ?? "null"
++  );
++}
++
++describe("onboarding suspension and accepted outcomes", () => {
++  beforeEach(() => {
++    vi.useFakeTimers();
++    localStorage.clear();
++    sessions.length = 0;
++    network.mockReset().mockResolvedValue(Response.json(ready));
++    vi.stubGlobal("fetch", network);
++    vi.stubGlobal("scrollTo", vi.fn<() => void>());
++  });
++  afterEach(() => {
++    cleanup();
++    vi.useRealTimers();
++    vi.unstubAllGlobals();
++    vi.restoreAllMocks();
++  });
++
++  it("restores confirmed text history and retryable input, rejecting the old late response", async () => {
++    const pending = Promise.withResolvers<Response>();
++    network.mockReturnValueOnce(pending.promise);
++    mount();
++    submit();
++    hide();
++    show();
++    expect(
++      screen.getByRole("textbox", { name: en.motivation_label })
++    ).toBeEnabled();
++    expect(
++      screen.getByRole("textbox", { name: en.motivation_label })
++    ).toHaveValue("Make friends");
++    await act(() => submit("Meet coworkers"));
++    await act(() =>
++      pending.resolve(Response.json({ ...ready, reply: "Stale response" }))
++    );
++    expect(screen.queryByText("Stale response")).not.toBeInTheDocument();
++    expect(
++      JSON.parse(String(network.mock.calls[1]?.[1]?.body)).messages
++    ).toStrictEqual([{ role: "user", text: "Meet coworkers" }]);
++    await act(() => vi.advanceTimersByTimeAsync(2000));
++    expect(
++      screen.getByRole("heading", { name: en.heading_benefits })
++    ).toBeInTheDocument();
++  });
++
++  it("removes only the unconfirmed message when a pending text turn is suspended", () => {
++    network.mockReturnValueOnce(Promise.withResolvers<Response>().promise);
++    mount({
++      conversation: [
++        { role: "user", text: "Confirmed answer" },
++        { role: "assistant", text: "Confirmed question" },
++      ],
++    });
++    submit("Pending answer");
++    hide();
++    show();
++    expect(screen.getByText("Confirmed answer")).toBeInTheDocument();
++    expect(screen.getByText("Confirmed question")).toBeInTheDocument();
++    expect(
++      screen.queryByText("Pending answer", { selector: "p" })
++    ).not.toBeInTheDocument();
++    expect(
++      screen.getByRole("textbox", { name: en.motivation_label })
++    ).toHaveValue("Pending answer");
++  });
++
++  it("keeps an accepted clarification when suspended during its reading delay", async () => {
++    network.mockResolvedValueOnce(Response.json(clarify));
++    mount();
++    await act(() => submit());
++    hide();
++    show();
++    expect(
++      screen.getByRole("textbox", { name: en.motivation_label })
++    ).toBeEnabled();
++    expect(screen.getByText(clarify.reply)).toBeInTheDocument();
++    await act(() => submit("At work"));
++    expect(
++      JSON.parse(String(network.mock.calls[1]?.[1]?.body)).messages
++    ).toHaveLength(3);
++  });
++
++  it.each(["ready", "choose"] as const)(
++    "consumes third-turn %s navigation once on persisted pageshow",
++    async (status) => {
++      network.mockResolvedValueOnce(
++        Response.json(status === "ready" ? ready : choose)
++      );
++      mount({
++        conversation: [
++          { role: "user", text: "One" },
++          { role: "assistant", text: "First question" },
++          { role: "user", text: "Two" },
++          { role: "assistant", text: "Second question" },
++        ],
++      });
++      await act(() => submit());
++      expect(raw().conversation).toHaveLength(6);
++      hide();
++      show();
++      show();
++      await act(() => vi.advanceTimersByTimeAsync(3000));
++      expect(
++        screen.getByRole("heading", {
++          name: status === "ready" ? en.heading_benefits : en.heading_skills,
++        })
++      ).toBeInTheDocument();
++      expect(network).toHaveBeenCalledOnce();
++      if (status === "ready") {
++        fireEvent.click(
++          screen.getByRole("button", { name: en.continue_button })
++        );
++        show();
++      }
++      expect(
++        screen.getByRole("heading", { name: en.heading_skills })
++      ).toBeInTheDocument();
++    }
++  );
++
++  it("abandons accepted text navigation when switching modes during the delay", async () => {
++    mount();
++    await act(() => submit());
++    hide();
++    fireEvent.click(screen.getByRole("button", { name: en.mode_switch_voice }));
++    show();
++    await act(() => vi.advanceTimersByTimeAsync(3000));
++    expect(raw().resolvedGoal).toBeUndefined();
++    expect(raw().conversationMode).toBe("voice");
++    expect(sessions).toHaveLength(1);
++  });
++
++  it.each(["connecting", "listening", "thinking", "speaking"] as const)(
++    "interrupts %s voice and requires an explicit restart",
++    (phase) => {
++      voice();
++      const old = latest();
++      act(() => old.callbacks.onPhase(phase));
++      hide();
++      show();
++      expect(old.close).toHaveBeenCalledOnce();
++      expect(sessions).toHaveLength(1);
++      fireEvent.click(screen.getByRole("button", { name: en.voice_restart }));
++      expect(sessions).toHaveLength(2);
++      act(() => {
++        old.callbacks.onComplete(ready);
++        old.callbacks.onError("Old failure");
++        old.callbacks.onPhase("ready");
++        old.callbacks.onMessages(
++          [],
++          [{ role: "user", text: "Old transcript" }]
++        );
++      });
++      expect({
++        resolvedGoal: raw().resolvedGoal,
++        conversation: raw().conversation,
++      }).toStrictEqual({ resolvedGoal: undefined, conversation: [] });
++      expect(screen.queryByText("Old failure")).not.toBeInTheDocument();
++    }
++  );
++
++  it("pauses transcript capture on the same session without exposing Restart", () => {
++    voice();
++    openTranscript();
++    expect(latest().pause).toHaveBeenCalledOnce();
++    expect(
++      screen.queryByRole("button", { name: en.voice_restart })
++    ).not.toBeInTheDocument();
++    fireEvent.click(screen.getByRole("button", { name: en.voice_back }));
++    expect(latest().resume).toHaveBeenCalledOnce();
++    expect(latest().close).not.toHaveBeenCalled();
++    expect(sessions).toHaveLength(1);
++  });
++
++  it.each(["ready", "choose"] as const)(
++    "immediately persists batched transcript and %s completion while transcript is open, then restores without voice",
++    (status) => {
++      const view = voice();
++      openTranscript();
++      const turn = status === "ready" ? ready : choose;
++      const conversation: OnboardingMessage[] = [
++        { role: "user", text: "Make friends" },
++        { role: "assistant", text: ready.reply },
++      ];
++      act(() => {
++        latest().callbacks.onMessages(
++          conversation.map((message, id) => ({ ...message, id, final: true })),
++          conversation
++        );
++        latest().callbacks.onComplete(turn);
++        expect(raw()).toMatchObject({
++          step: "microphone",
++          resolvedGoal: turn,
++          conversation,
++          motivation: turn.goal,
++        });
++        latest().callbacks.onComplete({
++          ...ready,
++          goal: "Duplicate must not replace",
++        });
++        expect(raw().resolvedGoal).toStrictEqual(turn);
++      });
++      expect(screen.getByRole("log")).toBeInTheDocument();
++      hide();
++      show();
++      expect(
++        screen.getByRole("button", { name: en.continue_button })
++      ).toBeEnabled();
++      expect(
++        screen.queryByRole("button", { name: en.voice_restart })
++      ).not.toBeInTheDocument();
++      const restored = readOnboarding().draft;
++      view.unmount();
++      mount(restored);
++      expect(
++        screen.getByRole("heading", {
++          name: status === "ready" ? en.heading_benefits : en.heading_skills,
++        })
++      ).toBeInTheDocument();
++      expect({
++        sessions: sessions.length,
++        requests: network.mock.calls.length,
++      }).toStrictEqual({ sessions: 1, requests: 0 });
++    }
++  );
++
++  it("keeps completed voice Continue working after suspension", () => {
++    voice();
++    openTranscript();
++    act(() => latest().callbacks.onComplete(ready));
++    hide();
++    show();
++    fireEvent.click(screen.getByRole("button", { name: en.continue_button }));
++    expect(
++      screen.getByRole("heading", { name: en.heading_benefits })
++    ).toBeInTheDocument();
++  });
++
++  it("reports blocked storage while allowing accepted voice navigation", () => {
++    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
++      throw new Error("Blocked");
++    });
++    voice();
++    openTranscript();
++    act(() => latest().callbacks.onComplete(ready));
++    expect(screen.getByText(en.progress_error)).toBeInTheDocument();
++    fireEvent.click(screen.getByRole("button", { name: en.continue_button }));
++    expect(
++      screen.getByRole("heading", { name: en.heading_benefits })
++    ).toBeInTheDocument();
++  });
++
++  it("never writes an editing draft, including synchronous voice completion", () => {
++    localStorage.setItem(onboardingStorageKeys.draft, "existing draft");
++    const writes = vi.spyOn(Storage.prototype, "setItem");
++    voice(true);
++    openTranscript();
++    act(() => latest().callbacks.onComplete(ready));
++    fireEvent.click(screen.getByRole("button", { name: en.continue_button }));
++    fireEvent.click(screen.getByRole("button", { name: en.cancel_button }));
++    expect(writes).not.toHaveBeenCalled();
++    expect(localStorage.getItem(onboardingStorageKeys.draft)).toBe(
++      "existing draft"
++    );
++  });
++});
+--- baseline/apps/web/src/components/onboarding/onboarding.test.tsx
++++ current/apps/web/src/components/onboarding/onboarding.test.tsx
+@@ -51,6 +51,7 @@
+ vi.mock(import("./use-onboarding-live"), () => ({
+   useOnboardingLive: ({
+     onMessages,
++    onResolved,
+   }: Parameters<typeof useOnboardingLive>[0]) => {
+     const [state, setState] = useState<LiveState>({
+       phase: "connecting",
+@@ -62,8 +63,12 @@
+     useEffect(() => {
+       const current: MockSession = {
+         onMessages,
+-        update: (changes) =>
+-          setState((previous) => ({ ...previous, ...changes })),
++        update: (changes) => {
++          setState((previous) => ({ ...previous, ...changes }));
++          if (changes.result && changes.result.status !== "clarify") {
++            onResolved({ ...changes.result, status: changes.result.status });
++          }
++        },
+         close: vi.fn<() => void>(),
+         pause: vi.fn<() => void>(),
+         resume: vi.fn<() => void>(),
+@@ -507,7 +512,7 @@
+         })
+       );
+       act(() => live.update({ phase: "ready", result: reply }));
+-      expect(readOnboarding().draft.step).toBe("microphone");
++      expect(readOnboarding().draft.step).toBe("benefits");
+       await userEvent.click(
+         screen.getByRole("button", { name: en.continue_button })
+       );
+--- baseline/apps/web/src/components/onboarding/onboarding.tsx
++++ current/apps/web/src/components/onboarding/onboarding.tsx
+@@ -212,6 +212,7 @@
+   const sessionId = useId();
+   const attempt = useRef(0);
+   const [draft, setDraft] = useState(initial);
++  const currentDraft = useRef(initial);
+   const [voiceStarted, setVoiceStarted] = useState(false);
+   const [attemptId, setAttemptId] = useState(0);
+   const locale = practiceLanguageLocales[draft.language];
+@@ -222,18 +223,30 @@
+     initial.resolvedGoal ?? null
+   );
+   const answer = useRef(initial.motivation);
+-  function ready(turn: OnboardingTurn) {
++  function commitDraft(changes: Partial<OnboardingDraft>) {
++    const nextDraft = { ...currentDraft.current, ...changes };
++    currentDraft.current = nextDraft;
++    setDraft(nextDraft);
++    if (!onCancel) {
++      setCanSave(saveOnboardingDraft(nextDraft));
++    }
++  }
++  function acceptGoal(turn: OnboardingTurn) {
+     if (attempt.current !== attemptId || turn.status === "clarify") {
+       return;
+     }
+     setResolved(turn);
+-    setDraft((current) => ({
+-      ...current,
++    commitDraft({
+       goalStatus: turn.status === "choose" ? "choose" : "ready",
+       resolvedGoal: turn,
+       motivation: turn.goal,
+-      step: turn.status === "choose" ? "skills" : "benefits",
+-    }));
++    });
++  }
++  function advanceGoal(turn: OnboardingTurn) {
++    if (attempt.current !== attemptId || turn.status === "clarify") {
++      return;
++    }
++    commitDraft({ step: turn.status === "choose" ? "skills" : "benefits" });
+   }
+   const goal = useOnboardingGoal({
+     initialMessages:
+@@ -245,16 +258,16 @@
+         return;
+       }
+       answer.current = "";
+-      setDraft((current) => ({
+-        ...current,
++      commitDraft({
+         conversation,
+         motivation: "",
+         // The reply is confirmed even while its reading delay is running.
+         resolvedGoal: turn.status === "clarify" ? undefined : turn,
+         goalStatus: turn.status === "clarify" ? undefined : turn.status,
+-      }));
++      });
++      acceptGoal(turn);
+     },
+-    onReady: ready,
++    onReady: advanceGoal,
+   });
+   const recommendationOptions = onboardingRecommendationQuery({
+     name: draft.name.trim(),
+@@ -276,11 +289,11 @@
+   });
+   useEffect(() => {
+     if (!onCancel) {
+-      // Synchronize the persistence result from external browser storage.
++      // Save the current snapshot on entry; subsequent mutations persist synchronously.
+       // oxlint-disable-next-line react/set-state-in-effect
+-      setCanSave(saveOnboardingDraft(draft));
+-    }
+-  }, [draft, onCancel]);
++      setCanSave(saveOnboardingDraft(currentDraft.current));
++    }
++  }, [currentDraft, onCancel]);
+   useEffect(() => {
+     if (!draft.step) {
+       return;
+@@ -311,7 +324,7 @@
+     answer.current = "";
+     setVoiceStarted(startVoice);
+     const nextDraft: OnboardingDraft = {
+-      ...draft,
++      ...currentDraft.current,
+       conversation: [],
+       conversationMode: undefined,
+       motivation: "",
+@@ -319,10 +332,7 @@
+       resolvedGoal: undefined,
+       ...changes,
+     };
+-    setDraft(nextDraft);
+-    if (!onCancel) {
+-      setCanSave(saveOnboardingDraft(nextDraft));
+-    }
++    commitDraft(nextDraft);
+   }
+   function switchMode(mode: "text" | "voice") {
+     replaceAttempt(
+@@ -337,7 +347,7 @@
+     if (changes.motivation !== undefined) {
+       answer.current = changes.motivation;
+     }
+-    setDraft((current) => ({ ...current, ...changes }));
++    commitDraft(changes);
+   }
+   function next() {
+     update({ step: onboardingSteps[index + 1] });
+@@ -347,13 +357,12 @@
+     setVoiceStarted(false);
+     setResolved(null);
+     answer.current = "";
+-    setDraft((current) => ({
+-      ...current,
++    commitDraft({
+       motivation: "",
+       goalStatus: "choose",
+       resolvedGoal: undefined,
+       step: "skills",
+-    }));
++    });
+   }
+   function back() {
+     if (draft.step === "skills" && draft.goalStatus !== "choose") {
+@@ -425,10 +434,11 @@
+             language={draft.language}
+             onMessages={(conversation) => {
+               if (attempt.current === attemptId) {
+-                setDraft((current) => ({ ...current, conversation }));
++                commitDraft({ conversation });
+               }
+             }}
+-            onReady={ready}
++            onResolved={acceptGoal}
++            onReady={advanceGoal}
+             onRestart={() => switchMode("voice")}
+             onSwitch={() => switchMode("text")}
+             onChoose={chooseSkills}
+--- baseline/apps/web/src/components/onboarding/use-onboarding-goal.ts
++++ current/apps/web/src/components/onboarding/use-onboarding-goal.ts
+@@ -3,7 +3,13 @@
+   OnboardingTurn,
+   OnboardingTurnRequest,
+ } from "@chitchat/contracts/onboarding";
+-import { useCallback, useEffect, useRef, useState } from "react";
++import {
++  useCallback,
++  useEffect,
++  useEffectEvent,
++  useRef,
++  useState,
++} from "react";
+ 
+ import { replyToOnboarding } from "@/lib/practice-api";
+ 
+@@ -41,19 +47,42 @@
+   const [error, setError] = useState(false);
+   const [result, setResult] = useState<OnboardingTurn | null>(null);
+   const active = useRef<AbortController | null>(null);
++  const pendingNavigation = useRef<OnboardingTurn | null>(null);
+   const stop = useCallback(() => {
+-    active.current?.abort();
++    const previous = active.current;
+     active.current = null;
++    previous?.abort();
+   }, []);
++  const advance = useEffectEvent(() => {
++    const turn = pendingNavigation.current;
++    pendingNavigation.current = null;
++    if (turn) {
++      onReady(turn);
++    }
++  });
+   useEffect(() => {
+-    window.addEventListener("pagehide", stop);
++    function suspend() {
++      stop();
++      setMessages(history.current);
++      setPhase("idle");
++    }
++    function restore(event: PageTransitionEvent) {
++      if (event.persisted) {
++        advance();
++      }
++    }
++    window.addEventListener("pagehide", suspend);
++    window.addEventListener("pageshow", restore);
+     return () => {
+-      window.removeEventListener("pagehide", stop);
++      window.removeEventListener("pagehide", suspend);
++      window.removeEventListener("pageshow", restore);
++      pendingNavigation.current = null;
+       stop();
+     };
+   }, [stop]);
+ 
+   function reset() {
++    pendingNavigation.current = null;
+     stop();
+     history.current = [];
+     setMessages([]);
+@@ -63,7 +92,12 @@
+   }
+ 
+   async function submit(answer: string) {
+-    if (!answer.trim() || active.current || history.current.length >= 6) {
++    if (
++      !answer.trim() ||
++      active.current ||
++      pendingNavigation.current ||
++      history.current.length >= 6
++    ) {
+       return;
+     }
+     const controller = new AbortController();
+@@ -83,6 +117,9 @@
+         signal
+       );
+       signal.throwIfAborted();
++      if (active.current !== controller) {
++        return;
++      }
+       const conversation: OnboardingMessage[] = [
+         ...next,
+         { role: "assistant", text: turn.reply },
+@@ -91,9 +128,11 @@
+       setMessages(conversation);
+       onReply(conversation, turn);
+       setResult(turn);
++      pendingNavigation.current = turn.status === "clarify" ? null : turn;
+       await leaveTimeToRead(signal);
+       signal.throwIfAborted();
+-      if (turn.status !== "clarify") {
++      if (active.current === controller && pendingNavigation.current === turn) {
++        pendingNavigation.current = null;
+         onReady(turn);
+       }
+     } catch {
+--- baseline/apps/web/src/components/onboarding/use-onboarding-live.test.tsx
++++ current/apps/web/src/components/onboarding/use-onboarding-live.test.tsx
+@@ -51,6 +51,8 @@
+         name: "Alex",
+         language: "English",
+         onMessages,
++        onResolved:
++          vi.fn<Parameters<typeof useOnboardingLive>[0]["onResolved"]>(),
+         autoStart,
+       })
+     ),
+--- baseline/apps/web/src/components/onboarding/use-onboarding-live.ts
++++ current/apps/web/src/components/onboarding/use-onboarding-live.ts
+@@ -21,23 +21,30 @@
+   name,
+   language,
+   onMessages,
++  onResolved,
+   autoStart = false,
+ }: {
+   name: string;
+   language: PracticeLanguage;
+   onMessages: (messages: OnboardingMessage[]) => void;
++  onResolved: (turn: OnboardingTurn & { status: "ready" | "choose" }) => void;
+   autoStart?: boolean;
+ }) {
+-  const [phase, setPhase] = useState<OnboardingLivePhase>("idle");
++  const [phase, setPhase] = useState<OnboardingLivePhase | "interrupted">(
++    "idle"
++  );
+   const [messages, setMessages] = useState<OnboardingLiveMessage[]>([]);
+   const [error, setError] = useState<string | null>(null);
+   const [result, setResult] = useState<OnboardingTurn | null>(null);
+   const session = useRef<OnboardingLive | null>(null);
++  const completed = useRef(false);
+   const startOnMount = useRef(autoStart);
+   const reportMessages = useRef(onMessages);
++  const reportResolved = useRef(onResolved);
+   useEffect(() => {
+     reportMessages.current = onMessages;
+-  }, [onMessages]);
++    reportResolved.current = onResolved;
++  }, [onMessages, onResolved]);
+   const close = useCallback(() => {
+     // Invalidate first: disposing audio and sockets may synchronously fire events.
+     const previous = session.current;
+@@ -51,6 +58,7 @@
+ 
+   function start() {
+     close();
++    completed.current = false;
+     setMessages([]);
+     onMessages([]);
+     setError(null);
+@@ -59,7 +67,7 @@
+     try {
+       const live = new OnboardingLive({
+         onPhase: (nextPhase) => {
+-          if (session.current === live) {
++          if (session.current === live && !completed.current) {
+             setPhase(nextPhase);
+           }
+         },
+@@ -70,13 +78,19 @@
+           }
+         },
+         onComplete: (turn) => {
+-          if (session.current === live) {
++          if (
++            session.current === live &&
++            !completed.current &&
++            turn.status !== "clarify"
++          ) {
++            completed.current = true;
+             setResult(turn);
+             setPhase("ready");
++            reportResolved.current({ ...turn, status: turn.status });
+           }
+         },
+         onError: (message) => {
+-          if (session.current === live) {
++          if (session.current === live && !completed.current) {
+             setError(message);
+             setPhase("idle");
+           }
+@@ -98,9 +112,13 @@
+     if (startOnMount.current) {
+       begin();
+     }
+-    window.addEventListener("pagehide", close);
++    function suspend() {
++      close();
++      setPhase(completed.current ? "ready" : "interrupted");
++    }
++    window.addEventListener("pagehide", suspend);
+     return () => {
+-      window.removeEventListener("pagehide", close);
++      window.removeEventListener("pagehide", suspend);
+       close();
+     };
+   }, [close]);

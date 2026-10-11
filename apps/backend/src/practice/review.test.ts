@@ -14,6 +14,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { finalizeFeedback } from "./feedback";
 import { createFeedbackProvider } from "./review";
+import { textClient, textResponse } from "./text-model.test-helper";
 import { PracticeTracing } from "./tracing";
 
 const request: PracticeFeedbackRequest = {
@@ -32,18 +33,6 @@ const assessment: PracticeAssessment = {
   },
   nextStep: { tip: "Ask about my favorite part of the lake." },
 };
-function textResponse(value: unknown) {
-  const response = new GenerateContentResponse();
-  response.candidates = [
-    { content: { parts: [{ text: JSON.stringify(value) }] } },
-  ];
-  response.usageMetadata = {
-    promptTokenCount: 100,
-    candidatesTokenCount: 50,
-    thoughtsTokenCount: 10,
-  };
-  return response;
-}
 function audioResponse(mimeType = "audio/l16; rate=24000; channels=1") {
   const response = new GenerateContentResponse();
   response.candidates = [
@@ -60,6 +49,7 @@ function audioResponse(mimeType = "audio/l16; rate=24000; channels=1") {
 }
 const generateContent = vi.fn<GoogleGenAI["models"]["generateContent"]>();
 const ai = { models: { generateContent } } as unknown as GoogleGenAI;
+const text = textClient();
 let exporter: InMemorySpanExporter;
 let tracer: NodeTracerProvider;
 let tracing: PracticeTracing;
@@ -67,6 +57,7 @@ let tracing: PracticeTracing;
 describe("transcript assessment and TTS", () => {
   beforeEach(() => {
     generateContent.mockReset();
+    text.generate.mockReset();
     exporter = new InMemorySpanExporter();
     tracer = new NodeTracerProvider({
       spanProcessors: [new SimpleSpanProcessor(exporter)],
@@ -95,18 +86,21 @@ describe("transcript assessment and TTS", () => {
           expiresAt: Date.now() + 900_000,
         })
     );
-    generateContent.mockResolvedValueOnce(textResponse({ assessment }));
-    const result = await createFeedbackProvider(ai, tracing).assessConversation(
+    text.generate.mockResolvedValueOnce(textResponse({ assessment }));
+    const result = await createFeedbackProvider(
+      ai,
+      text.ai,
+      tracing
+    ).assessConversation(
       { ...request, tracingToken: session.tracingToken },
       new AbortController().signal
     );
     expect(result).toMatchObject({ score: 8, status: "scored" });
-    const params = generateContent.mock.calls[0]?.[0];
-    expect(params).toMatchObject({
-      contents: expect.stringContaining(request.messages[0]?.text ?? "missing"),
-      config: {
-        systemInstruction: expect.stringContaining("you have no audio"),
-      },
+    const params = text.generate.mock.calls[0]?.[0];
+    expect(JSON.stringify(params?.prompt)).toContain(request.messages[0]?.text);
+    expect(params?.prompt).toContainEqual({
+      role: "system",
+      content: expect.stringContaining("you have no audio"),
     });
     await tracer.forceFlush();
     const span = exporter
@@ -133,33 +127,33 @@ describe("transcript assessment and TTS", () => {
   ])(
     "rejects invalid model assessments before returning them",
     async (invalid) => {
-      generateContent.mockResolvedValueOnce(
+      text.generate.mockResolvedValueOnce(
         textResponse({ assessment: invalid })
       );
       await expect(
-        createFeedbackProvider(ai).assessConversation(
+        createFeedbackProvider(ai, text.ai).assessConversation(
           request,
           new AbortController().signal
         )
-      ).rejects.toThrow(/score|highlight|abort/iu);
+      ).rejects.toThrow(/schema|highlight|abort/iu);
     }
   );
 
   it("allows insufficient evidence and rejects an aborted assessment", async () => {
-    generateContent.mockResolvedValue(textResponse({ assessment: null }));
-    const provider = createFeedbackProvider(ai);
+    text.generate.mockResolvedValue(textResponse({ assessment: null }));
+    const provider = createFeedbackProvider(ai, text.ai);
     await expect(
       provider.assessConversation(request, new AbortController().signal)
     ).resolves.toStrictEqual({ status: "insufficient" });
     await expect(
       provider.assessConversation(request, AbortSignal.abort())
-    ).rejects.toThrow(/score|highlight|abort/iu);
+    ).rejects.toThrow(/schema|highlight|abort/iu);
   });
 
   it("speaks confirmed text in the selected character's voice without another assessment", async () => {
     generateContent.mockResolvedValueOnce(audioResponse());
     const feedback = finalizeFeedback(assessment, request.messages);
-    const result = await createFeedbackProvider(ai).speakFeedback(
+    const result = await createFeedbackProvider(ai, text.ai).speakFeedback(
       { selection: request.selection, feedback: { ...feedback, score: 10 } },
       new AbortController().signal
     );
@@ -187,7 +181,7 @@ describe("transcript assessment and TTS", () => {
 
   it("speaks an insufficient-evidence recap without a score", async () => {
     generateContent.mockResolvedValueOnce(audioResponse());
-    const result = await createFeedbackProvider(ai).speakFeedback(
+    const result = await createFeedbackProvider(ai, text.ai).speakFeedback(
       { selection: request.selection, feedback: { status: "insufficient" } },
       new AbortController().signal
     );
@@ -202,7 +196,7 @@ describe("transcript assessment and TTS", () => {
   ])("rejects unsupported TTS audio %s", async (mimeType) => {
     generateContent.mockResolvedValueOnce(audioResponse(mimeType));
     await expect(
-      createFeedbackProvider(ai).speakFeedback(
+      createFeedbackProvider(ai, text.ai).speakFeedback(
         {
           selection: request.selection,
           feedback: { status: "insufficient" },

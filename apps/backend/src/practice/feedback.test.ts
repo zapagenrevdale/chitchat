@@ -118,16 +118,29 @@ describe("conversation feedback", () => {
         ...message,
         text: message.speaker === "user" ? "yes" : message.text,
       })),
+      body.messages.map((message) => ({
+        ...message,
+        text:
+          message.speaker === "user" ? "! ? 。 … ".repeat(10) : message.text,
+      })),
+      ...["はい", "你好", "สวัสดี"].map((text) =>
+        body.messages.map((message) => ({ ...message, text }))
+      ),
+      [
+        ...body.messages.filter(({ speaker }) => speaker === "user"),
+        ...body.messages.filter(({ speaker }) => speaker === "partner"),
+      ],
     ].map((messages) => ({ messages }))
   )(
     "does not invent a score for too little conversation",
     async ({ messages }) => {
-      const { request, createSession } = setup();
+      const { request, assessConversation } = setup();
       const response = await request({ ...body, messages });
+      expect(response.status).toBe(200);
       await expect(response.json()).resolves.toStrictEqual({
         status: "insufficient",
       });
-      expect(createSession).not.toHaveBeenCalled();
+      expect(assessConversation).not.toHaveBeenCalled();
     }
   );
 
@@ -141,14 +154,38 @@ describe("conversation feedback", () => {
   });
 
   it("accepts a full transcript beyond the small setup request limit", async () => {
-    const { request, createSession } = setup();
+    const { request, assessConversation } = setup();
     const messages = [
       ...body.messages,
       { id: 7, speaker: "partner", text: "More conversation. ".repeat(350) },
     ];
     const response = await request({ ...body, messages });
     expect(response.status).toBe(200);
-    expect(createSession).not.toHaveBeenCalled();
+    expect(assessConversation).toHaveBeenCalledWith(
+      { ...body, messages },
+      expect.any(AbortSignal)
+    );
+    await expect(response.json()).resolves.toStrictEqual(
+      finalizeFeedback(assessment, body.messages)
+    );
+  });
+
+  it.each([
+    "私は週末に公園を散歩するのが好きです。湖の近くには美しい花がたくさん咲いています。あなたは普段どこを歩きますか。",
+    "我喜欢周末和朋友一起去公园散步。湖边有很多漂亮的花，我们常常在那里聊天。你平时喜欢去什么地方？",
+    "ฉันชอบเดินเล่นในสวนสาธารณะกับเพื่อนในวันหยุดเราเห็นดอกไม้สวยงามริมทะเลสาบและพูดคุยกันคุณชอบไปเดินเล่นที่ไหน",
+  ])("assesses substantial conversation without spaces: %s", async (text) => {
+    const { request, assessConversation } = setup();
+    const messages = body.messages.map((message) => ({ ...message, text }));
+    const response = await request({ ...body, messages });
+    expect(response.status).toBe(200);
+    expect(assessConversation).toHaveBeenCalledWith(
+      { ...body, messages },
+      expect.any(AbortSignal)
+    );
+    await expect(response.json()).resolves.toStrictEqual(
+      finalizeFeedback(assessment, body.messages)
+    );
   });
 
   it.each([
@@ -167,21 +204,21 @@ describe("conversation feedback", () => {
   ])(
     "validates transcript limits, speakers, IDs, and scene",
     async (invalid) => {
-      const { request, createSession } = setup();
+      const { request, assessConversation } = setup();
       await expect(request(invalid)).resolves.toMatchObject({ status: 400 });
-      expect(createSession).not.toHaveBeenCalled();
+      expect(assessConversation).not.toHaveBeenCalled();
     }
   );
 
   it("rejects foreign origins and oversized request bodies", async () => {
-    const { request, createSession } = setup();
+    const { request, assessConversation } = setup();
     await expect(
       request(body, "https://elsewhere.example")
     ).resolves.toMatchObject({ status: 403 });
     await expect(
-      request({ ...body, extra: "x".repeat(128_000) })
+      request({ ...body, extra: "x".repeat(512 * 1024) })
     ).resolves.toMatchObject({ status: 413 });
-    expect(createSession).not.toHaveBeenCalled();
+    expect(assessConversation).not.toHaveBeenCalled();
   });
 
   it.each([
@@ -264,12 +301,6 @@ describe("conversation feedback", () => {
       assessment: { ...assessment, score: 10 },
     });
     await expect(response.json()).resolves.toMatchObject({ score: 8 });
-  });
-
-  it("does not call the scorer for insufficient evidence", async () => {
-    const { request, assessConversation } = setup();
-    await request({ ...body, messages: [] });
-    expect(assessConversation).not.toHaveBeenCalled();
   });
 
   it("returns speech through an independent validated endpoint", async () => {

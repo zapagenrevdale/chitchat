@@ -1,0 +1,30 @@
+$ turbo run test "--filter=@chitchat/web" -- src/lib/practice-audio.test.ts
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/web
+   • Running test in 1 packages
+   • Remote caching disabled
+
+@chitchat/contracts:build: cache hit, replaying logs e3020678733545d2
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/web:i18n:compile: cache hit, replaying logs e57cb7ea6df8a6e2
+@chitchat/web:i18n:compile: $ paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy baseLocale
+@chitchat/web:i18n:compile: ℹ [paraglide-js] Compiling inlang project ...
+@chitchat/web:i18n:compile: ✔ [paraglide-js] Successfully compiled inlang project.
+@chitchat/web:test: cache miss, executing c41fb97e83914903
+@chitchat/web:test: $ vitest run src/lib/practice-audio.test.ts
+@chitchat/web:test: 
+@chitchat/web:test: [1m[30m[46m RUN [49m[39m[22m [36mv5.0.0 [39m[90m/Users/genrevzapa/projects/chitchat/apps/web[39m
+@chitchat/web:test: 
+@chitchat/web:test:  [32m✓[39m src/lib/practice-audio.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+@chitchat/web:test: [2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+@chitchat/web:test: [2m   Start at [22m 11:13:49
+@chitchat/web:test: [2m   Duration [22m 739ms[2m (environment 80%, setup 8%, transform 6%, worker 4%, import 1%, tests 1%)[22m
+@chitchat/web:test: 
+
+ Tasks:    3 successful, 3 total
+Cached:    2 cached, 3 total
+  Time:    975ms 
+

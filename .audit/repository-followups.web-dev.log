@@ -1,0 +1,31 @@
+$ turbo run dev "--filter=@chitchat/web" "--filter=@chitchat/email"
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/email, @chitchat/web
+   • Running dev in 2 packages
+   • Remote caching disabled
+
+@chitchat/email:dev: cache bypass, force executing 1fc5f3a3842b8390
+@chitchat/contracts:build: cache hit, replaying logs ca2ee1b0bceadeb7
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/web:dev: cache bypass, force executing 0b9f17fc806ba6ad
+@chitchat/email:dev: $ cc-worktree dev email
+@chitchat/web:dev: $ cc-worktree dev web
+@chitchat/email:dev: 
+@chitchat/email:dev: portless
+@chitchat/email:dev: 
+@chitchat/email:dev: -- Proxy is running
+@chitchat/email:dev: -- email.amber.cc.local (LAN: 192.168.0.200)
+@chitchat/email:dev: -- Using port 62004 (fixed)
+@chitchat/email:dev: Error: "email.amber.cc.local" is already registered by a running process (PID 11505). Use --force to override.
+@chitchat/email:dev: email exited with code 1.
+@chitchat/email:dev: error: script "dev" exited with code 1
+@chitchat/email#dev:  ERROR  command (/Users/genrevzapa/projects/chitchat/packages/email) /Users/genrevzapa/.bun/bin/bun run dev exited (1)
+
+ Tasks:    1 successful, 3 total
+Cached:    1 cached, 3 total
+  Time:    406ms 
+Failed:    @chitchat/email#dev
+
+ ERROR  run failed: command  exited (1)
+error: script "dev" exited with code 1

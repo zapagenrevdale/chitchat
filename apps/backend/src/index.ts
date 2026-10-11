@@ -12,7 +12,8 @@ const app = createApp({
     ? createGeminiProvider(
         liveApiKey,
         env.GEMINI_API_KEY_LIVE,
-        telemetry?.practice
+        telemetry?.practice,
+        env.TYPESAFE_API_KEY
       )
     : undefined,
   createTranscriptionSession: liveApiKey

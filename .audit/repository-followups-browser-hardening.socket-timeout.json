@@ -1,0 +1,15 @@
+{
+  "origin": "https://amber.cc.local",
+  "label": "hardening-socket-timeout",
+  "capturedAt": "2026-10-11T04:01:22.080Z",
+  "errors": [],
+  "requests": [],
+  "network": [],
+  "failures": [],
+  "diagnostics": [],
+  "expectedCancellations": [],
+  "unexpectedErrors": [],
+  "target": "offline-timeout",
+  "blocker": "Error: CDP socket open timeout",
+  "exitCode": 2
+}

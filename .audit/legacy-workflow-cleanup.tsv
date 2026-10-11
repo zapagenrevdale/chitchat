@@ -1,0 +1,2 @@
+ts	phase	decision	why	evidence	result
+2026-10-11T02:57:46Z	cleanup	Removed the legacy context and workflow docs and their AGENTS.md sections	User requested pstack-only workflow docs; kept the deletion scoped to the identified setup	AGENTS.md;.audit/legacy-workflow-cleanup.todo.md	Verified four documents and both legacy directories absent; reference search empty; scoped diff check passed; application tests skipped for documentation-only change

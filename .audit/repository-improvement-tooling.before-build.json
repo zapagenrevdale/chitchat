@@ -1,0 +1,116 @@
+{
+  "id": "3KWztvOk50UyKJE0CZOwVI1XbRg",
+  "version": "1",
+  "turboVersion": "2.10.12",
+  "monorepo": true,
+  "globalCacheInputs": {
+    "rootKey": "I can’t see ya, but I know you’re here",
+    "files": {
+      "oxfmt.config.ts": "45bce5e06de2da5edae29c358c70ef6bcd7ed1ef",
+      "oxlint.config.ts": "ab5fe47ee91a7bcdbc9d8e22be8960c7ed27f9c5",
+      "tsconfig.base.json": "cdadbe5c835c8dd46c4929d49008e010b2c8362e"
+    },
+    "hashOfExternalDependencies": "146b244a3cd30a9c",
+    "hashOfInternalDependencies": "",
+    "environmentVariables": {
+      "specified": {
+        "env": [],
+        "passThroughEnv": [
+          "CHITCHAT_WORKTREE_HOME",
+          "DOCKER_*",
+          "NODE_EXTRA_CA_CERTS",
+          "PORTLESS",
+          "PORTLESS_*",
+          "SSH_AUTH_SOCK",
+          "XDG_STATE_HOME"
+        ]
+      },
+      "configured": [],
+      "inferred": [],
+      "passthrough": [
+        "SSH_AUTH_SOCK=a2eb7ad045965385f2e9010849214ef6d929fe878af9b818a9f5ffe2db0c82de"
+      ]
+    },
+    "engines": null
+  },
+  "packages": [
+    "@chitchat/db"
+  ],
+  "envMode": "strict",
+  "frameworkInference": true,
+  "tasks": [
+    {
+      "taskId": "@chitchat/db#build",
+      "task": "build",
+      "package": "@chitchat/db",
+      "hash": "85a4960c281bb37a",
+      "inputs": {
+        ".env.example": "d1690eea55e84d24f6673bc0f8d03b7501bffb6f",
+        "package.json": "ad650f4dc43a4e40cc00d6184aee4db54c5d0f31",
+        "prisma.config.ts": "3d835d71f0ac331d6344a7d2ac33a5cab70e557d",
+        "prisma/migrations/20260911000000_auth/migration.sql": "6218d43c445a417fe45677baf2d12ebd6da0aed5",
+        "prisma/migrations/migration_lock.toml": "2fe25d87cc30b78fc25be5e171a4876951691252",
+        "prisma/schema.prisma": "fcff08fee662b3c7dc60f2983a3ec79d66a7ebb2",
+        "src/client.ts": "291c14c3dc36fb4c57330c062d560a852dde5ea6",
+        "tsconfig.json": "dd27f19159d0b56b0082b96a7dd6340baadb6887",
+        "turbo.json": "479a57d936954ebc5082c7ec60861470c942eefd"
+      },
+      "hashOfExternalDependencies": "58c8fbdaec243f5a",
+      "cache": {
+        "local": true,
+        "remote": false,
+        "status": "HIT",
+        "source": "LOCAL",
+        "timeSaved": 997,
+        "sha": "abc5fe1cde17790d1a8522a0d083eae6b372eded",
+        "dirtyHash": "946e26b3ed6a658c3dd527364ba45d3baa3c1cc37bceec14f23a92cd5a1756fe"
+      },
+      "command": "prisma generate",
+      "cliArguments": [],
+      "outputs": [
+        "src/generated/**"
+      ],
+      "excludedOutputs": null,
+      "logFile": "packages/db/.turbo/turbo-build.log",
+      "directory": "packages/db",
+      "dependencies": [],
+      "dependents": [],
+      "with": [],
+      "resolvedTaskDefinition": {
+        "outputs": [
+          "src/generated/**"
+        ],
+        "cache": true,
+        "dependsOn": [
+          "^build"
+        ],
+        "inputs": [],
+        "outputLogs": "full",
+        "persistent": false,
+        "interruptible": false,
+        "env": [],
+        "passThroughEnv": null,
+        "interactive": false
+      },
+      "expandedOutputs": [],
+      "framework": "",
+      "envMode": "strict",
+      "environmentVariables": {
+        "specified": {
+          "env": [],
+          "passThroughEnv": null
+        },
+        "configured": [],
+        "inferred": [],
+        "passthrough": null
+      }
+    }
+  ],
+  "user": "",
+  "scm": {
+    "type": "git",
+    "sha": "abc5fe1cde17790d1a8522a0d083eae6b372eded",
+    "branch": "main"
+  }
+}
+

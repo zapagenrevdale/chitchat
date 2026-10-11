@@ -5,6 +5,8 @@ import type {
   PracticeFeedbackRequest,
 } from "@chitchat/contracts";
 
+const wordSegmenter = new Intl.Segmenter(undefined, { granularity: "word" });
+
 export function hasEnoughConversation(
   messages: PracticeFeedbackRequest["messages"]
 ) {
@@ -18,7 +20,11 @@ export function hasEnoughConversation(
       continue;
     }
     if (speaker === "user") {
-      userWords += trimmed.split(/\s+/u).length;
+      for (const segment of wordSegmenter.segment(trimmed)) {
+        if (segment.isWordLike) {
+          userWords += 1;
+        }
+      }
       if (previousSpeaker !== speaker) {
         userTurns += 1;
       }

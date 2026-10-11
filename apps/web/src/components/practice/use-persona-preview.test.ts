@@ -1,3 +1,4 @@
+/* oxlint-disable vitest/max-expects -- Late events must preserve state and released audio across lifecycle transitions. */
 import { act, cleanup, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -99,6 +100,114 @@ describe("saved persona introductions", () => {
     await act(() => result.current.play(leo));
     unmount();
     expect(clips[1]?.hasAttribute("src")).toBeFalsy();
-    expect(clips[1]?.onended).toBeNull();
   });
+
+  it.each(["resolve", "reject"] as const)(
+    "ignores late events and playback %s after stop or replacement",
+    async (settlement) => {
+      const pending = Promise.withResolvers<undefined>();
+      vi.mocked(HTMLMediaElement.prototype.play).mockReturnValueOnce(
+        pending.promise
+      );
+      const { result } = renderHook(() => usePersonaPreview());
+      act(() => {
+        void result.current.play(maya);
+      });
+      expect(result.current.status).toBe("loading");
+      act(() => result.current.stop());
+      act(() => {
+        clips[0]?.dispatchEvent(new Event("ended"));
+        clips[0]?.dispatchEvent(new Event("error"));
+      });
+      expect(result.current.status).toBeNull();
+      expect(result.current.error).toBeNull();
+      const replacementPlayback = Promise.withResolvers<undefined>();
+      vi.mocked(HTMLMediaElement.prototype.play).mockReturnValueOnce(
+        replacementPlayback.promise
+      );
+      act(() => {
+        void result.current.play(leo);
+      });
+      const [, replacement] = clips;
+      act(() => {
+        clips[0]?.dispatchEvent(new Event("ended"));
+        clips[0]?.dispatchEvent(new Event("error"));
+      });
+      await act(() => {
+        if (settlement === "resolve") {
+          pending.resolve();
+        } else {
+          pending.reject(new Error("Interrupted"));
+        }
+      });
+      expect(result.current.status).toBe("loading");
+      expect(result.current.error).toBeNull();
+      expect(replacement.getAttribute("src")).toBe(leo.introductionAudio);
+      await act(() => replacementPlayback.resolve());
+      expect(result.current.status).toBe("playing");
+      act(() => replacement.dispatchEvent(new Event("ended")));
+      expect(result.current.status).toBeNull();
+    }
+  );
+
+  it.each(["resolve", "reject"] as const)(
+    "stays stopped after late playback %s",
+    async (settlement) => {
+      const pending = Promise.withResolvers<undefined>();
+      vi.mocked(HTMLMediaElement.prototype.play).mockReturnValueOnce(
+        pending.promise
+      );
+      const { result } = renderHook(() => usePersonaPreview());
+      act(() => {
+        void result.current.play(maya);
+      });
+      act(() => result.current.stop());
+      await act(() => {
+        if (settlement === "resolve") {
+          pending.resolve();
+        } else {
+          pending.reject(new Error("Interrupted"));
+        }
+      });
+      expect(result.current.status).toBeNull();
+      expect(result.current.error).toBeNull();
+      expect(clips[0]?.hasAttribute("src")).toBeFalsy();
+    }
+  );
+
+  it.each(["resolve", "reject"] as const)(
+    "releases audio and ignores late events and playback %s after unmount",
+    async (settlement) => {
+      const pending = Promise.withResolvers<undefined>();
+      vi.mocked(HTMLMediaElement.prototype.play).mockReturnValueOnce(
+        pending.promise
+      );
+      const { result, unmount } = renderHook(() => usePersonaPreview());
+      act(() => {
+        void result.current.play(maya);
+      });
+      const [audio] = clips;
+      unmount();
+      expect(audio.hasAttribute("src")).toBeFalsy();
+      expect(audio.pause).toHaveBeenCalledWith();
+      expect(audio.load).toHaveBeenCalledWith();
+      const pauses = vi.mocked(audio.pause).mock.calls.length;
+      const loads = vi.mocked(audio.load).mock.calls.length;
+      act(() => {
+        audio.dispatchEvent(new Event("ended"));
+        audio.dispatchEvent(new Event("error"));
+      });
+      await act(() => {
+        if (settlement === "resolve") {
+          pending.resolve();
+        } else {
+          pending.reject(new Error("Interrupted"));
+        }
+      });
+      expect(audio.pause).toHaveBeenCalledTimes(pauses);
+      expect(audio.load).toHaveBeenCalledTimes(loads);
+      expect(audio.hasAttribute("src")).toBeFalsy();
+      expect(clips).toHaveLength(1);
+    }
+  );
 });

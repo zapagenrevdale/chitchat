@@ -1,0 +1,114 @@
+$ turbo run test "--filter=@chitchat/web" "--ui=stream"
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/web
+   • Running test in 1 packages
+   • Remote caching disabled
+
+@chitchat/contracts:build: cache hit, replaying logs ca2ee1b0bceadeb7
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/web:i18n:compile: cache hit, replaying logs 76ec0cbb524cb23f
+@chitchat/web:i18n:compile: $ paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy baseLocale
+@chitchat/web:i18n:compile: ℹ [paraglide-js] Compiling inlang project ...
+@chitchat/web:i18n:compile: ✔ [paraglide-js] Successfully compiled inlang project.
+@chitchat/web:test: cache miss, executing 8b706a2b01519ad1
+@chitchat/web:test: $ vitest run
+@chitchat/web:test: 
+@chitchat/web:test: [1m[30m[46m RUN [49m[39m[22m [36mv5.0.0 [39m[90m/Users/genrevzapa/projects/chitchat/apps/web[39m
+@chitchat/web:test: 
+@chitchat/web:test:  [32m✓[39m src/components/ui/watercolor-wave.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 130[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/components/ui/toggle-group.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 235[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/components/practice/conversation-rail.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 224[2mms[22m[39m
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test:  [32m✓[39m src/components/practice/practice-conversation.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 201[2mms[22m[39m
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test: Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+@chitchat/web:test:  [32m✓[39m src/components/practice/practice-feedback.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 448[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/components/practice/place-image.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 716[2mms[22m[39m
+@chitchat/web:test:    [32m✓[39m place image preview [2m(4)[22m
+@chitchat/web:test:      [33m[2m✓[22m[39m opens the photo dialog and restores focus after Escape[33m 443[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/components/ui/chit-avatar.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/components/practice/live-waveform.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/lib/practice-live.test.ts [2m([22m[2m45 tests[22m[2m)[22m[32m 68[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/components/practice/use-persona-preview.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 71[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/lib/practice-transcription.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/components/practice/practice-setup.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 1170[2mms[22m[39m
+@chitchat/web:test:    [32m✓[39m guided practice setup [2m(9)[22m
+@chitchat/web:test:      [33m[2m✓[22m[39m shows one choice at a time and starts the exact previewed mission[33m 309[2mms[22m[39m
+@chitchat/web:test: [90mstderr[2m | src/components/practice/use-setup-speech.test.tsx[2m > [22m[2mGemini setup speech[2m > [22m[2mconnects with a temporary token, streams mic audio, and cleans up on unmount
+@chitchat/web:test: [22m[39mThe current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: 
+@chitchat/web:test: [90mstderr[2m | src/components/practice/use-setup-speech.test.tsx[2m > [22m[2mGemini setup speech[2m > [22m[2mreplaces interim segments, appends new segments, and waits for final text before submitting
+@chitchat/web:test: [22m[39mThe current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: 
+@chitchat/web:test: [90mstderr[2m | src/components/practice/use-setup-speech.test.tsx[2m > [22m[2mGemini setup speech[2m > [22m[2mpauses without submitting and preserves words across a fresh connection
+@chitchat/web:test: [22m[39mThe current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: 
+@chitchat/web:test: [90mstderr[2m | src/components/practice/use-setup-speech.test.tsx[2m > [22m[2mGemini setup speech[2m > [22m[2mpauses without submitting and preserves words across a fresh connection
+@chitchat/web:test: [22m[39mThe current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: 
+@chitchat/web:test: [90mstderr[2m | src/components/practice/use-setup-speech.test.tsx[2m > [22m[2mGemini setup speech[2m > [22m[2mextends the silence window during sustained microphone activity
+@chitchat/web:test: [22m[39mThe current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: 
+@chitchat/web:test: [90mstderr[2m | src/components/practice/use-setup-speech.test.tsx[2m > [22m[2mGemini setup speech[2m > [22m[2mreleases resources and reports permission denial
+@chitchat/web:test: [22m[39mThe current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: 
+@chitchat/web:test: [90mstderr[2m | src/components/practice/use-setup-speech.test.tsx[2m > [22m[2mGemini setup speech[2m > [22m[2mdoes not submit after a transcription disconnect during finalization
+@chitchat/web:test: [22m[39mThe current testing environment is not configured to support act(...)
+@chitchat/web:test: The current testing environment is not configured to support act(...)
+@chitchat/web:test: 
+@chitchat/web:test:  [32m✓[39m src/components/practice/use-setup-speech.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 54[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/lib/playback-worklet.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 137[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/components/onboarding/use-onboarding-goal.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/lib/onboarding-live.test.ts [2m([22m[2m28 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/components/practice/use-practice.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/components/onboarding/use-onboarding-live.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/lib/practice-guided.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/lib/onboarding-storage.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/lib/practice-tracing.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/lib/onboarding-api.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/lib/practice-audio.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/lib/onboarding-locale.test.ts [2m([22m[2m57 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/components/onboarding/onboarding-audio-fallback.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 10[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/lib/phrase-progress.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/components/onboarding/onboarding-introduction.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/components/practice/practice-design.test.tsx [2m([22m[2m32 tests[22m[2m)[22m[33m 3398[2mms[22m[39m
+@chitchat/web:test:    [32m✓[39m practice design [2m(32)[22m
+@chitchat/web:test:      [33m[2m✓[22m[39m saves a backstory into the new AI scene and omits an unchecked goal from voice practice[33m 397[2mms[22m[39m
+@chitchat/web:test:      [33m[2m✓[22m[39m cancels unsaved backstory edits without generating or changing the scene[33m 336[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/components/onboarding/onboarding.test.tsx [2m([22m[2m25 tests[22m[2m)[22m[33m 9592[2mms[22m[39m
+@chitchat/web:test:    [32m✓[39m onboarding [2m(25)[22m
+@chitchat/web:test:      [32m✓[39m text onboarding [2m(6)[22m
+@chitchat/web:test:        [33m[2m✓[22m[39m takes a English learner through text onboarding after switching from voice[33m 2617[2mms[22m[39m
+@chitchat/web:test:        [33m[2m✓[22m[39m takes a Japanese learner through text onboarding after switching from voice[33m 2078[2mms[22m[39m
+@chitchat/web:test:        [33m[2m✓[22m[39m takes a Filipino learner through text onboarding after switching from voice[33m 2141[2mms[22m[39m
+@chitchat/web:test:        [33m[2m✓[22m[39m takes a Arabic learner through text onboarding after switching from voice[33m 2300[2mms[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [2m Test Files [22m [1m[32m29 passed[39m[22m[90m (29)[39m
+@chitchat/web:test: [2m      Tests [22m [1m[32m331 passed[39m[22m[90m (331)[39m
+@chitchat/web:test: [2m   Start at [22m 11:13:02
+@chitchat/web:test: [2m   Duration [22m 12.42s[2m (tests 41%, environment 32%, import 11%, transform 10%, setup 6%)[22m
+@chitchat/web:test: 
+@chitchat/web:test: [2mEnvironment [22m [33mjsdom was created 29 times[39m[2m · 12.99s total, 32% of tracked time[22m
+@chitchat/web:test: [2m            [22m [2mcreate it once per worker with [22m[33mpool: 'vmThreads'[39m[2m (keeps per-file isolation) or [22m[33misolate: false[39m[2m (shares it across files)[22m
+@chitchat/web:test: [2m            [22m [2mlearn more: https://vitest.dev/guide/improving-performance#test-environments[22m
+@chitchat/web:test: 
+
+ Tasks:    3 successful, 3 total
+Cached:    2 cached, 3 total
+  Time:    12.596s 
+

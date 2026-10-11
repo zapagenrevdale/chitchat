@@ -1,0 +1,143 @@
+--- .audit/repository-improvement-audio.practice-audio.ts.before
++++ apps/web/src/lib/practice-audio.ts
+@@ -73,7 +73,9 @@
+     onAudio: (data: string, sampleRate: number) => void,
+     onFailure: (message: string) => void
+   ) {
++    signal.throwIfAborted();
+     await Promise.all([this.inputContext.resume(), this.context.resume()]);
++    signal.throwIfAborted();
+     const stream = await navigator.mediaDevices.getUserMedia({
+       audio: {
+         channelCount: 1,
+--- .audit/repository-improvement-audio.practice-audio.test.ts.before
++++ apps/web/src/lib/practice-audio.test.ts
+@@ -11,6 +11,128 @@
+ function createAnalyser() {
+   return { ...createNode(), fftSize: 256 };
+ }
++
++function createCancellationFixture() {
++  const inputResume = Promise.withResolvers<null>();
++  const outputResume = Promise.withResolvers<null>();
++  const acquisitionStarted = Promise.withResolvers<null>();
++  const tracks = [{ stop: vi.fn<() => void>() }, { stop: vi.fn<() => void>() }];
++  const stream = { getTracks: () => tracks };
++  const acquisition = Promise.withResolvers<typeof stream>();
++  const resume = vi
++    .fn<() => Promise<null>>()
++    .mockReturnValueOnce(inputResume.promise)
++    .mockReturnValueOnce(outputResume.promise);
++  const addModule = vi.fn<() => Promise<void>>().mockResolvedValue();
++  const worklet = vi.fn<() => void>();
++  const getUserMedia = vi.fn<() => Promise<typeof stream>>(() => {
++    acquisitionStarted.resolve(null);
++    return acquisition.promise;
++  });
++  vi.stubGlobal(
++    "AudioContext",
++    class {
++      destination = {};
++      audioWorklet = { addModule };
++      resume = resume;
++      close = vi.fn<() => Promise<void>>().mockResolvedValue();
++      createAnalyser = createAnalyser;
++    }
++  );
++  vi.stubGlobal("AudioWorkletNode", worklet);
++  vi.stubGlobal("navigator", { mediaDevices: { getUserMedia } });
++  return {
++    audio: new PracticeAudio(vi.fn<(playing: boolean) => void>()),
++    inputResume,
++    outputResume,
++    acquisition,
++    acquisitionStarted,
++    stream,
++    tracks,
++    resume,
++    addModule,
++    worklet,
++    getUserMedia,
++  };
++}
++
++describe("audio startup cancellation", () => {
++  afterEach(() => vi.unstubAllGlobals());
++
++  it("rejects an already-aborted startup without resuming audio or requesting the microphone", async () => {
++    const fixture = createCancellationFixture();
++    const controller = new AbortController();
++    controller.abort();
++    fixture.inputResume.resolve(null);
++    fixture.outputResume.resolve(null);
++    fixture.acquisition.resolve(fixture.stream);
++    try {
++      await expect(
++        fixture.audio.prepare(controller.signal, vi.fn(), vi.fn())
++      ).rejects.toBe(controller.signal.reason);
++      expect(fixture.getUserMedia).not.toHaveBeenCalled();
++      expect(fixture.resume).not.toHaveBeenCalled();
++      expect(fixture.addModule).not.toHaveBeenCalled();
++      expect(fixture.worklet).not.toHaveBeenCalled();
++    } finally {
++      fixture.audio.dispose();
++    }
++  });
++
++  it.each(["input", "output"])(
++    "does not request the microphone after cancellation while %s audio resumes",
++    async (pendingContext) => {
++      const fixture = createCancellationFixture();
++      const controller = new AbortController();
++      const pendingResume =
++        pendingContext === "input" ? fixture.inputResume : fixture.outputResume;
++      const otherResume =
++        pendingContext === "input" ? fixture.outputResume : fixture.inputResume;
++      otherResume.resolve(null);
++      fixture.acquisition.resolve(fixture.stream);
++      try {
++        const preparation = fixture.audio.prepare(
++          controller.signal,
++          vi.fn(),
++          vi.fn()
++        );
++        controller.abort();
++        pendingResume.resolve(null);
++        await expect(preparation).rejects.toBe(controller.signal.reason);
++        expect(fixture.getUserMedia).not.toHaveBeenCalled();
++        expect(fixture.addModule).not.toHaveBeenCalled();
++        expect(fixture.worklet).not.toHaveBeenCalled();
++      } finally {
++        fixture.audio.dispose();
++      }
++    }
++  );
++
++  it("stops every acquired track without starting worklets when canceled during microphone acquisition", async () => {
++    const fixture = createCancellationFixture();
++    const controller = new AbortController();
++    fixture.inputResume.resolve(null);
++    fixture.outputResume.resolve(null);
++    try {
++      const preparation = fixture.audio.prepare(
++        controller.signal,
++        vi.fn(),
++        vi.fn()
++      );
++      await fixture.acquisitionStarted.promise;
++      controller.abort();
++      fixture.acquisition.resolve(fixture.stream);
++      await expect(preparation).rejects.toBe(controller.signal.reason);
++      for (const track of fixture.tracks) {
++        expect(track.stop).toHaveBeenCalledOnce();
++      }
++      expect(fixture.addModule).not.toHaveBeenCalled();
++      expect(fixture.worklet).not.toHaveBeenCalled();
++    } finally {
++      fixture.audio.dispose();
++    }
++  });
++});
+ 
+ describe("streaming PCM audio", () => {
+   it("encodes signed little-endian samples without a WAV header", () => {

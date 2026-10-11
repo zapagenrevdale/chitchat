@@ -1,0 +1,523 @@
+--- baseline/package.json
++++ current/package.json
+@@ -11,6 +11,7 @@
+     "build": "turbo run build",
+     "typecheck": "turbo run typecheck",
+     "test": "turbo run test",
++    "test:auth": "turbo run test:auth --filter=@chitchat/backend",
+     "lint": "turbo run lint",
+     "format": "turbo run format",
+     "db:generate": "turbo run generate --filter=@chitchat/db",
+--- baseline/turbo.json
++++ current/turbo.json
+@@ -33,6 +33,11 @@
+     },
+     "test": {
+       "dependsOn": ["^build"]
++    },
++    "test:auth": {
++      "dependsOn": ["^build"],
++      "cache": false,
++      "passThroughEnv": ["AUTH_INTEGRATION_DATABASE_URL"]
+     },
+     "lint": {},
+     "format": {
+--- baseline/apps/backend/package.json
++++ current/apps/backend/package.json
+@@ -9,6 +9,7 @@
+     "start": "bun dist/index.js",
+     "typecheck": "tsc --noEmit",
+     "test": "vitest run",
++    "test:auth": "bun --no-env-file --no-install src/integration/auth-integration.ts",
+     "lint": "ultracite check",
+     "format": "ultracite fix",
+     "generate:introductions": "bun src/practice/generate-introductions.ts",
+--- baseline/docs/worktrees.md
++++ current/docs/worktrees.md
+@@ -79,6 +79,23 @@
+ 
+ The registry is stored at `$XDG_STATE_HOME/chitchat/worktrees/registry.sqlite`, defaulting to `~/.local/state/chitchat/worktrees/registry.sqlite`. `CHITCHAT_WORKTREE_HOME` can override its directory for isolated tooling tests; keep the same value throughout a worktree's lifecycle. SQLite transactions coordinate reservations and per-checkout operation leases. A new command can reclaim a lease left by a process that has exited.
+ 
++## Check real authentication
++
++With the worktree PostgreSQL service running, refresh its status and run the authentication journey:
++
++```sh
++bun run worktree:status --output .worktree/status.json
++bun run test:auth
++```
++
++The database role needs `CREATEDB` permission and access to the `postgres` maintenance database. The default target comes only from `DATABASE_URL` in `packages/db/.env`. Its loopback host, port, and database name must match the saved worktree status. To use another PostgreSQL server, set `AUTH_INTEGRATION_DATABASE_URL` explicitly. The configured worktree supplies the HTTPS web and API origins in either case.
++
++Each invocation creates a fresh `cc_auth_<uuidhex>` database, deploys the committed Prisma migrations, and starts a child that imports the production Hono app and Better Auth configuration. Concurrent invocations use separate databases. The runner drops only the database it successfully created, after the child exits, including on failure or handled termination. Each child has a 90-second limit. An uncatchable kill of the parent can leave its database behind; the output names the owned database for diagnosis.
++
++The child environment contains a fresh auth secret and the disposable database URL. It excludes Gemini and Langfuse credentials. Bun does not load environment files, and migration dotenv loading is disabled. The journey checks signup, persisted credentials, cookie-authenticated identity, wrong-password rejection, fresh signin, and signout with saved-cookie replay. It checks cookie attributes and credentialed CORS through Hono's `fetch`; it does not test browser cookie enforcement or a TLS connection.
++
++`test:auth` is an uncached Turborepo task. Ordinary `bun run test` stays database-independent. A successful run reports both journey completion and deletion of its temporary database. Child output is suppressed to keep credentials out of logs; failures report the migration or journey stage.
++
+ ## Merge or remove
+ 
+ Run teardown before deleting the directory, including when a branch has been merged:
+--- baseline/apps/backend/src/integration/auth-integration.ts
++++ current/apps/backend/src/integration/auth-integration.ts
+@@ -0,0 +1,264 @@
++import { readFile } from "node:fs/promises";
++import { fileURLToPath } from "node:url";
++
++import { SQL } from "bun";
++import { z } from "zod";
++
++const root = fileURLToPath(new URL("../../../../", import.meta.url));
++const statusSchema = z.object({
++  configured: z.literal(true),
++  root: z.string(),
++  phase: z.literal("ready"),
++  urls: z.object({ web: z.url(), backend: z.url() }),
++  database: z.object({
++    host: z.string(),
++    port: z.number().int(),
++    name: z.string(),
++  }),
++});
++
++type ChildRunner = (child: {
++  command: string[];
++  cwd: string;
++  env: Record<string, string>;
++  signal: AbortSignal;
++  stage: "migrations" | "journey";
++}) => Promise<void>;
++
++const runChild: ChildRunner = async ({ command, cwd, env, signal, stage }) => {
++  signal.throwIfAborted();
++  const child = Bun.spawn(command, {
++    cwd,
++    env,
++    stdout: "ignore",
++    stderr: "ignore",
++    detached: true,
++  });
++  const terminate = () => {
++    try {
++      // The migration command also owns a Prisma subprocess.
++      process.kill(-child.pid, "SIGKILL");
++    } catch {
++      child.kill("SIGKILL");
++    }
++  };
++  const deadline = setTimeout(terminate, 90_000);
++  signal.addEventListener("abort", terminate, { once: true });
++  try {
++    const code = await child.exited;
++    signal.throwIfAborted();
++    if (code !== 0) {
++      throw new Error(
++        `${stage} child failed (exit ${code}, signal ${child.signalCode ?? "none"}).`
++      );
++    }
++  } finally {
++    clearTimeout(deadline);
++    signal.removeEventListener("abort", terminate);
++    terminate();
++  }
++};
++
++async function worktreeDatabaseUrl() {
++  let text: string;
++  try {
++    text = await readFile(`${root}packages/db/.env`, "utf-8");
++  } catch {
++    throw new Error(
++      "Missing packages/db/.env. Run worktree:setup or set AUTH_INTEGRATION_DATABASE_URL."
++    );
++  }
++  const values = [
++    ...text.matchAll(/^[\t ]*DATABASE_URL[\t ]*=[\t ]*(?<value>[^\r\n]*)$/gmu),
++  ];
++  if (values.length !== 1) {
++    throw new Error("packages/db/.env must contain exactly one DATABASE_URL.");
++  }
++  return values[0]?.groups?.value
++    ?.trim()
++    .replace(/^(?<quote>["'])(?<value>.*)\k<quote>$/u, "$<value>");
++}
++
++async function configuration() {
++  let status: z.infer<typeof statusSchema>;
++  try {
++    status = statusSchema.parse(
++      JSON.parse(await readFile(`${root}.worktree/status.json`, "utf-8"))
++    );
++  } catch {
++    throw new Error(
++      "Run worktree:setup and worktree:status --output .worktree/status.json first."
++    );
++  }
++  if (status.root !== root.replace(/\/$/u, "")) {
++    throw new Error(
++      "Worktree status belongs to another checkout. Refresh worktree:status."
++    );
++  }
++  const web = new URL(status.urls.web);
++  const backend = new URL(status.urls.backend);
++  if (
++    [web, backend].some(
++      (url) =>
++        url.protocol !== "https:" || url.origin !== url.href.replace(/\/$/u, "")
++    )
++  ) {
++    throw new Error(
++      "Authentication integration requires configured HTTPS web and API origins."
++    );
++  }
++  let raw = process.env.AUTH_INTEGRATION_DATABASE_URL;
++  const explicit = raw !== undefined;
++  if (!explicit) {
++    raw = await worktreeDatabaseUrl();
++  }
++  let base: URL;
++  try {
++    base = new URL(raw ?? "");
++    if (
++      !["postgres:", "postgresql:"].includes(base.protocol) ||
++      !base.hostname ||
++      base.pathname === "/"
++    ) {
++      throw new Error("Invalid PostgreSQL target.");
++    }
++  } catch {
++    throw new Error(
++      "AUTH_INTEGRATION_DATABASE_URL or packages/db/.env DATABASE_URL must be a PostgreSQL URL."
++    );
++  }
++  if (
++    !explicit &&
++    (!["127.0.0.1", "localhost", "[::1]"].includes(base.hostname) ||
++      base.hostname !== status.database.host ||
++      Number(base.port || 5432) !== status.database.port ||
++      decodeURIComponent(base.pathname.slice(1)) !== status.database.name)
++  ) {
++    throw new Error(
++      "Default database target does not match the isolated worktree status. Refresh worktree:status."
++    );
++  }
++  return { base, web: web.origin, backend: backend.origin };
++}
++
++export async function runAuthIntegration(childRunner: ChildRunner = runChild) {
++  const { base, web, backend } = await configuration();
++  const database = `cc_auth_${crypto.randomUUID().replaceAll("-", "")}`;
++  const disposable = new URL(base);
++  disposable.pathname = `/${database}`;
++  const adminUrl = new URL(base);
++  adminUrl.pathname = "/postgres";
++  let admin: SQL;
++  try {
++    admin = new SQL(adminUrl.href, { max: 1, connectionTimeout: 5 });
++  } catch {
++    throw new Error(
++      "Invalid PostgreSQL connection options for authentication integration."
++    );
++  }
++  const controller = new AbortController();
++  const terminate = () =>
++    controller.abort(new Error("Authentication integration interrupted."));
++  process.on("SIGINT", terminate);
++  process.on("SIGTERM", terminate);
++  let ownedDatabase: string | undefined;
++  const failures: Error[] = [];
++  let stage =
++    "PostgreSQL prerequisite (connect to postgres with CREATEDB permission)";
++  try {
++    await admin`SET statement_timeout = '15s'`;
++    controller.signal.throwIfAborted();
++    await admin.unsafe(`CREATE DATABASE "${database}"`);
++    ownedDatabase = database;
++    console.log(`auth integration created ${database}`);
++    const env: Record<string, string> = {
++      PATH: process.env.PATH ?? "",
++      NODE_ENV: "test",
++      DATABASE_URL: disposable.href,
++      DOTENV_CONFIG_PATH: "/dev/null",
++      BETTER_AUTH_URL: backend,
++      WEB_ORIGIN: web,
++      BETTER_AUTH_SECRET: `${crypto.randomUUID()}${crypto.randomUUID()}`,
++      PORT: "4000",
++    };
++    for (const task of ["migrations", "journey"] as const) {
++      stage = task;
++      controller.signal.throwIfAborted();
++      // Migrations must finish before the journey imports the production database client.
++      // oxlint-disable-next-line no-await-in-loop
++      await childRunner({
++        command:
++          task === "migrations"
++            ? [
++                process.execPath,
++                "--no-env-file",
++                "--no-install",
++                "run",
++                "migrate:deploy",
++              ]
++            : [
++                process.execPath,
++                "--no-env-file",
++                "--no-install",
++                "src/integration/auth-journey.ts",
++              ],
++        cwd: `${root}${task === "migrations" ? "packages/db" : "apps/backend"}`,
++        env,
++        signal: controller.signal,
++        stage: task,
++      });
++      console.log(`auth integration ${task} passed`);
++    }
++    controller.signal.throwIfAborted();
++  } catch (error) {
++    failures.push(
++      new Error(
++        `Authentication integration failed during ${stage}${controller.signal.aborted ? " (interrupted)" : ""}.`,
++        { cause: error }
++      )
++    );
++  } finally {
++    if (ownedDatabase) {
++      try {
++        await admin.unsafe(`DROP DATABASE "${ownedDatabase}" WITH (FORCE)`);
++        console.log(`auth integration dropped ${ownedDatabase}`);
++      } catch (error) {
++        failures.push(
++          new Error(`Cleanup failed for owned database ${ownedDatabase}.`, {
++            cause: error,
++          })
++        );
++      }
++    }
++    try {
++      await admin.close({ timeout: 5 });
++    } catch (error) {
++      failures.push(
++        new Error("Closing the PostgreSQL admin connection failed.", {
++          cause: error,
++        })
++      );
++    }
++    process.removeListener("SIGINT", terminate);
++    process.removeListener("SIGTERM", terminate);
++  }
++  if (failures.length > 0) {
++    throw new AggregateError(
++      failures,
++      failures.map((error) => error.message).join("\n")
++    );
++  }
++}
++
++if (import.meta.main) {
++  try {
++    await runAuthIntegration();
++  } catch (error) {
++    console.error(
++      error instanceof Error
++        ? error.message
++        : "Authentication integration failed."
++    );
++    process.exitCode = 1;
++  }
++}
+--- baseline/apps/backend/src/integration/auth-journey.ts
++++ current/apps/backend/src/integration/auth-journey.ts
+@@ -0,0 +1,193 @@
++import assert from "node:assert/strict";
++
++assert.ok(
++  process.env.NODE_ENV === "test",
++  "Run the journey through bun run test:auth"
++);
++assert.ok(
++  process.env.DATABASE_URL,
++  "The runner must provide a disposable DATABASE_URL"
++);
++assert.ok(
++  /^\/cc_auth_[a-f\d]{32}$/u.test(new URL(process.env.DATABASE_URL).pathname),
++  "The journey requires a disposable auth database"
++);
++
++const { db } = await import("../auth");
++const { env } = await import("../env");
++const { default: server } = await import("../index");
++
++const identity = {
++  email: `auth-${crypto.randomUUID()}@example.test`,
++  name: "Auth integration user",
++  password: `Integration-${crypto.randomUUID()}`,
++};
++
++async function request(path: string, cookie?: string, body?: unknown) {
++  const headers = new Headers({ Origin: env.WEB_ORIGIN });
++  if (cookie) {
++    headers.set("Cookie", cookie);
++  }
++  if (body !== undefined) {
++    headers.set("Content-Type", "application/json");
++  }
++  const response = await server.fetch(
++    new Request(`${env.BETTER_AUTH_URL}${path}`, {
++      method: body === undefined ? "GET" : "POST",
++      headers,
++      body: body === undefined ? undefined : JSON.stringify(body),
++    })
++  );
++  assert.ok(
++    response.headers.get("Access-Control-Allow-Origin") === env.WEB_ORIGIN,
++    "CORS must allow the configured web origin"
++  );
++  assert.ok(
++    response.headers.get("Access-Control-Allow-Credentials") === "true",
++    "CORS must allow credentials"
++  );
++  if (path === "/api/me") {
++    assert.ok(
++      response.headers.get("Cache-Control") === "no-store",
++      "Identity responses must not be cached"
++    );
++  }
++  return response;
++}
++
++function sessionCookie(response: Response, expired = false) {
++  const cookies = response.headers
++    .getSetCookie()
++    .map((header) => Bun.Cookie.parse(header));
++  const cookie = cookies.find(
++    (entry) => entry?.name === "__Secure-better-auth.session_token"
++  );
++  assert.ok(cookie, "Response must issue the secure session cookie");
++  assert.ok(cookie.secure, "Session cookie must be Secure");
++  assert.ok(cookie.httpOnly, "Session cookie must be HttpOnly");
++  assert.ok(cookie.path === "/", "Session cookie must cover the API path");
++  if (expired) {
++    assert.ok(
++      cookie.maxAge === 0 ||
++        (cookie.expires !== undefined &&
++          cookie.expires.getTime() <= Date.now()),
++      "Signout must expire the cookie"
++    );
++  } else {
++    assert.ok(cookie.value.length > 0, "Session cookie must have a value");
++    assert.ok(
++      cookie.maxAge !== undefined && cookie.maxAge > 0,
++      "Session cookie must have a positive lifetime"
++    );
++  }
++  return `${cookie.name}=${cookie.value}`;
++}
++
++async function authenticated(cookie: string, userId: string) {
++  const response = await request("/api/me", cookie);
++  assert.ok(
++    response.status === 200,
++    "Session cookie must authenticate /api/me"
++  );
++  const body = await response.json();
++  assert.ok(
++    body.user.id === userId &&
++      body.user.email === identity.email &&
++      body.user.name === identity.name,
++    "Authenticated identity must match the persisted signup user exactly"
++  );
++}
++
++async function signout(cookie: string, userId: string) {
++  const response = await request("/api/auth/sign-out", cookie, {});
++  assert.ok(response.status === 200, "Signout must succeed");
++  sessionCookie(response, true);
++  assert.ok(
++    (await db.session.count({ where: { userId } })) === 0,
++    "Signout must delete persisted sessions"
++  );
++  const replay = await request("/api/me", cookie);
++  assert.ok(
++    replay.status === 401,
++    "Replaying the saved cookie after signout must be denied"
++  );
++  const body = await replay.json();
++  assert.ok(
++    body.error === "Unauthorized",
++    "Cookie replay must return Unauthorized"
++  );
++}
++
++try {
++  const anonymous = await request("/api/me");
++  assert.ok(anonymous.status === 401, "Anonymous access must be denied");
++  const signup = await request("/api/auth/sign-up/email", undefined, identity);
++  assert.ok(signup.status === 200, "Signup must succeed");
++  const signupCookie = sessionCookie(signup);
++  const user = await db.user.findUnique({
++    where: { email: identity.email },
++    include: { accounts: true },
++  });
++  assert.ok(
++    user && user.name === identity.name && user.email === identity.email,
++    "Signup must persist the exact user identity"
++  );
++  const account = user.accounts.find(
++    (entry) => entry.providerId === "credential"
++  );
++  assert.ok(
++    account && account.userId === user.id && account.accountId === user.id,
++    "Signup must persist a credential account for the user"
++  );
++  assert.ok(
++    account.password &&
++      account.password !== identity.password &&
++      !account.password.includes(identity.password),
++    "Credential password must be a nonplaintext hash"
++  );
++  assert.ok(
++    (await db.session.count({ where: { userId: user.id } })) === 1,
++    "Signup must persist one session"
++  );
++  await authenticated(signupCookie, user.id);
++  await signout(signupCookie, user.id);
++
++  const wrong = await request("/api/auth/sign-in/email", undefined, {
++    email: identity.email,
++    password: "Wrong-password-123",
++  });
++  assert.ok(wrong.status === 401, "Wrong password must be denied");
++  assert.ok(
++    !wrong.headers
++      .getSetCookie()
++      .some(
++        (header) =>
++          Bun.Cookie.parse(header)?.name ===
++          "__Secure-better-auth.session_token"
++      ),
++    "Wrong password must not issue a session cookie"
++  );
++  assert.ok(
++    (await db.session.count({ where: { userId: user.id } })) === 0,
++    "Wrong password must not create a session"
++  );
++
++  const signin = await request("/api/auth/sign-in/email", undefined, {
++    email: identity.email,
++    password: identity.password,
++  });
++  assert.ok(signin.status === 200, "Correct password must sign in");
++  const signinCookie = sessionCookie(signin);
++  assert.ok(
++    signinCookie !== signupCookie,
++    "Fresh signin must issue a new cookie"
++  );
++  assert.ok(
++    (await db.session.count({ where: { userId: user.id } })) === 1,
++    "Signin must persist one fresh session"
++  );
++  await authenticated(signinCookie, user.id);
++  await signout(signinCookie, user.id);
++} finally {
++  await db.$disconnect();
++}

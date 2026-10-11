@@ -1,0 +1,10 @@
+{
+  "apps/web/src/lib/onboarding-live.ts": "c7c361e3514e043228027e819bfcafbaf9b57d665b8a76a32670c460996ec252",
+  "apps/web/src/lib/onboarding-live.test.ts": "d59fa15ff988528ee1ab330e50a2ee03f8514c280a1fc920db39dffa74d03bcb",
+  "apps/web/src/lib/practice-audio.ts": "8ee46f05092be3dd07148f0c6c8d69a2410ef30a06bf29d111620681f8983a83",
+  "apps/web/src/lib/practice-audio.test.ts": "1a45e9fc8c91c78509a26bb15f6e4eebbedde445a2d78ed36174fcd9ce63c613",
+  "apps/web/src/lib/playback-worklet.test.ts": "7c33d47d05498333f7efce674dbdc96409234357fd81157a9c232d659946dbb5",
+  "apps/web/public/audio/playback.worklet.js": "60d421001b7babf8b48d54f8838ed69156353bb40c199d7a559b44299da0895c",
+  "apps/backend/src/practice/onboarding-live.ts": "9d74b0050fd279f18fb1ef82217604d240ba805f691d2ec9b456674f019b6b77",
+  "apps/backend/src/practice/onboarding-live.test.ts": "c83363bddc211327880287cf89a0010b1888314fb42f85aac9b055e705875152"
+}

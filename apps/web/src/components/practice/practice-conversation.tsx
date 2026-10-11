@@ -1,9 +1,9 @@
 import { Mic, MicOff, PhoneOff } from "lucide-react";
-import { useReducedMotion } from "motion/react";
 import { useEffect, useId, useLayoutEffect, useRef } from "react";
+import type { ReactElement } from "react";
 
 import { Button } from "@/components/ui/button";
-import { LiveWaveform } from "@/components/ui/live-waveform";
+import { WatercolorWave } from "@/components/ui/watercolor-wave";
 import type { PracticeMessage } from "@/lib/practice-live";
 
 import { ConversationRail } from "./conversation-rail";
@@ -31,7 +31,7 @@ export function ConversationMessage({
   message: PracticeMessage;
   transcriptId: string;
   name: string;
-  avatar?: string;
+  avatar?: string | ReactElement;
 }) {
   return (
     <div
@@ -39,7 +39,7 @@ export function ConversationMessage({
       className={`flex max-w-[85%] items-end gap-2 ${message.speaker === "user" ? "self-end" : "self-start"}`}
     >
       {message.speaker === "partner" &&
-        (avatar ? (
+        (typeof avatar === "string" ? (
           <img
             src={avatar}
             alt=""
@@ -48,12 +48,14 @@ export function ConversationMessage({
             className="bg-card size-8 shrink-0 rounded-full"
           />
         ) : (
-          <span
-            aria-hidden="true"
-            className="bg-muted flex size-8 shrink-0 items-center justify-center rounded-full text-sm"
-          >
-            {name[0]}
-          </span>
+          (avatar ?? (
+            <span
+              aria-hidden="true"
+              className="bg-muted flex size-8 shrink-0 items-center justify-center rounded-full text-sm"
+            >
+              {name[0]}
+            </span>
+          ))
         ))}
       <p
         className={`rounded-3xl px-4 py-3 text-lg leading-relaxed wrap-anywhere whitespace-pre-wrap ${message.speaker === "user" ? "bg-primary text-primary-foreground rounded-br-md" : "bg-muted rounded-bl-md"}`}
@@ -79,6 +81,15 @@ function conversationStatus(practice: Practice) {
   return muted && state === "listening"
     ? "Microphone muted"
     : statusLabels[state];
+}
+
+function microphoneIsActive(practice: Practice) {
+  return (
+    (practice.state === "listening" || practice.state === "talking") &&
+    !practice.muted &&
+    (practice.selection?.mode !== "guided" ||
+      practice.guided.phase === "listening")
+  );
 }
 
 function ConversationRecap({
@@ -125,7 +136,6 @@ export function PracticeConversation({
   scene: string;
 }) {
   const { state, messages, muted } = practice;
-  const reducedMotion = useReducedMotion();
   const transcriptId = useId();
   const followLatest = useRef(true);
   const transcript = useRef<HTMLDivElement>(null);
@@ -133,6 +143,7 @@ export function PracticeConversation({
   const endButton = useRef<HTMLButtonElement>(null);
   const connected = state === "listening" || state === "talking";
   const reviewing = state === "reviewing";
+  const ongoing = state !== "ended" && !reviewing;
   const showRecap =
     (state === "ended" || reviewing) && practice.selection !== null;
   const status = conversationStatus(practice);
@@ -234,58 +245,53 @@ export function PracticeConversation({
       ) : (
         conversationLog
       )}
-      <div className="flex flex-col items-center gap-4 pb-[env(safe-area-inset-bottom)]">
+      {ongoing && <SpeakingPrompt practice={practice} />}
+      <div
+        className={`relative isolate flex w-full flex-col items-center gap-4 ${ongoing ? "h-56 shrink-0 justify-end overflow-hidden pb-[max(1.5rem,env(safe-area-inset-bottom))]" : "pb-[env(safe-area-inset-bottom)]"}`}
+      >
+        {ongoing && (
+          <WatercolorWave
+            active={microphoneIsActive(practice)}
+            getLevel={practice.getInputVolume}
+          />
+        )}
         {!reviewing && (
           <output
-            className="text-muted-foreground text-center text-sm"
+            className={`relative z-10 px-4 text-center text-sm ${ongoing ? "text-primary font-medium" : "text-muted-foreground"}`}
             aria-live="polite"
           >
             {status}
           </output>
         )}
-        {state !== "ended" && !reviewing && (
-          <>
-            <SpeakingPrompt practice={practice} />
-            <LiveWaveform
-              analyser={practice.getAnalyser()}
-              active={connected && !muted && !reducedMotion}
-              mode="static"
-              height={48}
-              barWidth={3}
-              barGap={3}
-              fadeEdges
-              className="max-w-xs"
-              aria-label={status}
-            />
-            <div className="relative flex items-center justify-center">
-              {connected && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-16 rounded-full"
-                  aria-label={muted ? "Unmute microphone" : "Mute microphone"}
-                  onClick={() => practice.toggleMute()}
-                >
-                  {muted ? (
-                    <MicOff aria-hidden="true" />
-                  ) : (
-                    <Mic aria-hidden="true" />
-                  )}
-                </Button>
-              )}
+        {ongoing && (
+          <div className="relative z-10 flex items-center justify-center">
+            {connected && (
               <Button
-                ref={endButton}
                 variant="ghost"
                 size="icon"
-                className="bg-destructive/10 text-destructive hover:bg-destructive/20 hover:text-destructive size-12 touch-manipulation rounded-full transition-colors"
-                aria-label="End conversation"
-                title="Finish practice and get feedback"
-                onClick={() => practice.end()}
+                className="absolute right-16 rounded-full"
+                aria-label={muted ? "Unmute microphone" : "Mute microphone"}
+                onClick={() => practice.toggleMute()}
               >
-                <PhoneOff aria-hidden="true" className="size-5" />
+                {muted ? (
+                  <MicOff aria-hidden="true" />
+                ) : (
+                  <Mic aria-hidden="true" />
+                )}
               </Button>
-            </div>
-          </>
+            )}
+            <Button
+              ref={endButton}
+              variant="ghost"
+              size="icon"
+              className="bg-destructive/10 text-destructive hover:bg-destructive/20 hover:text-destructive size-12 touch-manipulation rounded-full transition-colors"
+              aria-label="End conversation"
+              title="Finish practice and get feedback"
+              onClick={() => practice.end()}
+            >
+              <PhoneOff aria-hidden="true" className="size-5" />
+            </Button>
+          </div>
         )}
         {state === "ended" && (
           <Button className="rounded-full" onClick={() => practice.reset()}>

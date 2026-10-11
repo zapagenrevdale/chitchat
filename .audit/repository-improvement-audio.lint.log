@@ -1,0 +1,108 @@
+$ turbo run lint "--filter=@chitchat/web"
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/web
+   • Running lint in 1 packages
+   • Remote caching disabled
+
+@chitchat/web:i18n:compile: cache miss, executing 76ec0cbb524cb23f
+@chitchat/contracts:build: cache hit, replaying logs ca2ee1b0bceadeb7
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/web:i18n:compile: $ paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy baseLocale
+@chitchat/web:i18n:compile: ℹ [paraglide-js] Compiling inlang project ...
+@chitchat/web:i18n:compile: ✔ [paraglide-js] Successfully compiled inlang project.
+@chitchat/web:lint: cache miss, executing c88c0015328fdbad
+@chitchat/web:lint: $ ultracite check
+@chitchat/web:lint: Checking formatting...
+@chitchat/web:lint: 
+@chitchat/web:lint: src/lib/practice-audio.test.ts (0ms)
+@chitchat/web:lint: 
+@chitchat/web:lint: Format issues found in above 1 files. Run without `--check` to fix.
+@chitchat/web:lint: Finished in 238ms on 155 files using 10 threads.
+@chitchat/web:lint: 
+@chitchat/web:lint:   x vitest(valid-expect): Async assertions must be awaited.
+@chitchat/web:lint:      ,-[src/lib/practice-audio.test.ts:107:27]
+@chitchat/web:lint:  106 |             controller.abort();
+@chitchat/web:lint:  107 | ,->         const rejection = expect(preparation).rejects.toBe(
+@chitchat/web:lint:  108 | |             controller.signal.reason
+@chitchat/web:lint:  109 | `->         );
+@chitchat/web:lint:  110 |             pendingResume.resolve();
+@chitchat/web:lint:      `----
+@chitchat/web:lint:   help: Add `await` to your assertion.
+@chitchat/web:lint: 
+@chitchat/web:lint:   x vitest(valid-expect): Async assertions must be awaited.
+@chitchat/web:lint:      ,-[src/lib/practice-audio.test.ts:134:25]
+@chitchat/web:lint:  133 |           controller.abort();
+@chitchat/web:lint:  134 | ,->       const rejection = expect(preparation).rejects.toBe(
+@chitchat/web:lint:  135 | |           controller.signal.reason
+@chitchat/web:lint:  136 | `->       );
+@chitchat/web:lint:  137 |           fixture.acquisition.resolve(fixture.stream);
+@chitchat/web:lint:      `----
+@chitchat/web:lint:   help: Add `await` to your assertion.
+@chitchat/web:lint: 
+@chitchat/web:lint:   x typescript(no-invalid-void-type): Use `void` only as a return type or generic type argument.
+@chitchat/web:lint:     ,-[src/lib/practice-audio.test.ts:16:45]
+@chitchat/web:lint:  15 | function createCancellationFixture() {
+@chitchat/web:lint:  16 |   const inputResume = Promise.withResolvers<void>();
+@chitchat/web:lint:     :                                             ^^^^
+@chitchat/web:lint:  17 |   const outputResume = Promise.withResolvers<void>();
+@chitchat/web:lint:     `----
+@chitchat/web:lint:   help: Replace this `void` type with an allowed type, or keep `void` only in a valid return position.
+@chitchat/web:lint: 
+@chitchat/web:lint:   x typescript(no-invalid-void-type): Use `void` only as a return type or generic type argument.
+@chitchat/web:lint:     ,-[src/lib/practice-audio.test.ts:17:46]
+@chitchat/web:lint:  16 |   const inputResume = Promise.withResolvers<void>();
+@chitchat/web:lint:  17 |   const outputResume = Promise.withResolvers<void>();
+@chitchat/web:lint:     :                                              ^^^^
+@chitchat/web:lint:  18 |   const acquisitionStarted = Promise.withResolvers<void>();
+@chitchat/web:lint:     `----
+@chitchat/web:lint:   help: Replace this `void` type with an allowed type, or keep `void` only in a valid return position.
+@chitchat/web:lint: 
+@chitchat/web:lint:   x typescript(no-invalid-void-type): Use `void` only as a return type or generic type argument.
+@chitchat/web:lint:     ,-[src/lib/practice-audio.test.ts:18:52]
+@chitchat/web:lint:  17 |   const outputResume = Promise.withResolvers<void>();
+@chitchat/web:lint:  18 |   const acquisitionStarted = Promise.withResolvers<void>();
+@chitchat/web:lint:     :                                                    ^^^^
+@chitchat/web:lint:  19 |   const tracks = [
+@chitchat/web:lint:     `----
+@chitchat/web:lint:   help: Replace this `void` type with an allowed type, or keep `void` only in a valid return position.
+@chitchat/web:lint: 
+@chitchat/web:lint:   x vitest(require-mock-type-parameters): Missing type parameters on mock function call
+@chitchat/web:lint:     ,-[src/lib/practice-audio.test.ts:30:22]
+@chitchat/web:lint:  29 |   const addModule = vi.fn<() => Promise<void>>().mockResolvedValue();
+@chitchat/web:lint:  30 |   const worklet = vi.fn();
+@chitchat/web:lint:     :                      ^^
+@chitchat/web:lint:  31 |   const getUserMedia = vi.fn(() => {
+@chitchat/web:lint:     `----
+@chitchat/web:lint:   help: Add a type parameter to the mock function, e.g. `vi.fn<() => void>()`.
+@chitchat/web:lint: 
+@chitchat/web:lint:   x vitest(require-mock-type-parameters): Missing type parameters on mock function call
+@chitchat/web:lint:     ,-[src/lib/practice-audio.test.ts:31:27]
+@chitchat/web:lint:  30 |   const worklet = vi.fn();
+@chitchat/web:lint:  31 |   const getUserMedia = vi.fn(() => {
+@chitchat/web:lint:     :                           ^^
+@chitchat/web:lint:  32 |     acquisitionStarted.resolve();
+@chitchat/web:lint:     `----
+@chitchat/web:lint:   help: Add a type parameter to the mock function, e.g. `vi.fn<() => void>()`.
+@chitchat/web:lint: 
+@chitchat/web:lint:   x vitest(require-mock-type-parameters): Missing type parameters on mock function call
+@chitchat/web:lint:     ,-[src/lib/practice-audio.test.ts:48:33]
+@chitchat/web:lint:  47 |   return {
+@chitchat/web:lint:  48 |     audio: new PracticeAudio(vi.fn()),
+@chitchat/web:lint:     :                                 ^^
+@chitchat/web:lint:  49 |     inputResume,
+@chitchat/web:lint:     `----
+@chitchat/web:lint:   help: Add a type parameter to the mock function, e.g. `vi.fn<() => void>()`.
+@chitchat/web:lint: 
+@chitchat/web:lint: Found 0 warnings and 8 errors.
+@chitchat/web:lint: Finished in 322ms on 92 files with 586 rules using 10 threads.
+@chitchat/web:lint: error: script "lint" exited with code 1
+@chitchat/web#lint:  ERROR  command (/Users/genrevzapa/projects/chitchat/apps/web) /Users/genrevzapa/.bun/bin/bun run lint exited (1)
+
+ Tasks:    2 successful, 3 total
+Cached:    1 cached, 3 total
+  Time:    1.558s 
+Failed:    @chitchat/web#lint
+
+ ERROR  run failed: command  exited (1)
+error: script "lint" exited with code 1

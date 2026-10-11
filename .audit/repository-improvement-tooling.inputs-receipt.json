@@ -1,0 +1,15 @@
+{
+  "result": "PASS",
+  "personaSvgContentHashesVerified": 30,
+  "defaultBackendInputsRetained": true,
+  "backendDependenciesRetained": [
+    "@chitchat/contracts#build",
+    "@chitchat/db#build",
+    "@chitchat/email#build",
+    "@chitchat/worktree#build"
+  ],
+  "effectiveDbOutputs": [
+    "src/generated/**"
+  ],
+  "dbOutputCaveat": "Existing packages/db/turbo.json overrides the root DB output declaration. Baseline already includes generated outputs."
+}

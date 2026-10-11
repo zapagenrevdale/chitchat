@@ -1,0 +1,31 @@
+$ turbo run test "--filter=@chitchat/web" -- src/components/practice/use-persona-preview.test.ts src/components/practice/live-waveform.test.tsx
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/web
+   • Running test in 1 packages
+   • Remote caching disabled
+
+@chitchat/contracts:build: cache miss, executing 756c94f8bed59392
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/web:i18n:compile: cache hit, replaying logs 1b97e8e430b4c9a8
+@chitchat/web:i18n:compile: $ paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy baseLocale
+@chitchat/web:i18n:compile: ℹ [paraglide-js] Compiling inlang project ...
+@chitchat/web:i18n:compile: ✔ [paraglide-js] Successfully compiled inlang project.
+@chitchat/web:test: cache miss, executing 01405ee60ec09d7e
+@chitchat/web:test: $ vitest run src/components/practice/use-persona-preview.test.ts src/components/practice/live-waveform.test.tsx
+@chitchat/web:test: 
+@chitchat/web:test: [1m[30m[46m RUN [49m[39m[22m [36mv5.0.0 [39m[90m/Users/genrevzapa/projects/chitchat/apps/web[39m
+@chitchat/web:test: 
+@chitchat/web:test:  [32m✓[39m src/components/practice/use-persona-preview.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 55[2mms[22m[39m
+@chitchat/web:test:  [32m✓[39m src/components/practice/live-waveform.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 326[2mms[22m[39m
+@chitchat/web:test: 
+@chitchat/web:test: [2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+@chitchat/web:test: [2m      Tests [22m [1m[32m20 passed[39m[22m[90m (20)[39m
+@chitchat/web:test: [2m   Start at [22m 11:52:00
+@chitchat/web:test: [2m   Duration [22m 1.83s[2m (environment 66%, tests 12%, setup 9%, transform 8%, import 4%)[22m
+@chitchat/web:test: 
+
+ Tasks:    3 successful, 3 total
+Cached:    1 cached, 3 total
+  Time:    2.26s 
+

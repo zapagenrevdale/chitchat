@@ -1,0 +1,1605 @@
+*** Begin Patch
+*** Update File: apps/web/src/lib/onboarding-live.ts
+@@
+   Transcription,
+ } from "@google/genai";
+ 
++import { OnboardingTranscript } from "./onboarding-transcript";
+ import {
+   completeOnboardingVoice,
+   createOnboardingSession,
+   PracticeApiError,
+ } from "./practice-api";
+ import { PracticeAudio } from "./practice-audio";
++import type { PlaybackPosition } from "./practice-audio";
+ import { PracticeTraceQueue } from "./practice-tracing";
+ 
+ export type OnboardingLivePhase =
+@@
+ 
+ interface OutputTurn {
+   message: Utterance;
++  transcript: OnboardingTranscript;
++  origin?: PlaybackPosition;
+   chunks: { data: string; mimeType: string }[];
+   hasAudio: boolean;
+   started: boolean;
+   complete: boolean;
++  generated: boolean;
+   drained: boolean;
+   drainRequested: boolean;
+ }
+@@
+ 
+   constructor(callbacks: Callbacks) {
+     this.callbacks = callbacks;
+-    this.audio = new PracticeAudio((playing) => {
+-      if (this.closed) {
+-        return;
+-      }
+-      this.playing = playing;
+-      this.trace?.record({
+-        type: "lifecycle",
+-        name: playing ? "playback_started" : "playback_finished",
+-      });
+-      if (playing && this.playback) {
+-        this.playback.started = true;
+-        this.playback.message.visible = true;
+-        this.publish();
+-      }
+-      this.updatePhase();
+-    });
++    this.audio = new PracticeAudio(
++      (playing) => {
++        if (this.closed) {
++          return;
++        }
++        this.playing = playing;
++        this.trace?.record({
++          type: "lifecycle",
++          name: playing ? "playback_started" : "playback_finished",
++        });
++        this.updatePhase();
++      },
++      (position) => this.revealPlayback(position)
++    );
+   }
+ 
+   async start(learner: OnboardingLiveRequest) {
+@@
+     return message;
+   }
+ 
+-  private transcribe(message: Utterance, transcription: Transcription) {
+-    const text = message.text + (transcription.text ?? "");
+-    if (text.length > 500) {
++  private transcribe(output: OutputTurn, transcription: Transcription) {
++    if (
++      output.transcript.text.length + (transcription.text?.length ?? 0) >
++      500
++    ) {
+       this.fail(
+         "That answer was too long for this short setup. Restart voice with a shorter answer, switch to text, or choose your skills."
+       );
+       return;
+     }
+-    message.text = text;
+-    if (transcription.finished) {
+-      this.finalizeMessage(message);
++    output.transcript.append(transcription);
++    this.revealPlayback(this.audio.getPlaybackPosition());
++  }
++
++  private revealPlayback(position: PlaybackPosition) {
++    const output = this.playback;
++    if (
++      this.closed ||
++      !output?.origin ||
++      output.origin.generation !== position.generation
++    ) {
++      return;
++    }
++    const consumed = position.consumedSamples - output.origin.submittedSamples;
++    if (consumed <= 0) {
++      return;
++    }
++    output.started = true;
++    const text = output.transcript.prefix(
++      consumed / position.sampleRate,
++      output.generated
++        ? (position.submittedSamples - output.origin.submittedSamples) /
++            position.sampleRate
++        : undefined
++    );
++    if (output.message.text !== text) {
++      output.message.visible = true;
++      output.message.text = text;
++      this.publish();
+     }
+   }
+ 
+@@
+     }
+     const output: OutputTurn = {
+       message,
++      transcript: new OnboardingTranscript(),
+       chunks: [],
+       hasAudio: false,
+       started: false,
+       complete: false,
++      generated: false,
+       drained: false,
+       drainRequested: false,
+     };
+@@
+     this.awaitingReply = false;
+     this.playbackQueue.push(output);
+     this.playback ??= output;
++    if (this.playback === output) {
++      output.origin = this.audio.getPlaybackPosition();
++    }
+     if (this.completion && message.id > this.completion.afterOutputId) {
+       this.completion.acknowledgment = output;
+     }
+@@
+     if (this.closed || content.interrupted) {
+       return;
+     }
+-    const hasOutput = Boolean(
+-      content.outputTranscription?.text || content.modelTurn
+-    );
++    const hasOutput = Boolean(content.outputTranscription || content.modelTurn);
+     let { output } = this;
+     if (hasOutput && (!output || output.complete)) {
+       output = this.createOutput();
+     }
+     if (output && content.outputTranscription) {
+-      this.transcribe(output.message, content.outputTranscription);
++      this.transcribe(output, content.outputTranscription);
+       this.publish();
+     }
+     this.receiveAudio(content, output);
+@@
+       return;
+     }
+     if (output && (content.generationComplete || content.turnComplete)) {
+-      // Unlike input transcription, v1beta output transcription is complete
+-      // before generationComplete (or its interrupted/turnComplete boundary).
+-      this.finalizeMessage(output.message);
+-      this.publish();
++      output.generated = true;
+       if (output === this.playback) {
++        this.revealPlayback(this.audio.getPlaybackPosition());
+         this.audio.finishPlayback();
+       }
+     }
+@@
+         return;
+       }
+       output.drained = true;
++      if (output.hasAudio && output.started) {
++        output.message.text = output.transcript.text;
++        output.message.visible = true;
++        this.finalizeMessage(output.message);
++      }
++      this.publish();
+       this.playbackQueue.shift();
+       [this.playback] = this.playbackQueue;
+       try {
+         if (this.playback) {
++          this.playback.origin = this.audio.getPlaybackPosition();
+           for (const chunk of this.playback.chunks) {
+             this.bufferedAudio -= chunk.data.length;
+             this.audio.play(chunk.data, chunk.mimeType);
+           }
+           this.playback.chunks = [];
++          if (this.playback.generated) {
++            this.audio.finishPlayback();
++          }
+           if (this.playback.complete) {
+-            this.audio.finishPlayback();
+             this.drain(this.playback);
+           }
+         }
+@@
+     };
+     if (this.output && !this.output.complete) {
+       this.output.complete = true;
+-      this.audio.finishPlayback();
++      if (this.output === this.playback) {
++        this.audio.finishPlayback();
++      }
+       this.drain(this.output);
+     }
+     this.output = undefined;
+@@
+       return;
+     }
+     if (revealTranscript) {
+-      for (const utterance of this.messages) {
+-        utterance.visible = true;
+-      }
+       this.publish();
+     }
+     this.trace?.record({ type: "lifecycle", name: "error", detail: message });
+*** Update File: apps/web/src/lib/onboarding-live.test.ts
+@@
+ 
+ const audio = vi.hoisted(() => ({
+   onPlaying: undefined as ((playing: boolean) => void) | undefined,
++  onProgress: undefined as
++    | ((position: AudioModule.PlaybackPosition) => void)
++    | undefined,
++  position: {
++    generation: 0,
++    consumedSamples: 0,
++    submittedSamples: 0,
++    sampleRate: 24_000,
++  },
+   prepare: vi.fn<AudioModule.PracticeAudio["prepare"]>(),
+   play: vi.fn<AudioModule.PracticeAudio["play"]>(),
+   dispose: vi.fn<() => void>(),
+@@
+   drainPlayback: vi.fn<(done: () => void) => void>(),
+   setMuted: vi.fn<(muted: boolean) => void>(),
+   getAnalyser: vi.fn<AudioModule.PracticeAudio["getAnalyser"]>(),
++  getPlaybackPosition:
++    vi.fn<AudioModule.PracticeAudio["getPlaybackPosition"]>(),
+   inputVolume: 0.3,
+ }));
+ vi.mock(import("./practice-audio"), () => ({
+   PracticeAudio: class {
+-    constructor(onPlaying: (playing: boolean) => void) {
++    constructor(
++      onPlaying: (playing: boolean) => void,
++      onProgress?: (position: AudioModule.PlaybackPosition) => void
++    ) {
+       audio.onPlaying = onPlaying;
++      audio.onProgress = onProgress;
+     }
++    getPlaybackPosition = audio.getPlaybackPosition;
+     prepare = audio.prepare;
+     play = audio.play;
+     dispose = audio.dispose;
+@@
+     },
+   });
+ }
++function progress(consumedSamples: number) {
++  audio.position.consumedSamples = consumedSamples;
++  audio.onProgress?.({ ...audio.position });
++}
++
+ function drain() {
++  progress(audio.position.submittedSamples);
+   audio.onPlaying?.(false);
+   required(audio.drainPlayback.mock.calls.at(-1)?.[0])();
+ }
+@@
+     FakeSocket.instances = [];
+     attempts = [];
+     audio.prepare.mockResolvedValue();
++    audio.getPlaybackPosition.mockImplementation(() => {
++      const position = { ...audio.position };
++      return position;
++    });
++    audio.position = {
++      generation: 0,
++      consumedSamples: 0,
++      submittedSamples: 0,
++      sampleRate: 24_000,
++    };
++    audio.play.mockImplementation(() => {
++      audio.position.submittedSamples += 24_000;
++    });
++    audio.stopPlayback.mockImplementation(() => {
++      audio.position = {
++        ...audio.position,
++        generation: audio.position.generation + 1,
++        consumedSamples: 0,
++        submittedSamples: 0,
++      };
++    });
+     vi.mocked(createOnboardingSession).mockResolvedValue({
+       ...session,
+       expiresAt: Date.now() + 180_000,
+@@
+       "audio/pcm;rate=24000"
+     );
+     audio.onPlaying?.(true);
++    progress(12_000);
++    expect(callbacks.onMessages).toHaveBeenLastCalledWith(
++      [{ id: 1, role: "assistant", text: "What", final: false }],
++      []
++    );
++    expect(callbacks.onPhase).toHaveBeenLastCalledWith("speaking");
++    socket.message({
++      serverContent: { generationComplete: true, turnComplete: true },
++    });
++    drain();
++    expect(callbacks.onMessages.mock.calls.at(-1)?.[1]).toStrictEqual([
++      { role: "assistant", text: "What would you like to practice?" },
++    ]);
++  });
++
++  it("paces late untimed deltas without a jump and releases the remainder at drain", async () => {
++    const { socket, callbacks } = await connect();
++    socket.message({ serverContent: { modelTurn: { parts: [audioPart] } } });
++    audio.onPlaying?.(true);
++    progress(12_000);
++    socket.message({
++      serverContent: { outputTranscription: { text: "Hello " } },
++    });
++    socket.message({
++      serverContent: {
++        outputTranscription: { text: "Alex." },
++        generationComplete: true,
++      },
++    });
++    expect(callbacks.onMessages).toHaveBeenLastCalledWith([], []);
++    socket.message({
++      serverContent: {
++        outputTranscription: { text: " Welcome." },
++        turnComplete: true,
++      },
++    });
++    drain();
++    expect(callbacks.onMessages).toHaveBeenLastCalledWith(
++      [{ id: 1, role: "assistant", text: "Hello Alex. Welcome.", final: true }],
++      [{ role: "assistant", text: "Hello Alex. Welcome." }]
++    );
++  });
++
++  it("paces a streamed untimed response with PCM, freezes during underflow, and adapts at generation completion", async () => {
++    const { socket, callbacks } = await connect();
++    socket.message({
++      serverContent: {
++        outputTranscription: {
++          text: "one two three four five six seven eight",
++        },
++        modelTurn: { parts: [audioPart] },
++      },
++    });
++    progress(12_000);
++    expect(callbacks.onMessages.mock.calls.at(-1)?.[0]).toStrictEqual([
++      { id: 1, role: "assistant", text: "one", final: false },
++    ]);
++    vi.advanceTimersByTime(5000);
++    progress(12_000);
++    expect(callbacks.onMessages.mock.calls.at(-1)?.[0][0]?.text).toBe("one");
++    socket.message({
++      serverContent: { modelTurn: { parts: [audioPart, audioPart] } },
++    });
++    progress(24_000);
++    expect(callbacks.onMessages.mock.calls.at(-1)?.[0][0]?.text).toBe(
++      "one two"
++    );
++    socket.message({ serverContent: { generationComplete: true } });
++    const afterGeneration =
++      callbacks.onMessages.mock.calls.at(-1)?.[0][0]?.text;
++    progress(48_000);
++    expect({
++      afterGeneration,
++      later: callbacks.onMessages.mock.calls.at(-1)?.[0][0]?.text,
++    }).toStrictEqual({
++      afterGeneration: "one two",
++      later: "one two three four five",
++    });
++    socket.message({ serverContent: { turnComplete: true } });
++    drain();
++    expect(callbacks.onMessages.mock.calls.at(-1)?.[1]).toStrictEqual([
++      { role: "assistant", text: "one two three four five six seven eight" },
++    ]);
++  });
++
++  it("uses each queued untimed turn's complete audio duration and playback origin", async () => {
++    const { socket, callbacks } = await connect();
++    socket.message({
++      serverContent: {
++        outputTranscription: { text: "First reply." },
++        modelTurn: { parts: [audioPart] },
++        turnComplete: true,
++      },
++    });
++    socket.message({
++      serverContent: {
++        outputTranscription: { text: "one two three four" },
++        modelTurn: { parts: [audioPart, audioPart, audioPart, audioPart] },
++        generationComplete: true,
++      },
++    });
++    drain();
++    expect(audio.finishPlayback).toHaveBeenCalledTimes(2);
++    progress(36_000);
++    expect(callbacks.onMessages.mock.calls.at(-1)?.[0]).toHaveLength(1);
++    progress(48_000);
++    expect(callbacks.onMessages.mock.calls.at(-1)?.[0]).toMatchObject([
++      { text: "First reply.", final: true },
++      { text: "one", final: false },
++    ]);
++    progress(72_000);
++    expect(callbacks.onMessages.mock.calls.at(-1)?.[0][1]?.text).toBe(
++      "one two"
++    );
++    socket.message({ serverContent: { turnComplete: true } });
++    drain();
++    expect(callbacks.onMessages.mock.calls.at(-1)?.[0][1]).toMatchObject({
++      text: "one two three four",
++      final: true,
++    });
++  });
++
++  it("cancels an approximate suffix on interruption and ignores its late drain", async () => {
++    const { socket, callbacks } = await connect();
++    socket.message({
++      serverContent: {
++        outputTranscription: { text: "one two three four" },
++        modelTurn: { parts: [audioPart, audioPart, audioPart, audioPart] },
++        turnComplete: true,
++      },
++    });
++    progress(24_000);
++    const oldPosition = { ...audio.position, consumedSamples: 96_000 };
++    const oldDrain = required(audio.drainPlayback.mock.calls.at(-1)?.[0]);
++    socket.message({ serverContent: { interrupted: true } });
++    oldDrain();
++    audio.onProgress?.(oldPosition);
++    expect(callbacks.onMessages).toHaveBeenLastCalledWith(
++      [{ id: 1, role: "assistant", text: "one", final: false }],
++      []
++    );
++  });
++
++  it("processes captions and all audio parts in the same event", async () => {
++    const { socket, callbacks } = await connect();
++    socket.message({
++      serverContent: {
++        outputTranscription: { text: "Hello!" },
++        modelTurn: { parts: [audioPart, audioPart] },
++        generationComplete: true,
++      },
++    });
++    expect(audio.play).toHaveBeenCalledTimes(2);
++    expect(audio.finishPlayback).toHaveBeenCalledOnce();
++    expect(callbacks.onMessages).toHaveBeenLastCalledWith([], []);
++    audio.onPlaying?.(true);
++    progress(24_000);
++    expect(callbacks.onMessages).toHaveBeenLastCalledWith([], []);
++    socket.message({ serverContent: { turnComplete: true } });
++    drain();
++    expect(callbacks.onMessages.mock.calls.at(-1)?.[0]).toMatchObject([
++      { text: "Hello!", final: true },
++    ]);
++  });
++
++  it("keeps the next response hidden until the preceding audio drains and its own playback starts", async () => {
++    const { socket, callbacks } = await connect();
++    socket.message({
++      serverContent: {
++        outputTranscription: {
++          text: "First reply.",
++          words: [
++            { text: "First reply.", startOffset: "0s", endOffset: "0.5s" },
++          ],
++        },
++        modelTurn: { parts: [audioPart] },
++        turnComplete: true,
++      },
++    });
++    audio.onPlaying?.(true);
++    progress(12_000);
++    socket.message({
++      serverContent: {
++        outputTranscription: {
++          text: "Second reply.",
++          words: [
++            { text: "Second reply.", startOffset: "0s", endOffset: "0.5s" },
++          ],
++        },
++        modelTurn: { parts: [audioPart] },
++        turnComplete: true,
++      },
++    });
++    expect(audio.play).toHaveBeenCalledOnce();
++    expect(callbacks.onMessages.mock.calls.at(-1)?.[0]).toHaveLength(1);
++    drain();
++    expect(audio.play).toHaveBeenCalledTimes(2);
++    expect(callbacks.onMessages.mock.calls.at(-1)?.[0]).toHaveLength(1);
++    audio.onPlaying?.(true);
++    progress(36_000);
++    expect(callbacks.onMessages.mock.calls.at(-1)?.[0]).toMatchObject([
++      { text: "First reply." },
++      { text: "Second reply." },
++    ]);
++  });
++
++  it("preserves exact cues then paces the untimed suffix, confirming only at drain", async () => {
++    const { socket, callbacks } = await connect();
++    socket.message({
++      serverContent: {
++        outputTranscription: {
++          text: "Hello, Alex. Let's practice.",
++          words: [
++            { word: "Hello", startOffset: "0s", endOffset: "0.2s" },
++            { word: "Alex.", startOffset: "0.2s", endOffset: "0.5s" },
++          ],
++          finished: true,
++        },
++        modelTurn: { parts: [audioPart] },
++        generationComplete: true,
++      },
++    });
++    progress(4799);
++    expect(callbacks.onMessages).toHaveBeenLastCalledWith([], []);
++    progress(4800);
++    expect(callbacks.onMessages).toHaveBeenLastCalledWith(
++      [{ id: 1, role: "assistant", text: "Hello", final: false }],
++      []
++    );
++    progress(12_000);
++    expect(callbacks.onMessages).toHaveBeenLastCalledWith(
++      [{ id: 1, role: "assistant", text: "Hello, Alex.", final: false }],
++      []
++    );
++    progress(18_000);
++    expect(callbacks.onMessages.mock.calls.at(-1)?.[0][0]?.text).toBe(
++      "Hello, Alex. Let's"
++    );
++    socket.message({ serverContent: { turnComplete: true } });
++    drain();
+     expect(callbacks.onMessages).toHaveBeenLastCalledWith(
+       [
+         {
+           id: 1,
+           role: "assistant",
+-          text: "What would you like to practice?",
+-          final: false,
++          text: "Hello, Alex. Let's practice.",
++          final: true,
+         },
+       ],
++      [{ role: "assistant", text: "Hello, Alex. Let's practice." }]
++    );
++  });
++
++  it("catches up late timestamps in the current turn after generationComplete", async () => {
++    const { socket, callbacks } = await connect();
++    socket.message({
++      serverContent: {
++        modelTurn: { parts: [audioPart] },
++        generationComplete: true,
++      },
++    });
++    progress(12_000);
++    socket.message({
++      serverContent: { outputTranscription: { text: "Hello " } },
++    });
++    expect(callbacks.onMessages).toHaveBeenLastCalledWith([], []);
++    socket.message({
++      serverContent: {
++        outputTranscription: {
++          text: "Alex.",
++          words: [
++            { text: "Hello", startOffset: "0s", endOffset: "0.2s" },
++            { text: "Alex.", startOffset: "0.2s", endOffset: "0.8s" },
++          ],
++        },
++      },
++    });
++    expect(callbacks.onMessages).toHaveBeenLastCalledWith(
++      [{ id: 1, role: "assistant", text: "Hello", final: false }],
+       []
+     );
+-    expect(callbacks.onPhase).toHaveBeenLastCalledWith("speaking");
+-    socket.message({
+-      serverContent: { generationComplete: true, turnComplete: true },
+-    });
+-    expect(callbacks.onMessages.mock.calls.at(-1)?.[1]).toStrictEqual([
+-      { role: "assistant", text: "What would you like to practice?" },
++    progress(19_200);
++    expect(callbacks.onMessages.mock.calls.at(-1)?.[0]).toStrictEqual([
++      { id: 1, role: "assistant", text: "Hello Alex.", final: false },
+     ]);
+   });
+ 
+-  it("reveals late output deltas when audio arrived first without splitting the utterance", async () => {
+-    const { socket, callbacks } = await connect();
+-    socket.message({ serverContent: { modelTurn: { parts: [audioPart] } } });
+-    audio.onPlaying?.(true);
+-    socket.message({
+-      serverContent: { outputTranscription: { text: "Hello " } },
+-    });
+-    socket.message({
+-      serverContent: {
+-        outputTranscription: { text: "Alex." },
+-        generationComplete: true,
+-      },
+-    });
+-    expect(callbacks.onMessages).toHaveBeenLastCalledWith(
+-      [{ id: 1, role: "assistant", text: "Hello Alex.", final: true }],
+-      [{ role: "assistant", text: "Hello Alex." }]
+-    );
+-  });
+-
+-  it("processes captions and all audio parts in the same event", async () => {
+-    const { socket, callbacks } = await connect();
+-    socket.message({
+-      serverContent: {
+-        outputTranscription: { text: "Hello!" },
+-        modelTurn: { parts: [audioPart, audioPart] },
+-        generationComplete: true,
+-      },
+-    });
+-    expect(audio.play).toHaveBeenCalledTimes(2);
+-    expect(audio.finishPlayback).toHaveBeenCalledOnce();
+-    expect(callbacks.onMessages).toHaveBeenLastCalledWith([], []);
+-    audio.onPlaying?.(true);
+-    expect(callbacks.onMessages.mock.calls.at(-1)?.[0]).toMatchObject([
+-      { text: "Hello!", final: true },
+-    ]);
+-  });
+-
+-  it("keeps the next response hidden until the preceding audio drains and its own playback starts", async () => {
+-    const { socket, callbacks } = await connect();
+-    socket.message({
+-      serverContent: {
+-        outputTranscription: { text: "First reply." },
++  it.each([undefined, "invalid", "-1s", "0.1"])(
++    "paces missing or malformed timing %s and confirms only at successful drain",
++    async (endOffset) => {
++      const { socket, callbacks } = await connect();
++      socket.message({
++        serverContent: {
++          outputTranscription: {
++            text: "Hello.",
++            words: [{ word: "Hello.", startOffset: "0s", endOffset }],
++          },
++          modelTurn: { parts: [audioPart] },
++          turnComplete: true,
++        },
++      });
++      progress(12_000);
++      expect(callbacks.onMessages).toHaveBeenLastCalledWith([], []);
++      progress(24_000);
++      expect(callbacks.onMessages).toHaveBeenLastCalledWith(
++        [{ id: 1, role: "assistant", text: "Hello.", final: false }],
++        []
++      );
++      drain();
++      expect(callbacks.onMessages).toHaveBeenLastCalledWith(
++        [{ id: 1, role: "assistant", text: "Hello.", final: true }],
++        [{ role: "assistant", text: "Hello." }]
++      );
++    }
++  );
++
++  it("does not treat a timed text-only turn as spoken after earlier audio drains", async () => {
++    const { socket, callbacks } = await connect();
++    socket.message({
++      serverContent: {
++        outputTranscription: { text: "Spoken." },
+         modelTurn: { parts: [audioPart] },
+         turnComplete: true,
+       },
+     });
+-    audio.onPlaying?.(true);
+-    socket.message({
+-      serverContent: {
+-        outputTranscription: { text: "Second reply." },
++    drain();
++    socket.message({
++      serverContent: {
++        outputTranscription: {
++          text: "Not spoken.",
++          words: [{ word: "Not spoken.", startOffset: "0s", endOffset: "0s" }],
++        },
++        turnComplete: true,
++      },
++    });
++    drain();
++    expect(callbacks.onMessages).toHaveBeenLastCalledWith(
++      [{ id: 1, role: "assistant", text: "Spoken.", final: true }],
++      [{ role: "assistant", text: "Spoken." }]
++    );
++  });
++
++  it.each(["interrupt", "error"])(
++    "retains only the heard prefix on %s, not queued text",
++    async (cause) => {
++      const { socket, callbacks } = await connect();
++      socket.message({
++        serverContent: {
++          outputTranscription: {
++            text: "Heard. Unheard.",
++            words: [
++              { text: "Heard.", startOffset: "0s", endOffset: "0.25s" },
++              { text: "Unheard.", startOffset: "0.25s", endOffset: "1s" },
++            ],
++          },
++          modelTurn: { parts: [audioPart] },
++          turnComplete: true,
++        },
++      });
++      progress(6000);
++      const oldPosition = { ...audio.position, consumedSamples: 24_000 };
++      const oldDrain = required(audio.drainPlayback.mock.calls.at(-1)?.[0]);
++      socket.message({
++        serverContent: {
++          outputTranscription: { text: "Queued." },
++          modelTurn: { parts: [audioPart] },
++          turnComplete: true,
++        },
++      });
++      if (cause === "interrupt") {
++        socket.message({ serverContent: { interrupted: true } });
++      } else {
++        required(audio.prepare.mock.calls[0]?.[2])("Playback stopped.");
++      }
++      oldDrain();
++      audio.onProgress?.(oldPosition);
++      expect(callbacks.onMessages).toHaveBeenLastCalledWith(
++        [{ id: 1, role: "assistant", text: "Heard.", final: false }],
++        []
++      );
++      expect(callbacks.onComplete).not.toHaveBeenCalled();
++    }
++  );
++
++  it("ignores old-generation progress after the next response starts", async () => {
++    const { socket, callbacks } = await connect();
++    socket.message({ serverContent: { modelTurn: { parts: [audioPart] } } });
++    const oldPosition = { ...audio.position, consumedSamples: 24_000 };
++    socket.message({ serverContent: { interrupted: true } });
++    socket.message({
++      serverContent: {
++        outputTranscription: {
++          text: "New.",
++          words: [{ text: "New.", startOffset: "0s", endOffset: "0.25s" }],
++        },
+         modelTurn: { parts: [audioPart] },
+-        turnComplete: true,
+-      },
+-    });
+-    expect(audio.play).toHaveBeenCalledOnce();
+-    expect(callbacks.onMessages.mock.calls.at(-1)?.[0]).toHaveLength(1);
+-    drain();
+-    expect(audio.play).toHaveBeenCalledTimes(2);
+-    expect(callbacks.onMessages.mock.calls.at(-1)?.[0]).toHaveLength(1);
+-    audio.onPlaying?.(true);
+-    expect(callbacks.onMessages.mock.calls.at(-1)?.[0]).toMatchObject([
+-      { text: "First reply." },
+-      { text: "Second reply." },
+-    ]);
++      },
++    });
++    audio.onProgress?.(oldPosition);
++    expect(callbacks.onMessages).toHaveBeenLastCalledWith([], []);
++    progress(6000);
++    expect(callbacks.onMessages).toHaveBeenLastCalledWith(
++      [{ id: 2, role: "assistant", text: "New.", final: false }],
++      []
++    );
+   });
+ 
+   it("reports a queued audio error from the playback callback without an unhandled exception", async () => {
+@@
+     });
+     drain();
+     expect(callbacks.onComplete).not.toHaveBeenCalled();
++    expect(callbacks.onMessages).toHaveBeenLastCalledWith(
++      [
++        {
++          id: 1,
++          role: "user",
++          text: "I want to speak clearly in work meetings.",
++          final: true,
++        },
++      ],
++      [{ role: "user", text: "I want to speak clearly in work meetings." }]
++    );
+     await vi.advanceTimersByTimeAsync(25_000);
+     expect(callbacks.onError).toHaveBeenCalledWith(
+       expect.stringContaining("Couldn't finish")
+@@
+     expect(callbacks.onMessages.mock.calls.at(-1)?.[0]).toHaveLength(1);
+   });
+ 
+-  it("shows the available transcript with an explicit playback error", async () => {
++  it("does not expose unheard transcript on playback error", async () => {
+     const { socket, callbacks } = await connect();
+     socket.message({
+       serverContent: {
+@@
+     });
+     const failure = required(audio.prepare.mock.calls[0]?.[2]);
+     failure("Speech playback stopped. Please start again.");
+-    expect(callbacks.onMessages.mock.calls.at(-1)?.[0]).toMatchObject([
+-      { text: "Here is the spoken reply." },
+-    ]);
++    expect(callbacks.onMessages).toHaveBeenLastCalledWith([], []);
+     expect(callbacks.onError).toHaveBeenCalledWith(
+       expect.stringContaining("playback stopped")
+     );
+*** Update File: apps/web/src/lib/practice-audio.ts
+@@
+   } catch {
+     // A context may already be closed by browser audio-device cleanup.
+   }
++}
++
++export interface PlaybackPosition {
++  generation: number;
++  consumedSamples: number;
++  submittedSamples: number;
++  sampleRate: number;
+ }
+ 
+ export class PracticeAudio {
+@@
+   private playing = false;
+   private onDrained?: () => void;
+   private playbackGeneration = 0;
++  private consumedSamples = 0;
++  private submittedSamples = 0;
+   private disposed = false;
+   private muted = false;
+   private inputStopped = false;
+   inputVolume = 0;
+ 
+   private onPlaying: (playing: boolean) => void;
+-
+-  constructor(onPlaying: (playing: boolean) => void) {
++  private readonly onProgress?: (position: PlaybackPosition) => void;
++
++  constructor(
++    onPlaying: (playing: boolean) => void,
++    onProgress?: (position: PlaybackPosition) => void
++  ) {
+     this.onPlaying = onPlaying;
++    this.onProgress = onProgress;
+     this.analyser.fftSize = 256;
+     this.inputAnalyser.fftSize = 256;
+     this.analyser.connect(this.context.destination);
+@@
+           type: string;
+           playing: boolean;
+           message: string;
++          consumedSamples: number;
+         }>
+       ) => {
+         if (
+@@
+         if (event.data.type === "playing") {
+           this.playing = event.data.playing;
+           this.onPlaying(this.playing);
++        } else if (event.data.type === "progress") {
++          const { consumedSamples } = event.data;
++          if (
++            Number.isSafeInteger(consumedSamples) &&
++            consumedSamples >= this.consumedSamples &&
++            consumedSamples <= this.submittedSamples
++          ) {
++            this.consumedSamples = consumedSamples;
++            this.onProgress?.(this.getPlaybackPosition());
++          }
+         } else if (event.data.type === "drained") {
+           const { onDrained } = this;
+           this.onDrained = undefined;
+@@
+       throw new Error("Speech playback is not ready.");
+     }
+     const samples = decodePcm(data);
++    this.submittedSamples += samples.length;
+     // MessagePort has no targetOrigin parameter.
+     // oxlint-disable-next-line unicorn/require-post-message-target-origin
+     this.playback.port.postMessage(
+@@
+ 
+   stopPlayback() {
+     this.playbackGeneration += 1;
++    this.onDrained = undefined;
++    this.consumedSamples = 0;
++    this.submittedSamples = 0;
+     const message = { type: "clear", generation: this.playbackGeneration };
+     // MessagePort has no targetOrigin parameter.
+     // oxlint-disable-next-line unicorn/require-post-message-target-origin
+     this.playback?.port.postMessage(message);
+     this.playing = false;
+     this.onPlaying(false);
++  }
++
++  getPlaybackPosition(): PlaybackPosition {
++    return {
++      generation: this.playbackGeneration,
++      consumedSamples: this.consumedSamples,
++      submittedSamples: this.submittedSamples,
++      sampleRate: this.context.sampleRate,
++    };
+   }
+ 
+   getOutputVolume() {
+*** Update File: apps/web/src/lib/practice-audio.test.ts
+@@
+     }
+   });
+ });
++
++function createOutputFixture() {
++  const port = Object.assign(new EventTarget(), {
++    start: vi.fn<() => void>(),
++    close: vi.fn<() => void>(),
++    postMessage: vi.fn<(message: object) => void>(),
++  });
++  vi.stubGlobal(
++    "AudioContext",
++    class {
++      sampleRate = 24_000;
++      state = "running";
++      destination = {};
++      audioWorklet = {
++        addModule: vi.fn<() => Promise<void>>().mockResolvedValue(),
++      };
++      resume = vi.fn<() => Promise<void>>().mockResolvedValue();
++      close = vi.fn<() => Promise<void>>().mockResolvedValue();
++      createAnalyser = createAnalyser;
++    }
++  );
++  vi.stubGlobal(
++    "AudioWorkletNode",
++    class extends EventTarget {
++      port = port;
++      connect = vi.fn<() => void>();
++      disconnect = vi.fn<() => void>();
++    }
++  );
++  const onProgress =
++    vi.fn<NonNullable<ConstructorParameters<typeof PracticeAudio>[1]>>();
++  return {
++    audio: new PracticeAudio(vi.fn<(playing: boolean) => void>(), onProgress),
++    onProgress,
++    notify: (data: object) =>
++      port.dispatchEvent(new MessageEvent("message", { data })),
++  };
++}
++
++describe("consumed PCM positions", () => {
++  afterEach(() => vi.unstubAllGlobals());
++
++  it("reports monotonic consumed positions bounded by submitted samples", async () => {
++    const { audio, notify, onProgress } = createOutputFixture();
++    try {
++      await audio.prepareOutput(vi.fn());
++      audio.play(encodePcm(new Float32Array(3)), "audio/pcm;rate=24000");
++      expect(audio.getPlaybackPosition()).toStrictEqual({
++        generation: 0,
++        consumedSamples: 0,
++        submittedSamples: 3,
++        sampleRate: 24_000,
++      });
++      notify({ type: "progress", generation: 0, consumedSamples: 2 });
++      expect(onProgress).toHaveBeenLastCalledWith({
++        generation: 0,
++        consumedSamples: 2,
++        submittedSamples: 3,
++        sampleRate: 24_000,
++      });
++      for (const consumedSamples of [1, 4, -1, 1.5, Number.NaN]) {
++        notify({ type: "progress", generation: 0, consumedSamples });
++      }
++      expect(onProgress).toHaveBeenCalledOnce();
++      expect(audio.getPlaybackPosition().consumedSamples).toBe(2);
++    } finally {
++      audio.dispose();
++    }
++  });
++
++  it("resets counters, filters stale generations, and cancels old drain callbacks", async () => {
++    const { audio, notify, onProgress } = createOutputFixture();
++    try {
++      await audio.prepareOutput(vi.fn());
++      audio.play(encodePcm(new Float32Array(3)), "audio/pcm;rate=24000");
++      const oldDrain = vi.fn<() => void>();
++      audio.drainPlayback(oldDrain);
++      notify({ type: "progress", generation: 0, consumedSamples: 2 });
++      audio.stopPlayback();
++      expect(audio.getPlaybackPosition()).toStrictEqual({
++        generation: 1,
++        consumedSamples: 0,
++        submittedSamples: 0,
++        sampleRate: 24_000,
++      });
++      notify({ type: "progress", generation: 0, consumedSamples: 3 });
++      notify({ type: "drained", generation: 0 });
++      notify({ type: "drained", generation: 1 });
++      expect({
++        progress: onProgress.mock.calls.length,
++        drains: oldDrain.mock.calls.length,
++      }).toStrictEqual({ progress: 1, drains: 0 });
++      audio.play(encodePcm(new Float32Array(3)), "audio/pcm;rate=24000");
++      const newDrain = vi.fn<() => void>();
++      audio.drainPlayback(newDrain);
++      notify({ type: "progress", generation: 1, consumedSamples: 3 });
++      notify({ type: "drained", generation: 1 });
++      expect(onProgress).toHaveBeenLastCalledWith({
++        generation: 1,
++        consumedSamples: 3,
++        submittedSamples: 3,
++        sampleRate: 24_000,
++      });
++      expect(newDrain).toHaveBeenCalledOnce();
++    } finally {
++      audio.dispose();
++    }
++  });
++});
+*** Update File: apps/web/src/lib/playback-worklet.test.ts
+@@
+         start() {
+           /* The test delivers messages synchronously. */
+         },
+-        postMessage: notifications,
++        postMessage(message: object) {
++          notifications({ ...message });
++        },
+       };
+     },
+     registerProcessor(name: string, constructor: new () => PlaybackProcessor) {
+@@
+ }
+ 
+ describe("continuous speech playback", () => {
++  it("reports copied silent PCM, not startup buffering, underrun silence, or fades", () => {
++    const player = createPlayer();
++    player.send({
++      type: "audio",
++      generation: 0,
++      samples: new Float32Array(100),
++    });
++    player.render(10);
++    expect(player.notifications).not.toHaveBeenCalledWith(
++      expect.objectContaining({ type: "progress" })
++    );
++    player.send({
++      type: "audio",
++      generation: 0,
++      samples: new Float32Array(2200),
++    });
++    player.render(30);
++    const progress = player.notifications.mock.calls
++      .map(([message]) => message)
++      .filter((message) => "type" in message && message.type === "progress");
++    expect(progress).toStrictEqual([
++      { type: "progress", generation: 0, consumedSamples: 768 },
++      { type: "progress", generation: 0, consumedSamples: 1536 },
++      { type: "progress", generation: 0, consumedSamples: 2300 },
++    ]);
++    player.send({ type: "drain", generation: 0 });
++    player.render(1);
++    expect(player.notifications.mock.calls.slice(-2)).toStrictEqual([
++      [{ type: "progress", generation: 0, consumedSamples: 2300 }],
++      [{ type: "drained", generation: 0 }],
++    ]);
++    player.render(20);
++    expect(player.notifications.mock.calls.at(-2)).toStrictEqual([
++      { type: "progress", generation: 0, consumedSamples: 2300 },
++    ]);
++  });
++
++  it("resets progress and cancels an old drain on generation clear", () => {
++    const player = createPlayer();
++    player.send({
++      type: "audio",
++      generation: 0,
++      samples: new Float32Array(2400).fill(0.5),
++    });
++    player.send({ type: "drain", generation: 0 });
++    player.render(6);
++    player.send({ type: "clear", generation: 1 });
++    player.render(20);
++    expect(player.notifications).not.toHaveBeenCalledWith(
++      expect.objectContaining({ type: "drained" })
++    );
++    player.send({
++      type: "audio",
++      generation: 0,
++      samples: new Float32Array(2400),
++    });
++    player.send({ type: "drain", generation: 0 });
++    player.send({
++      type: "audio",
++      generation: 1,
++      samples: new Float32Array(10),
++    });
++    player.send({ type: "drain", generation: 1 });
++    player.render(2);
++    expect(player.notifications.mock.calls.slice(-2)).toStrictEqual([
++      [{ type: "progress", generation: 1, consumedSamples: 10 }],
++      [{ type: "drained", generation: 1 }],
++    ]);
++  });
++
++  it("reports short finished speech before announcing playback stopped without a drain", () => {
++    const player = createPlayer();
++    player.send({
++      type: "audio",
++      generation: 0,
++      samples: new Float32Array(128).fill(0.5),
++    });
++    player.send({ type: "finish", generation: 0 });
++    player.render(100);
++    expect(player.notifications.mock.calls.slice(-2)).toStrictEqual([
++      [{ type: "progress", generation: 0, consumedSamples: 128 }],
++      [{ type: "playing", generation: 0, playing: false }],
++    ]);
++  });
++
++  it("flushes residual consumption on underrun and keeps silence out of progress", () => {
++    const player = createPlayer();
++    player.send({
++      type: "audio",
++      generation: 0,
++      samples: new Float32Array(2400).fill(0.5),
++    });
++    player.render(100);
++    const progress = player.notifications.mock.calls
++      .map(([message]) => message)
++      .filter((message) => "type" in message && message.type === "progress");
++    expect(progress).toStrictEqual([
++      { type: "progress", generation: 0, consumedSamples: 768 },
++      { type: "progress", generation: 0, consumedSamples: 1536 },
++      { type: "progress", generation: 0, consumedSamples: 2304 },
++      { type: "progress", generation: 0, consumedSamples: 2400 },
++    ]);
++  });
++
+   it("preserves every sample across uneven chunks without introducing tones at boundaries", () => {
+     const player = createPlayer();
+     const speech = Float32Array.from(
+*** Update File: apps/web/public/audio/playback.worklet.js
+@@
+   offset = 0;
+   queued = 0;
+   generation = 0;
++  consumedSamples = 0;
++  reportedSamples = 0;
++  progressSamples = Math.round(sampleRate * 0.032);
+   complete = false;
+   draining = false;
+   playing = false;
+@@
+     this.queued = 0;
+     this.offset = 0;
+     this.complete = false;
++    this.draining = false;
++    this.consumedSamples = 0;
++    this.reportedSamples = 0;
+     this.beginFade();
+     this.setPlaying(false);
+   }
+ 
+   setPlaying(playing) {
+     if (this.playing !== playing) {
++      if (!playing && this.consumedSamples !== this.reportedSamples) {
++        this.reportProgress();
++      }
+       this.playing = playing;
+       this.notify({ type: "playing", playing });
+     }
+@@
+       this.lastSample = output[index];
+       this.offset += 1;
+       this.queued -= 1;
++      this.consumedSamples += 1;
+       if (this.offset === chunk.length) {
+         this.chunks.shift();
+         this.offset = 0;
+       }
++    }
++    if (this.consumedSamples - this.reportedSamples >= this.progressSamples) {
++      this.reportProgress();
+     }
+     if (
+       this.draining &&
+@@
+       this.fadeRemaining === 0
+     ) {
+       this.draining = false;
++      this.reportProgress();
+       this.notify({ type: "drained" });
+     }
+     return true;
+   }
++
++  reportProgress() {
++    this.reportedSamples = this.consumedSamples;
++    this.notify({ type: "progress", consumedSamples: this.consumedSamples });
++  }
+ }
+ registerProcessor("practice-speaker", PracticeSpeaker);
+*** Update File: apps/backend/src/practice/onboarding-live.ts
+@@
+             },
+             tools: onboardingLiveTools,
+             inputAudioTranscription: {},
+-            outputAudioTranscription: {},
++            outputAudioTranscription: { wordTimestamp: true },
+             realtimeInputConfig: {
+               activityHandling: ActivityHandling.START_OF_ACTIVITY_INTERRUPTS,
+               automaticActivityDetection: {
+*** Update File: apps/backend/src/practice/onboarding-live.test.ts
+@@
+ // Sequential requests intentionally exercise evolving quota and cookie state.
+ /* eslint-disable no-await-in-loop */
+ import { onboardingCompleteSchema } from "@chitchat/contracts/onboarding";
++import type { GoogleGenAI } from "@google/genai";
+ import { describe, expect, it, vi } from "vitest";
+ 
+ import type { PracticeProvider } from "./gemini";
+-import { onboardingLiveInstruction } from "./onboarding-live";
++import {
++  createOnboardingLiveSession,
++  onboardingLiveInstruction,
++} from "./onboarding-live";
+ import { createOnboardingLiveRoutes } from "./onboarding-live-routes";
+ import { createPracticeRoutes } from "./routes";
+ 
+ const origin = "https://amber.cc.local";
+-const request = { name: "Dale", language: "English" };
++const request = { name: "Dale", language: "English" as const };
+ function setup() {
+   const createOnboardingSession = vi
+     .fn<NonNullable<PracticeProvider["createOnboardingSession"]>>()
+@@
+ }
+ 
+ describe("onboarding Live sessions", () => {
++  it("locks word timestamps into the constrained token without exposing credentials", async () => {
++    const create = vi
++      .fn<GoogleGenAI["authTokens"]["create"]>()
++      .mockResolvedValue({ name: "auth_tokens/timed" });
++    const ai = { authTokens: { create } } as unknown as GoogleGenAI;
++    const session = await createOnboardingLiveSession(
++      ai,
++      request,
++      new AbortController().signal
++    );
++    expect(session.token).toBe("auth_tokens/timed");
++    expect(create).toHaveBeenCalledWith({
++      config: expect.objectContaining({
++        liveConnectConstraints: expect.objectContaining({
++          config: expect.objectContaining({
++            outputAudioTranscription: { wordTimestamp: true },
++          }),
++        }),
++        httpOptions: {
++          extraBody: {
++            fieldMask: expect.stringContaining("outputAudioTranscription"),
++          },
++        },
++      }),
++    });
++  });
++
+   it("validates identity and origin before issuing tokens", async () => {
+     const { app, provider } = setup();
+     for (const [body, requestOrigin, status] of [
+*** Add File: apps/web/src/lib/onboarding-transcript.ts
++import type { Transcription, WordInfo } from "@google/genai";
++
++type TimedWord = WordInfo & { text?: string };
++
++type TimedTranscription = Omit<Transcription, "words"> & {
++  words?: TimedWord[];
++  startOffset?: string;
++  endOffset?: string;
++};
++
++interface Cue {
++  start: number;
++  end: number;
++  index: number;
++  length: number;
++}
++
++interface Reveal {
++  at: number;
++  length: number;
++}
++
++const segmenter = new Intl.Segmenter(undefined, { granularity: "word" });
++// While audio is still arriving, use a conservative 150 words per minute.
++const nominalWordSeconds = 0.4;
++
++function wordEnds(text: string, start: number, end: number) {
++  const slice = text.slice(start, end);
++  const words = [...segmenter.segment(slice)].filter((word) => word.isWordLike);
++  return words.map((word, index) => {
++    const next = words[index + 1]?.index ?? slice.length;
++    return start + slice.slice(0, next).trimEnd().length;
++  });
++}
++
++function seconds(offset: unknown) {
++  if (typeof offset !== "string" || !/^\d+(?:\.\d{1,9})?s$/u.test(offset)) {
++    return;
++  }
++  const value = Number(offset.slice(0, -1));
++  return Number.isFinite(value) ? value : undefined;
++}
++
++// Interpret provider offsets on the output turn's audio timeline.
++export class OnboardingTranscript {
++  text = "";
++  private cues: Cue[] = [];
++  private matched = 0;
++  private lastEnd = 0;
++  private visible = 0;
++  private elapsed = 0;
++  private revealedAt = 0;
++  private duration?: number;
++  private dirty = true;
++  private reveals: Reveal[] = [];
++
++  append(transcription: TimedTranscription) {
++    this.text += transcription.text ?? "";
++    this.dirty = true;
++    const words: TimedWord[] =
++      transcription.words ??
++      (transcription.startOffset !== undefined ||
++      transcription.endOffset !== undefined
++        ? [transcription]
++        : []);
++    for (const word of words) {
++      const start = seconds(word.startOffset);
++      const end = seconds(word.endOffset);
++      const text = (word.word ?? word.text)?.trim();
++      const index = text ? this.text.indexOf(text, this.matched) : -1;
++      if (
++        start === undefined ||
++        end === undefined ||
++        start > end ||
++        end < this.lastEnd ||
++        !text ||
++        index < 0
++      ) {
++        continue;
++      }
++      this.matched = index + text.length;
++      this.lastEnd = end;
++      this.cues.push({ start, end, index, length: this.matched });
++    }
++  }
++
++  private plan(duration?: number) {
++    const preserveStreamingPace =
++      duration === undefined &&
++      this.duration === undefined &&
++      this.reveals.some((reveal) => reveal.length > this.visible);
++    this.reveals = [];
++    let length = this.visible;
++    let time = preserveStreamingPace ? this.revealedAt : this.elapsed;
++    this.revealedAt = time;
++    const approximate = (end: number, until?: number) => {
++      const ends = wordEnds(this.text, length, end);
++      let interval = nominalWordSeconds;
++      if (until !== undefined) {
++        interval =
++          until > time
++            ? (until - time) / ends.length
++            : Number.POSITIVE_INFINITY;
++      }
++      for (const [index, boundary] of ends.entries()) {
++        this.reveals.push({
++          at: time + (index + 1) * interval,
++          length: boundary,
++        });
++      }
++    };
++    for (const cue of this.cues) {
++      if (cue.length <= length) {
++        time = Math.max(time, cue.end);
++        continue;
++      }
++      if (cue.start > time) {
++        approximate(cue.index, cue.start);
++      }
++      this.reveals.push({ at: cue.end, length: cue.length });
++      ({ length } = cue);
++      time = Math.max(time, cue.end);
++    }
++    approximate(this.text.length, duration);
++  }
++
++  prefix(elapsedSeconds: number, audioDurationSeconds?: number) {
++    const elapsed = Number.isFinite(elapsedSeconds)
++      ? Math.max(this.elapsed, elapsedSeconds, 0)
++      : this.elapsed;
++    const duration =
++      audioDurationSeconds !== undefined &&
++      Number.isFinite(audioDurationSeconds) &&
++      audioDurationSeconds > 0
++        ? audioDurationSeconds
++        : undefined;
++    if (this.dirty || duration !== this.duration) {
++      // Re-anchor only undisclosed text so late text and final duration cannot
++      // retract words or spend already-consumed audio on a new sentence.
++      this.plan(duration);
++      this.duration = duration;
++      this.dirty = false;
++    }
++    for (const reveal of this.reveals) {
++      if (reveal.at > elapsed) {
++        break;
++      }
++      if (reveal.length > this.visible) {
++        this.visible = reveal.length;
++        this.revealedAt = reveal.at;
++      }
++    }
++    this.elapsed = elapsed;
++    return this.text.slice(0, this.visible);
++  }
++}
+*** Add File: apps/web/src/lib/onboarding-transcript.test.ts
++import { describe, expect, it } from "vitest";
++
++import { OnboardingTranscript } from "./onboarding-transcript";
++
++describe("turn-relative transcript cues", () => {
++  it("preserves punctuation and whitespace instead of reconstructing words", () => {
++    const transcript = new OnboardingTranscript();
++    transcript.append({
++      text: "Hello,  Alex!",
++      words: [
++        { word: "Hello", startOffset: "0s", endOffset: "0.2s" },
++        { word: "Alex!", startOffset: "0.2s", endOffset: "0.5s" },
++      ],
++    });
++    expect(transcript.prefix(0.199)).toBe("");
++    expect(transcript.prefix(0.2)).toBe("Hello");
++    expect(transcript.prefix(0.5)).toBe("Hello,  Alex!");
++  });
++
++  it.each([
++    { text: "two", startOffset: "0.1s", endOffset: "bad" },
++    { text: "two", startOffset: "-1s", endOffset: "0.4s" },
++    { text: "two", startOffset: "0.5s", endOffset: "0.4s" },
++    { text: "two", startOffset: "0s", endOffset: "0.1s" },
++    { text: "two", endOffset: "0.4s" },
++    { text: "missing", startOffset: "0.2s", endOffset: "0.4s" },
++  ])("paces the suffix after an invalid or unmatched cue %j", (word) => {
++    const transcript = new OnboardingTranscript();
++    transcript.append({
++      text: "one two three",
++      words: [{ text: "one", startOffset: "0s", endOffset: "0.2s" }, word],
++    });
++    expect(transcript.prefix(0.2)).toBe("one");
++    expect(transcript.prefix(0.61)).toBe("one two");
++    expect(transcript.prefix(1.01)).toBe("one two three");
++    expect(transcript.text).toBe("one two three");
++  });
++
++  it("paces an untimed lexical gap without crossing a future exact cue", () => {
++    const transcript = new OnboardingTranscript();
++    transcript.append({ text: "one two " });
++    transcript.append({
++      text: "three",
++      words: [{ text: "three", startOffset: "1s", endOffset: "2s" }],
++    });
++    expect(transcript.prefix(0.5)).toBe("one");
++    expect(transcript.prefix(1.5)).toBe("one two");
++    expect(transcript.prefix(2)).toBe("one two three");
++    expect(transcript.text).toBe("one two three");
++  });
++
++  it("accepts raw websocket offsets at the boundary without inventing word timings", () => {
++    const transcript = new OnboardingTranscript();
++    transcript.append({
++      text: "Hello, Alex.",
++      startOffset: "0s",
++      endOffset: "0.5s",
++    });
++    expect(transcript.prefix(0.4)).toBe("");
++    expect(transcript.prefix(0.5)).toBe("Hello, Alex.");
++  });
++
++  it("catches up timestamps that arrive without another text delta", () => {
++    const transcript = new OnboardingTranscript();
++    transcript.append({ text: "Hello." });
++    expect(transcript.prefix(0.1)).toBe("");
++    transcript.append({
++      words: [{ text: "Hello.", startOffset: "0s", endOffset: "0.5s" }],
++    });
++    expect(transcript.prefix(10)).toBe("Hello.");
++  });
++
++  it("reveals a long untimed response progressively using consumed speech", () => {
++    const transcript = new OnboardingTranscript();
++    transcript.append({ text: "one two three four five six seven eight" });
++    expect(transcript.prefix(0)).toBe("");
++    expect(transcript.prefix(0.5)).toBe("one");
++    expect(transcript.prefix(1)).toBe("one two");
++    expect(transcript.prefix(1)).toBe("one two");
++    expect(transcript.prefix(2)).toBe("one two three four five");
++  });
++
++  it("distributes words over known complete PCM duration", () => {
++    const transcript = new OnboardingTranscript();
++    transcript.append({ text: "one two three four" });
++    expect(transcript.prefix(0.5, 4)).toBe("");
++    expect(transcript.prefix(1, 4)).toBe("one");
++    expect(transcript.prefix(2, 4)).toBe("one two");
++    expect(transcript.prefix(4, 4)).toBe("one two three four");
++  });
++
++  it("adapts undisclosed words on generation completion without a jump or retraction", () => {
++    const transcript = new OnboardingTranscript();
++    transcript.append({ text: "one two three four five six" });
++    expect(transcript.prefix(0.8)).toBe("one two");
++    expect(transcript.prefix(0.8, 1.6)).toBe("one two");
++    expect(transcript.prefix(1, 1.6)).toBe("one two three");
++    expect(transcript.prefix(1.41, 1.6)).toBe("one two three four five");
++    expect(transcript.prefix(1.6, 1.6)).toBe(transcript.text);
++  });
++
++  it("keeps nominal pacing while transcription keeps streaming", () => {
++    const transcript = new OnboardingTranscript();
++    transcript.append({ text: "one two three four" });
++    expect(transcript.prefix(0.1)).toBe("");
++    transcript.append({ text: " five" });
++    expect(transcript.prefix(0.2)).toBe("");
++    transcript.append({ text: " six" });
++    expect(transcript.prefix(0.3)).toBe("");
++    transcript.append({ text: " seven" });
++    expect(transcript.prefix(0.4)).toBe("one");
++    transcript.append({ text: " eight" });
++    expect(transcript.prefix(0.8)).toBe("one two");
++  });
++
++  it("spreads a missing suffix after authoritative exact spans", () => {
++    const transcript = new OnboardingTranscript();
++    transcript.append({
++      text: "one two three four",
++      words: [{ word: "one", startOffset: "0s", endOffset: "1s" }],
++    });
++    expect(transcript.prefix(0.9, 4)).toBe("");
++    expect(transcript.prefix(1, 4)).toBe("one");
++    expect(transcript.prefix(2, 4)).toBe("one two");
++    expect(transcript.prefix(3, 4)).toBe("one two three");
++  });
++
++  it("keeps a visible prefix when late text and exact cues arrive during underflow", () => {
++    const transcript = new OnboardingTranscript();
++    transcript.append({ text: "Hello, " });
++    expect(transcript.prefix(0.5)).toBe("Hello,");
++    transcript.append({
++      text: "Alex. Welcome back!",
++      words: [{ word: "Hello", startOffset: "0s", endOffset: "2s" }],
++    });
++    expect(transcript.prefix(0.5)).toBe("Hello,");
++    expect(transcript.prefix(0.5)).toBe("Hello,");
++    expect(transcript.prefix(2.5)).toBe("Hello, Alex.");
++  });
++
++  it("preserves nonspace languages, emoji, punctuation and canonical spacing", () => {
++    const transcript = new OnboardingTranscript();
++    const text = "你好，世界！  今天练习对话🙂。";
++    transcript.append({ text });
++    const early = transcript.prefix(0.5);
++    expect(early).toBe("你好，");
++    expect(text.startsWith(early)).toBeTruthy();
++    expect(transcript.prefix(100)).toBe(text);
++  });
++
++  it("clamps malformed playback values and holds late text when audio is exhausted", () => {
++    const transcript = new OnboardingTranscript();
++    transcript.append({ text: "one two" });
++    expect(transcript.prefix(Number.NaN, Number.NaN)).toBe("");
++    expect(transcript.prefix(-1, -1)).toBe("");
++    expect(transcript.prefix(1, 1)).toBe("one two");
++    transcript.append({ text: " three four" });
++    expect(transcript.prefix(1, 1)).toBe("one two");
++    expect(transcript.prefix(Number.POSITIVE_INFINITY, 1)).toBe("one two");
++  });
++});
+*** End Patch

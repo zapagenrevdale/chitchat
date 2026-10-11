@@ -1,0 +1,48 @@
+$ turbo run test "--filter=@chitchat/backend" -- src/practice/feedback.test.ts src/practice/transcription.test.ts src/practice/transcript-body-budget.test.ts
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/backend
+   • Running test in 1 packages
+   • Remote caching disabled
+
+@chitchat/contracts:build: cache hit, replaying logs 2ea3885636fed53b
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/email:build: cache hit, replaying logs f3576fb486f40207
+@chitchat/email:build: $ tsc --noEmit
+@chitchat/db:build: cache hit, replaying logs 750a46bb6d6e270c
+@chitchat/db:build: $ prisma generate
+@chitchat/db:build: Loaded Prisma config from prisma.config.ts.
+@chitchat/db:build: 
+@chitchat/db:build: Prisma schema loaded from prisma/schema.prisma.
+@chitchat/db:build: ┌─────────────────────────────────────────────────────────┐
+@chitchat/db:build: │  Update available 7.10.0 -> 8.0.0-rc.22                 │
+@chitchat/db:build: │                                                         │
+@chitchat/db:build: │  This is a major update - please follow the guide at    │
+@chitchat/db:build: │  https://pris.ly/d/major-version-upgrade                │
+@chitchat/db:build: │                                                         │
+@chitchat/db:build: │  Run the following to update                            │
+@chitchat/db:build: │    npm i --save-dev prisma@latest                       │
+@chitchat/db:build: │    npm i @prisma/client@latest                          │
+@chitchat/db:build: └─────────────────────────────────────────────────────────┘
+@chitchat/db:build: 
+@chitchat/db:build: ✔ Generated Prisma Client (7.10.0) to ./src/generated/prisma in 21ms
+@chitchat/db:build: 
+@chitchat/backend:test: cache miss, executing 46239a66f7fa8661
+@chitchat/backend:test: $ vitest run src/practice/feedback.test.ts src/practice/transcription.test.ts src/practice/transcript-body-budget.test.ts
+@chitchat/backend:test: 
+@chitchat/backend:test: [1m[30m[46m RUN [49m[39m[22m [36mv5.0.0 [39m[90m/Users/genrevzapa/projects/chitchat/apps/backend[39m
+@chitchat/backend:test: 
+@chitchat/backend:test:  [32m✓[39m src/practice/transcription.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/feedback.test.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+@chitchat/backend:test:  [32m✓[39m src/practice/transcript-body-budget.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 55[2mms[22m[39m
+@chitchat/backend:test: 
+@chitchat/backend:test: [2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+@chitchat/backend:test: [2m      Tests [22m [1m[32m55 passed[39m[22m[90m (55)[39m
+@chitchat/backend:test: [2m   Start at [22m 11:16:53
+@chitchat/backend:test: [2m   Duration [22m 317ms[2m (import 42%, transform 41%, tests 15%, worker 1%)[22m
+@chitchat/backend:test: 
+
+ Tasks:    4 successful, 4 total
+Cached:    3 cached, 4 total
+  Time:    571ms 
+

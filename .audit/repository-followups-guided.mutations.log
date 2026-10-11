@@ -1,0 +1,3 @@
+44100 Hz baseline passes; wrong registration and dropped block samples rejected.
+48000 Hz baseline passes; wrong registration and dropped block samples rejected.
+Playback baseline registration passes; wrong registration rejected.

@@ -1,0 +1,58 @@
+diff --git a/apps/web/package.json b/apps/web/package.json
+index 1e1af62..cb3f0b5 100644
+--- a/apps/web/package.json
++++ b/apps/web/package.json
+@@ -11,7 +11,8 @@
+     "typecheck": "tsr generate && tsc --noEmit",
+     "test": "vitest run --passWithNoTests",
+     "lint": "ultracite check",
+-    "format": "ultracite fix"
++    "format": "ultracite fix",
++    "i18n:compile": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy baseLocale"
+   },
+   "dependencies": {
+     "@chitchat/contracts": "workspace:*",
+@@ -36,6 +37,7 @@
+   "devDependencies": {
+     "@chitchat/worktree": "workspace:*",
+     "@cloudflare/vite-plugin": "1.54.7",
++    "@inlang/paraglide-js": "2.25.4",
+     "@tailwindcss/vite": "4.3.3",
+     "@tanstack/router-cli": "1.167.35",
+     "@testing-library/jest-dom": "7.0.1",
+diff --git a/turbo.json b/turbo.json
+index 5966bfc..7ede211 100644
+--- a/turbo.json
++++ b/turbo.json
+@@ -59,11 +59,31 @@
+     "generate:introductions": {
+       "cache": false
+     },
++    "generate:chit-introductions": {
++      "cache": false
++    },
+     "generate:avatars": {
+       "cache": false
+     },
+     "generate:places": {
+       "cache": false
++    },
++    "@chitchat/web#i18n:compile": {
++      "inputs": ["messages/**", "project.inlang/settings.json", "package.json"],
++      "outputs": ["src/paraglide/**"]
++    },
++    "@chitchat/web#build": {
++      "dependsOn": ["^build", "i18n:compile"],
++      "outputs": ["dist/**"]
++    },
++    "@chitchat/web#typecheck": {
++      "dependsOn": ["^build", "i18n:compile"]
++    },
++    "@chitchat/web#test": {
++      "dependsOn": ["^build", "i18n:compile"]
++    },
++    "@chitchat/web#lint": {
++      "dependsOn": ["^build", "i18n:compile"]
+     }
+   }
+ }

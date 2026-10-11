@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import type * as GeminiSdk from "@google/genai";
 import type { AuthToken, CreateAuthTokenParameters } from "@google/genai";
 import sharp from "sharp";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createGeminiProvider } from "./gemini";
 
@@ -91,6 +91,68 @@ describe("Gemini Live provisioning", () => {
     expect(
       Date.parse(config?.newSessionExpireTime ?? "") - before
     ).toBeLessThan(61_000);
+  });
+
+  it("issues a separate v1beta onboarding token that expires after three minutes", async () => {
+    createToken.mockResolvedValue({ name: "auth_tokens/onboarding" });
+    const before = Date.now();
+    const session = await createGeminiProvider(
+      "test-key"
+    ).createOnboardingSession?.(
+      { name: "Dale", language: "English" },
+      new AbortController().signal
+    );
+    expect(session?.expiresAt).toBeGreaterThanOrEqual(before + 180_000);
+    expect(session?.expiresAt).toBeLessThan(before + 181_000);
+    expect(session).toMatchObject({
+      model: "gemini-3.8-live",
+      apiVersion: "v1beta",
+      maxDurationMs: 180_000,
+    });
+    expect(clientOptions).toHaveBeenCalledWith({
+      apiKey: "test-key",
+      httpOptions: { apiVersion: "v1beta", timeout: 20_000 },
+    });
+    const config = createToken.mock.calls[0]?.[0].config;
+    expect(config?.expireTime).toBe(
+      new Date(session?.expiresAt ?? 0).toISOString()
+    );
+  });
+
+  it("locks onboarding audio and its blocking completion tool without unsupported thinking configuration", async () => {
+    createToken.mockResolvedValue({ name: "auth_tokens/onboarding" });
+    await createGeminiProvider("test-key").createOnboardingSession?.(
+      { name: "Dale", language: "English" },
+      new AbortController().signal
+    );
+    const config = createToken.mock.calls[0]?.[0].config;
+    expect(config).toMatchObject({
+      uses: 1,
+      lockAdditionalFields: ["tools"],
+      liveConnectConstraints: {
+        model: "gemini-3.8-live",
+        config: {
+          responseModalities: ["AUDIO"],
+          tools: [
+            {
+              functionDeclarations: [
+                { name: "complete_onboarding", behavior: "BLOCKING" },
+              ],
+            },
+          ],
+          inputAudioTranscription: {},
+          outputAudioTranscription: {},
+        },
+      },
+    });
+    expect(
+      config?.liveConnectConstraints?.config?.thinkingConfig
+    ).toBeUndefined();
+    expect(config?.httpOptions?.extraBody?.fieldMask).toBe(
+      "model,generationConfig,systemInstruction,tools,inputAudioTranscription,outputAudioTranscription,realtimeInputConfig"
+    );
+    const declaration = config?.liveConnectConstraints?.config?.tools?.[0];
+    expect(JSON.stringify(declaration)).not.toContain('"reply"');
   });
 
   it("keeps scoring instructions and tools out of the live conversation", async () => {
@@ -338,6 +400,7 @@ describe("image credentials", () => {
 
 describe("AI scene generation", () => {
   beforeEach(() => vi.clearAllMocks());
+  afterEach(() => vi.unstubAllGlobals());
 
   it("generates structured copy from scene context, the persona, and backstory", async () => {
     const result = {
@@ -345,7 +408,20 @@ describe("AI scene generation", () => {
       description: "Ryan greets you by the dugout.",
       goal: "Learn one teammate’s name.",
     };
-    generateContent.mockResolvedValue({ text: JSON.stringify(result) });
+    const fetch = vi.fn<typeof globalThis.fetch>().mockResolvedValue(
+      Response.json({
+        candidates: [
+          {
+            content: {
+              role: "model",
+              parts: [{ text: JSON.stringify(result) }],
+            },
+            finishReason: "STOP",
+          },
+        ],
+      })
+    );
+    vi.stubGlobal("fetch", fetch);
     const { signal } = new AbortController();
     const request = {
       place: { name: "Baseball field", description: "The local field." },
@@ -359,18 +435,26 @@ describe("AI scene generation", () => {
     await expect(
       createGeminiProvider("test-key").generateScenePreview?.(request, signal)
     ).resolves.toStrictEqual(result);
-    const call = generateContent.mock.calls[0]?.[0];
-    expect(call).toMatchObject({
-      model: "gemini-3.1-flash-lite",
-      config: { abortSignal: signal, responseMimeType: "application/json" },
+    const [call] = fetch.mock.calls;
+    expect({
+      url: String(call?.[0]),
+      key: new Headers(call?.[1]?.headers).get("x-goog-api-key"),
+    }).toMatchObject({
+      url: expect.stringContaining("gemini-3.1-flash-lite:generateContent"),
+      key: "test-key",
     });
-    expect(JSON.parse(String(call?.contents))).toMatchObject({
+    const body = JSON.parse(String(call?.[1]?.body));
+    expect(body.generationConfig).toMatchObject({
+      responseMimeType: "application/json",
+      thinkingConfig: { thinkingLevel: "minimal" },
+    });
+    expect(JSON.parse(body.contents[0].parts[0].text)).toMatchObject({
       place: request.place,
       situation: request.situation,
       backstory: request.backstory,
       persona: { name: "Ryan", character: expect.any(String) },
     });
-    expect(call?.config?.systemInstruction).toContain(
+    expect(body.systemInstruction.parts[0].text).toContain(
       "Keep the description independent of the goal"
     );
   });

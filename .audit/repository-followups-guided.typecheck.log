@@ -1,0 +1,24 @@
+$ turbo run typecheck "--filter=@chitchat/web" "--filter=@chitchat/contracts"
+• turbo 2.10.12
+
+   • Packages in scope: @chitchat/contracts, @chitchat/web
+   • Running typecheck in 2 packages
+   • Remote caching disabled
+
+@chitchat/contracts:build: cache hit, replaying logs 14eff55ff9d610a4
+@chitchat/contracts:build: $ tsc --noEmit
+@chitchat/contracts:typecheck: cache miss, executing 39fb594971cb2b66
+@chitchat/contracts:typecheck: $ tsc --noEmit
+@chitchat/web:i18n:compile: cache hit, replaying logs 76ec0cbb524cb23f
+@chitchat/web:i18n:compile: $ paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --emit-ts-declarations --strategy baseLocale
+@chitchat/web:i18n:compile: ℹ [paraglide-js] Compiling inlang project ...
+@chitchat/web:i18n:compile: ✔ [paraglide-js] Successfully compiled inlang project.
+@chitchat/web:typecheck: cache hit, replaying logs aff6cdbf24f50304
+@chitchat/web:typecheck: $ tsr generate && tsc --noEmit
+@chitchat/web:typecheck: (node:67699) Warning: Accessing non-existent property 'replaceRouteChunk' of module exports inside circular dependency
+@chitchat/web:typecheck: (Use `node --trace-warnings ...` to show where the warning was created)
+
+ Tasks:    4 successful, 4 total
+Cached:    3 cached, 4 total
+  Time:    254ms 
+

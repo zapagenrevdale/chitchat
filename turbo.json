@@ -34,6 +34,11 @@
     "test": {
       "dependsOn": ["^build"]
     },
+    "test:auth": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "passThroughEnv": ["AUTH_INTEGRATION_DATABASE_URL"]
+    },
     "lint": {},
     "format": {
       "cache": false
@@ -59,11 +64,38 @@
     "generate:introductions": {
       "cache": false
     },
+    "generate:chit-introductions": {
+      "cache": false
+    },
     "generate:avatars": {
       "cache": false
     },
     "generate:places": {
       "cache": false
+    },
+    "@chitchat/backend#test": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/apps/web/public/images/personas/**"
+      ]
+    },
+    "@chitchat/web#i18n:compile": {
+      "inputs": ["messages/**", "project.inlang/settings.json", "package.json"],
+      "outputs": ["src/paraglide/**"]
+    },
+    "@chitchat/web#build": {
+      "dependsOn": ["^build", "i18n:compile"],
+      "outputs": ["dist/**"]
+    },
+    "@chitchat/web#typecheck": {
+      "dependsOn": ["^build", "i18n:compile"]
+    },
+    "@chitchat/web#test": {
+      "dependsOn": ["^build", "i18n:compile"]
+    },
+    "@chitchat/web#lint": {
+      "dependsOn": ["^build", "i18n:compile"]
     }
   }
 }
