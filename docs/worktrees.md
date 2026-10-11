@@ -79,6 +79,23 @@ Read `.worktree/status.json` for a single JSON document without Turborepo's log 
 
 The registry is stored at `$XDG_STATE_HOME/chitchat/worktrees/registry.sqlite`, defaulting to `~/.local/state/chitchat/worktrees/registry.sqlite`. `CHITCHAT_WORKTREE_HOME` can override its directory for isolated tooling tests; keep the same value throughout a worktree's lifecycle. SQLite transactions coordinate reservations and per-checkout operation leases. A new command can reclaim a lease left by a process that has exited.
 
+## Check real authentication
+
+With the worktree PostgreSQL service running, refresh its status and run the authentication journey:
+
+```sh
+bun run worktree:status --output .worktree/status.json
+bun run test:auth
+```
+
+The database role needs `CREATEDB` permission and access to the `postgres` maintenance database. The default target comes only from `DATABASE_URL` in `packages/db/.env`. Its loopback host, port, and database name must match the saved worktree status. To use another PostgreSQL server, set `AUTH_INTEGRATION_DATABASE_URL` explicitly. The configured worktree supplies the HTTPS web and API origins in either case.
+
+Each invocation creates a fresh `cc_auth_<uuidhex>` database, deploys the committed Prisma migrations, and starts a child that imports the production Hono app and Better Auth configuration. Concurrent invocations use separate databases. The runner drops only the database it successfully created, after the child exits, including on failure or handled termination. Each child has a 90-second limit. An uncatchable kill of the parent can leave its database behind; the output names the owned database for diagnosis.
+
+The child environment contains a fresh auth secret and the disposable database URL. It excludes Gemini and Langfuse credentials. Bun does not load environment files, and migration dotenv loading is disabled. The journey checks signup, persisted credentials, cookie-authenticated identity, wrong-password rejection, fresh signin, and signout with saved-cookie replay. It checks cookie attributes and credentialed CORS through Hono's `fetch`; it does not test browser cookie enforcement or a TLS connection.
+
+`test:auth` is an uncached Turborepo task. Ordinary `bun run test` stays database-independent. A successful run reports both journey completion and deletion of its temporary database. Child output is suppressed to keep credentials out of logs; failures report the migration or journey stage.
+
 ## Merge or remove
 
 Run teardown before deleting the directory, including when a branch has been merged:
