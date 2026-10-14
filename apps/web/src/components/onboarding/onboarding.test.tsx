@@ -11,6 +11,7 @@ import {
   fireEvent,
   render,
   screen,
+  waitFor,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useEffect, useRef, useState } from "react";
@@ -40,7 +41,7 @@ vi.mock(import("@/components/ui/watercolor-wave"), () => ({
 
 type LiveState = Pick<
   ReturnType<typeof useOnboardingLive>,
-  "phase" | "messages" | "error" | "result"
+  "phase" | "messages" | "error" | "result" | "canRetry"
 >;
 interface MockSession {
   onMessages: (messages: OnboardingMessage[]) => void;
@@ -59,6 +60,7 @@ vi.mock(import("./use-onboarding-live"), () => ({
       phase: "connecting",
       messages: [],
       error: null,
+      canRetry: true,
       result: null,
     });
     const session = useRef<MockSession | null>(null);
@@ -160,6 +162,17 @@ function emitMessages(session: MockSession, messages: OnboardingMessage[]) {
     });
     session.onMessages(messages);
   });
+}
+function chooseVoiceFromText() {
+  fireEvent.click(screen.getByRole("button", { name: en.back_button }));
+  fireEvent.click(screen.getByRole("button", { name: en.voice_answer }));
+}
+
+function chooseTextFromVoice() {
+  fireEvent.click(screen.getByRole("button", { name: en.back_button }));
+  fireEvent.click(screen.getByRole("button", { name: en.continue_button }));
+  act(() => clips.at(-1)?.dispatchEvent(new Event("ended")));
+  fireEvent.click(screen.getByRole("button", { name: en.mode_answer_text }));
 }
 function submitText(value: string) {
   fireEvent.change(screen.getByRole("textbox", { name: en.motivation_label }), {
@@ -263,11 +276,11 @@ describe("onboarding", () => {
       expect(words[1]).toHaveStyle({ opacity: "1" });
       expect(words[2]).toHaveStyle({ opacity: "0" });
       expect(
-        screen.getByRole("button", { name: en.voice_answer })
-      ).toBeEnabled();
+        screen.queryByRole("button", { name: en.voice_answer })
+      ).not.toBeInTheDocument();
       expect(
-        screen.getByRole("button", { name: en.mode_answer_text })
-      ).toBeEnabled();
+        screen.queryByRole("button", { name: en.mode_answer_text })
+      ).not.toBeInTheDocument();
       await userEvent.click(
         screen.getByRole("button", { name: "Skip intro (dev)" })
       );
@@ -280,8 +293,38 @@ describe("onboarding", () => {
         [...words].every((word) => word.style.opacity === "1")
       ).toBeTruthy();
       expect(heading).toHaveAccessibleName(welcomes[0].text);
+      expect(
+        screen.getByRole("group", { name: en.mode_answer_by })
+      ).not.toHaveAttribute("inert");
+      expect(
+        screen.getByRole("button", { name: en.voice_answer })
+      ).toBeEnabled();
     });
     /* oxlint-enable vitest/max-expects */
+
+    it("reveals the answer choices after playback without moving focus", async () => {
+      renderOnboarding({
+        ...freshOnboardingDraft(),
+        step: "name",
+        name: "Alex",
+      });
+      submitName();
+      const group = screen.getByRole("group", { hidden: true });
+      expect(group).toHaveAttribute("inert");
+      act(() => clips[0].dispatchEvent(new Event("ended")));
+      expect(screen.getByRole("heading", { level: 1 })).toHaveFocus();
+      expect(screen.getByRole("group", { name: en.mode_answer_by })).toBe(
+        group
+      );
+      await userEvent.tab();
+      expect(
+        screen.getByRole("button", { name: en.voice_answer })
+      ).toHaveFocus();
+      await userEvent.tab();
+      expect(
+        screen.getByRole("button", { name: en.mode_answer_text })
+      ).toHaveFocus();
+    });
 
     it.each([
       en.voice_answer,
@@ -295,6 +338,9 @@ describe("onboarding", () => {
       );
       submitName();
       const [clip] = clips;
+      if (label === en.voice_answer || label === en.mode_answer_text) {
+        act(() => clip.dispatchEvent(new Event("ended")));
+      }
       await userEvent.click(screen.getByRole("button", { name: label }));
       expect(clip.pause).toHaveBeenCalledOnce();
     });
@@ -378,6 +424,9 @@ describe("onboarding", () => {
             voice: en.voice_answer,
             back: en.back_button,
           };
+          if (action !== "back") {
+            act(() => clips[0].dispatchEvent(new Event("ended")));
+          }
           await userEvent.click(
             screen.getByRole("button", {
               name: labels[action],
@@ -450,6 +499,7 @@ describe("onboarding", () => {
         await user.click(
           screen.getByRole("button", { name: copy.continue_button })
         );
+        act(() => clips[0].dispatchEvent(new Event("ended")));
         expect(
           screen.getByRole("button", { name: copy.voice_answer })
         ).toBeEnabled();
@@ -486,14 +536,14 @@ describe("onboarding", () => {
         await user.click(
           screen.getByRole("button", { name: copy.continue_button })
         );
-        expect(screen.getAllByRole("checkbox")).toHaveLength(7);
+        expect(screen.getAllByRole("checkbox")).toHaveLength(11);
         expect(
           screen.getByRole("button", { name: copy.start_practice })
         ).toBeDisabled();
         expect(screen.getAllByText(copy.skill_suggested)).toHaveLength(2);
         await user.click(
           screen.getByRole("checkbox", {
-            name: copy.skill_smooth_speaking_title,
+            name: copy.skill_start_conversations_title,
           })
         );
         await user.click(
@@ -504,7 +554,7 @@ describe("onboarding", () => {
         );
         expect(
           screen.getByRole("checkbox", {
-            name: copy.skill_thinking_on_your_feet_title,
+            name: copy.skill_sharing_title,
           })
         ).toBeDisabled();
         await user.click(
@@ -524,7 +574,7 @@ describe("onboarding", () => {
           name: "Alex",
           language,
           motivation: reply.goal,
-          skills: ["smooth-speaking", "listening", "wit"],
+          skills: ["start-conversations", "listening", "wit"],
           goalStatus: "ready",
         });
         expect(audio).toHaveBeenCalledOnce();
@@ -561,13 +611,13 @@ describe("onboarding", () => {
       await screen.findByRole("alert");
       expect(input).toBeEnabled();
       expect(
-        screen.getByRole("button", { name: en.mode_switch_voice })
+        screen.getByRole("button", { name: en.back_button })
       ).toBeEnabled();
     });
   });
 
   describe("replacing a goal attempt", () => {
-    it("clears typed history, input, outcome, and persisted history across repeated switches", async () => {
+    it("clears typed history, input, outcome, and persisted history when choosing modes again", () => {
       const conversation: OnboardingMessage[] = [
         { role: "user", text: "An old goal" },
         { role: "assistant", text: "Tell me more" },
@@ -577,9 +627,7 @@ describe("onboarding", () => {
         conversation,
         motivation: "An unfinished answer",
       });
-      await userEvent.click(
-        screen.getByRole("button", { name: en.mode_switch_voice })
-      );
+      chooseVoiceFromText();
       expect(screen.queryByText("An old goal")).not.toBeInTheDocument();
       expect(readOnboarding().draft).toMatchObject({
         name: "Alex",
@@ -590,9 +638,7 @@ describe("onboarding", () => {
         motivation: "",
       });
       emitMessages(latestLive(), [{ role: "user", text: "Voice only" }]);
-      await userEvent.click(
-        screen.getByRole("button", { name: en.mode_switch_text })
-      );
+      chooseTextFromVoice();
       expect(screen.queryByText("Voice only")).not.toBeInTheDocument();
       expect(
         screen.getByRole("textbox", { name: en.motivation_label })
@@ -611,9 +657,7 @@ describe("onboarding", () => {
       renderOnboarding(initialText());
       submitText("Abandoned goal");
       const signal = fetchRecommendation.mock.calls[0]?.[1]?.signal;
-      await userEvent.click(
-        screen.getByRole("button", { name: en.mode_switch_voice })
-      );
+      chooseVoiceFromText();
       await act(() => pending.resolve(onboardingTurnResponse(reply)));
       expect(signal?.aborted).toBeTruthy();
       expect(screen.queryByText(reply.reply)).not.toBeInTheDocument();
@@ -628,9 +672,7 @@ describe("onboarding", () => {
         submitText("Make friends");
         await Promise.resolve();
       });
-      fireEvent.click(
-        screen.getByRole("button", { name: en.mode_switch_voice })
-      );
+      chooseVoiceFromText();
       await act(() => vi.advanceTimersByTimeAsync(2000));
       expect(readOnboarding().draft.step).toBe("microphone");
       expect(readOnboarding().draft.goalStatus).toBeUndefined();
@@ -642,9 +684,7 @@ describe("onboarding", () => {
         await startVoice();
         const old = latestLive();
         act(() => old.update({ phase }));
-        await userEvent.click(
-          screen.getByRole("button", { name: en.mode_switch_text })
-        );
+        chooseTextFromVoice();
         emitMessages(old, [{ role: "assistant", text: "Too late" }]);
         act(() => old.update({ phase: "ready", result: reply }));
         expect(old.close).toHaveBeenCalledOnce();
@@ -671,9 +711,7 @@ describe("onboarding", () => {
       await userEvent.click(
         screen.getByRole("button", { name: en.back_button })
       );
-      await userEvent.click(
-        screen.getByRole("button", { name: en.mode_switch_voice })
-      );
+      chooseVoiceFromText();
       await act(() =>
         pending.resolve(
           Response.json({
@@ -809,7 +847,7 @@ describe("onboarding", () => {
       emitMessages(first, [{ role: "user", text: "Discard on restart" }]);
       act(() => first.update({ phase: "idle", error: "Could not connect" }));
       expect(
-        screen.getByRole("button", { name: en.mode_switch_text })
+        screen.getByRole("button", { name: en.voice_continue_text })
       ).toBeEnabled();
       expect(
         screen.queryByRole("button", { name: en.choose_skills })
@@ -911,6 +949,26 @@ describe("onboarding", () => {
       ).toBeInTheDocument();
       expect(fetchRecommendation).not.toHaveBeenCalled();
       expect(liveMocks.sessions).toHaveLength(0);
+    });
+
+    it("sends the complete saved voice conversation when restoring suggestions", async () => {
+      const conversation = Array.from({ length: 24 }, (_, index) => ({
+        role: "user" as const,
+        text: `Goal detail ${index}`,
+      }));
+      renderOnboarding({
+        ...initialText(),
+        step: "skills",
+        conversationMode: "voice",
+        goalStatus: "ready",
+        motivation: reply.goal,
+        conversation,
+      });
+      await waitFor(() => expect(fetchRecommendation).toHaveBeenCalledOnce());
+      expect(
+        JSON.parse(String(fetchRecommendation.mock.calls[0]?.[1]?.body))
+          .conversation
+      ).toStrictEqual(conversation);
     });
 
     it("keeps Continue usable while restored benefit recommendations are pending", async () => {

@@ -169,3 +169,101 @@ describe("browser persistence", () => {
     });
   });
 });
+
+describe("skill catalog migration", () => {
+  beforeEach(() => localStorage.clear());
+
+  it("reopens affected completed profiles while keeping identity, goal and equivalent skills", () => {
+    localStorage.setItem(
+      onboardingStorageKeys.profile,
+      JSON.stringify({
+        ...profile,
+        skills: ["smooth-speaking", "listening", "wit"],
+      })
+    );
+    expect(readOnboarding()).toMatchObject({
+      profile: null,
+      draft: {
+        name: profile.name,
+        language: profile.language,
+        motivation: profile.motivation,
+        step: "skills",
+        skills: ["listening", "wit"],
+      },
+    });
+  });
+
+  it("does not guess replacements when every old selection was removed", () => {
+    localStorage.setItem(
+      onboardingStorageKeys.profile,
+      JSON.stringify({
+        ...profile,
+        skills: [
+          "smooth-speaking",
+          "thinking-on-your-feet",
+          "situational-response",
+        ],
+      })
+    );
+    expect(readOnboarding().draft).toMatchObject({
+      step: "skills",
+      skills: [],
+      motivation: profile.motivation,
+    });
+  });
+
+  it.each(["listening", "smooth-speaking"])(
+    "invalidates cached Gemini suggestions for %s and retains the full voice evidence",
+    (skill) => {
+      const conversation = Array.from({ length: 24 }, (_, index) => ({
+        role: "user",
+        text: `Goal detail ${index}`,
+      }));
+      localStorage.setItem(
+        onboardingStorageKeys.draft,
+        JSON.stringify({
+          version: 1,
+          name: "Alex",
+          language: "English",
+          motivation: "",
+          step: "motivation",
+          conversationMode: "voice",
+          conversation,
+          skills: [skill],
+          resolvedGoal: {
+            status: "ready",
+            goal: "Share interests",
+            reply: "Let's practice.",
+            suggestedSkills: [skill],
+          },
+        })
+      );
+      expect(readOnboarding().draft).toMatchObject({
+        name: "Alex",
+        language: "English",
+        motivation: "Share interests",
+        goalStatus: "ready",
+        step: "benefits",
+        conversationMode: "voice",
+        conversation,
+        skillRecommendationsVersion: 2,
+        skills: skill === "listening" ? ["listening"] : [],
+      });
+      expect(readOnboarding().draft.resolvedGoal).toBeUndefined();
+    }
+  );
+
+  it("rejects unknown skill IDs rather than silently dropping arbitrary corrupted values", () => {
+    localStorage.setItem(
+      onboardingStorageKeys.draft,
+      JSON.stringify({
+        ...freshOnboardingDraft(),
+        step: "skills",
+        name: "Alex",
+        motivation: "Meet people",
+        skills: ["unknown"],
+      })
+    );
+    expect(readOnboarding().draft).toStrictEqual(freshOnboardingDraft());
+  });
+});

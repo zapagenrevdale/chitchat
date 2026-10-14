@@ -1,37 +1,13 @@
 import { z } from "zod";
 
 import { learnerContextSchema } from "./conversation-goals";
+import { practiceLanguageSchema } from "./languages";
 
-export const practiceLanguages = [
-  "Arabic",
-  "Chinese",
-  "Danish",
-  "Dutch",
-  "English",
-  "Filipino",
-  "French",
-  "German",
-  "Greek",
-  "Hebrew",
-  "Hindi",
-  "Indonesian",
-  "Italian",
-  "Japanese",
-  "Korean",
-  "Norwegian",
-  "Persian",
-  "Polish",
-  "Portuguese",
-  "Russian",
-  "Spanish",
-  "Swedish",
-  "Thai",
-  "Turkish",
-  "Ukrainian",
-  "Vietnamese",
-] as const;
-export const practiceLanguageSchema = z.enum(practiceLanguages);
-export type PracticeLanguage = z.infer<typeof practiceLanguageSchema>;
+export {
+  type PracticeLanguage,
+  practiceLanguages,
+  practiceLanguageSchema,
+} from "./languages";
 
 const optionSchema = z.object({
   id: z.string(),

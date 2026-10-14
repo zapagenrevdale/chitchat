@@ -6,9 +6,14 @@ import type {
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 
-import { ConversationMessage } from "@/components/practice/practice-conversation";
+import {
+  Conversation,
+  ConversationContent,
+  ConversationScrollButton,
+} from "@/components/ai-elements/conversation";
+import { ChatInput } from "@/components/chat/chat-input";
+import { ConversationMessage } from "@/components/chat/conversation-message";
 import { Button } from "@/components/ui/button";
-import { ChatInput } from "@/components/ui/chat-input";
 import { ChitAvatar } from "@/components/ui/chit-avatar";
 import { WatercolorWave } from "@/components/ui/watercolor-wave";
 import { useOnboardingLocale } from "@/lib/onboarding-locale";
@@ -19,55 +24,73 @@ import { useOnboardingLive } from "./use-onboarding-live";
 
 const emptyMessages: OnboardingMessage[] = [];
 
-export function OnboardingModeSwitch({
-  mode,
-  onSwitch,
-}: {
-  mode: "text" | "voice";
-  onSwitch: () => void;
-}) {
-  const locale = useOnboardingLocale();
-  return (
-    <div className="shrink-0 text-center">
-      <Button variant="link" onClick={onSwitch}>
-        {mode === "voice"
-          ? m.mode_switch_text({}, { locale })
-          : m.mode_switch_voice({}, { locale })}
-      </Button>
-    </div>
-  );
-}
-
 export function OnboardingModeChoices({
+  ready = true,
   restart,
   onVoice,
   onText,
 }: {
+  ready?: boolean;
   restart: boolean;
   onVoice: () => void;
   onText: () => void;
 }) {
   const locale = useOnboardingLocale();
+  const labelId = useId();
   return (
-    <div className="mx-auto flex w-full max-w-xs flex-col items-center gap-3 text-center">
-      <Button size="lg" className="w-full whitespace-normal" onClick={onVoice}>
+    <fieldset
+      aria-labelledby={labelId}
+      aria-hidden={!ready}
+      inert={!ready}
+      data-ready={ready}
+      className="onboarding-mode-choices mx-auto mt-2 grid w-full max-w-md min-w-0 grid-cols-2 gap-x-3 gap-y-4 text-center sm:mt-3"
+    >
+      <p
+        id={labelId}
+        className="onboarding-mode-label text-muted-foreground col-span-2 text-sm font-normal"
+      >
+        {m.mode_answer_by({}, { locale })}
+      </p>
+      <Button
+        type="button"
+        variant="ghost"
+        size="lg"
+        className="onboarding-mode-button bg-card h-full min-w-0 flex-col gap-3 rounded-2xl px-4 py-5 font-medium whitespace-normal"
+        onClick={onVoice}
+      >
+        <img
+          src="/images/onboarding/speak.png"
+          alt=""
+          width={240}
+          height={160}
+          className="pointer-events-none h-28 w-full max-w-44 shrink-0 object-contain sm:h-32"
+        />
         {restart
           ? m.voice_restart({}, { locale })
           : m.voice_answer({}, { locale })}
       </Button>
       <Button
-        variant="secondary"
-        className="w-full whitespace-normal"
+        type="button"
+        variant="ghost"
+        size="lg"
+        className="onboarding-mode-button bg-card h-full min-w-0 flex-col gap-3 rounded-2xl px-4 py-5 font-medium whitespace-normal"
         onClick={onText}
       >
+        <img
+          src="/images/onboarding/chat.png"
+          alt=""
+          width={240}
+          height={160}
+          className="pointer-events-none h-28 w-full max-w-44 shrink-0 object-contain sm:h-32"
+        />
         {m.mode_answer_text({}, { locale })}
       </Button>
       {restart && (
-        <p className="text-muted-foreground text-xs leading-relaxed">
+        <p className="text-muted-foreground col-span-2 text-xs leading-relaxed">
           {m.mode_switch_hint({}, { locale })}
         </p>
       )}
-    </div>
+    </fieldset>
   );
 }
 
@@ -79,11 +102,10 @@ export function OnboardingGoalStatus({
   const locale = useOnboardingLocale();
   return (
     <div className="mx-auto mt-4 flex w-full max-w-xl shrink-0 flex-col items-center gap-3">
-      {goal.phase === "thinking" && <ChitAvatar size={48} state="thinking" />}
       <output className="sr-only">{goal.result?.reply}</output>
       {goal.error && (
         <p role="alert" className="text-destructive text-center text-sm">
-          {m.suggestions_error({}, { locale })}
+          {m.onboarding_reply_error({}, { locale })}
         </p>
       )}
     </div>
@@ -154,33 +176,20 @@ function VoiceTranscript({
   id: string;
 }) {
   const locale = useOnboardingLocale();
-  const log = useRef<HTMLDivElement>(null);
-  const follow = useRef(true);
-  useEffect(() => {
-    if (log.current && follow.current) {
-      log.current.scrollTop = log.current.scrollHeight;
-    }
-    // oxlint-disable-next-line react/exhaustive-effect-dependencies -- Follow new transcript content.
-  }, [messages]);
   return (
-    <div
-      id={id}
-      ref={log}
-      role="log"
-      // Voice supplies response audio; avoid duplicating incremental speech.
-      aria-live="off"
-      aria-label={m.voice_show_transcript({}, { locale })}
-      // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- Keyboard scrolling.
-      tabIndex={0}
-      onScroll={(event) => {
-        const node = event.currentTarget;
-        follow.current =
-          node.scrollHeight - node.scrollTop - node.clientHeight < 32;
-      }}
-      className="flex h-full min-h-0 flex-col gap-4 overflow-y-auto overscroll-contain p-2"
-    >
-      <OnboardingTranscriptMessages messages={messages} />
-    </div>
+    <Conversation className="h-full">
+      <ConversationContent
+        id={id}
+        aria-live="off"
+        aria-label={m.voice_show_transcript({}, { locale })}
+        contentClassName="gap-4 p-2"
+      >
+        <OnboardingTranscriptMessages messages={messages} />
+      </ConversationContent>
+      <ConversationScrollButton
+        aria-label={m.chat_jump_latest({}, { locale })}
+      />
+    </Conversation>
   );
 }
 
@@ -201,7 +210,7 @@ export function OnboardingMicrophone({
   onResolved,
   onReady,
   onRestart,
-  onSwitch,
+  onText,
 }: {
   name: string;
   language: PracticeLanguage;
@@ -209,11 +218,12 @@ export function OnboardingMicrophone({
   onResolved: (turn: OnboardingTurn & { status: "ready" | "choose" }) => void;
   onReady: (turn: OnboardingTurn) => void;
   onRestart: () => void;
-  onSwitch: () => void;
+  onText: () => void;
 }) {
   const locale = useOnboardingLocale();
   const [transcriptOpen, setTranscriptOpen] = useState(false);
   const transcriptId = useId();
+  const recoveryHintId = useId();
   const submitted = useRef<OnboardingTurn | null>(null);
   const live = useOnboardingLive({
     name,
@@ -291,8 +301,15 @@ export function OnboardingMicrophone({
           </p>
         )}
         {live.error && (
-          <p role="alert" className="text-destructive">
-            {live.error}
+          <p
+            role={live.canRetry ? "alert" : "status"}
+            className={
+              live.canRetry ? "text-destructive" : "text-muted-foreground"
+            }
+          >
+            {live.canRetry
+              ? live.error
+              : m.voice_unavailable_text({}, { locale })}
           </p>
         )}
         {live.phase === "ready" && live.result && (
@@ -308,13 +325,29 @@ export function OnboardingMicrophone({
           </Button>
         )}
         {(live.error || live.phase === "interrupted") && (
-          <Button className="mt-2" onClick={onRestart}>
-            {m.voice_restart({}, { locale })}
-          </Button>
+          <div className="mt-3 flex flex-col items-center gap-3">
+            <p
+              id={recoveryHintId}
+              className="text-muted-foreground text-xs leading-relaxed"
+            >
+              {m.mode_switch_hint({}, { locale })}
+            </p>
+            <Button onClick={onText} aria-describedby={recoveryHintId}>
+              {m.voice_continue_text({}, { locale })}
+            </Button>
+            {live.canRetry && (
+              <Button
+                variant="secondary"
+                onClick={onRestart}
+                aria-describedby={recoveryHintId}
+              >
+                {m.voice_restart({}, { locale })}
+              </Button>
+            )}
+          </div>
         )}
       </div>
-      <OnboardingModeSwitch mode="voice" onSwitch={onSwitch} />
-      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-20 h-40 overflow-hidden">
+      <div className="pointer-events-none fixed inset-x-5 bottom-0 z-20 mx-auto h-40 max-w-xl overflow-hidden sm:inset-x-8">
         <WatercolorWave
           active={live.phase === "listening" && !transcriptOpen}
           getLevel={live.getInputVolume}
@@ -361,44 +394,71 @@ export function OnboardingMotivation({
   onContinue,
   messages = emptyMessages,
   busy = false,
+  waitingForReply = false,
 }: {
   messages?: OnboardingMessage[];
   busy?: boolean;
+  waitingForReply?: boolean;
   name: string;
   introduction: string;
   value: string;
   onChange: (value: string) => void;
-  onContinue: () => void;
+  onContinue: () => void | Promise<void>;
 }) {
   const locale = useOnboardingLocale();
-  const log = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLTextAreaElement>(null);
+  const firstFocus = useRef(true);
   useEffect(() => {
-    if (messages.length && log.current) {
-      log.current.scrollTop = log.current.scrollHeight;
+    if (busy) {
+      return;
     }
-  }, [messages]);
-  useEffect(() => {
-    if (!busy) {
+    const { activeElement } = document;
+    if (
+      firstFocus.current ||
+      activeElement === document.body ||
+      input.current?.parentElement?.contains(activeElement)
+    ) {
       input.current?.focus({ preventScroll: true });
     }
+    firstFocus.current = false;
   }, [busy]);
   return (
     <div className="mx-auto flex min-h-0 w-full max-w-xl flex-1 flex-col">
       <h1 className="sr-only">{m.heading_motivation({}, { locale })}</h1>
-      <div
-        className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto pb-6"
-        ref={log}
-        role="log"
-        aria-live="off"
-        aria-label={m.voice_show_transcript({}, { locale })}
-      >
-        <OnboardingTranscriptMessages
-          name={name}
-          introduction={introduction}
-          messages={messages}
+      <Conversation>
+        <ConversationContent
+          aria-live="off"
+          aria-label={m.voice_show_transcript({}, { locale })}
+          contentClassName="gap-4 pb-6"
+        >
+          <OnboardingTranscriptMessages
+            name={name}
+            introduction={introduction}
+            messages={messages}
+          />
+          <div
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            className="text-muted-foreground flex items-center gap-3 text-sm empty:hidden"
+          >
+            {waitingForReply && (
+              <>
+                <span
+                  aria-hidden="true"
+                  className="flex size-8 shrink-0 items-center justify-center"
+                >
+                  <ChitAvatar size={32} />
+                </span>
+                <span>{m.chat_typing({}, { locale })}</span>
+              </>
+            )}
+          </div>
+        </ConversationContent>
+        <ConversationScrollButton
+          aria-label={m.chat_jump_latest({}, { locale })}
         />
-      </div>
+      </Conversation>
       <div className="bg-background shrink-0 pt-3 pb-1">
         <ChatInput
           inputRef={input}

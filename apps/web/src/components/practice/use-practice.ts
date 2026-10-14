@@ -3,14 +3,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { PracticeGuided, emptyGuidedProgress } from "@/lib/practice-guided";
 import { PracticeLive } from "@/lib/practice-live";
+import type { PracticeSuggestion } from "@/lib/practice-live";
 import type {
   PracticeMessage,
   PracticeState,
-  PracticeSuggestion,
   PracticeTranscript,
-} from "@/lib/practice-live";
+} from "@/lib/practice-session";
 
-export type { PracticeState } from "@/lib/practice-live";
+export type { PracticeState } from "@/lib/practice-session";
 
 export function usePractice() {
   const [guided, setGuided] = useState(emptyGuidedProgress);

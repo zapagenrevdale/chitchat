@@ -62,6 +62,22 @@ describe("onboarding recommendations", () => {
     expect(provider.recommendOnboarding).not.toHaveBeenCalled();
   });
 
+  it("accepts a full Unicode voice transcript and rejects a twenty-fifth message", async () => {
+    const { post, provider } = setup();
+    const conversation = Array.from({ length: 24 }, () => ({
+      role: "user",
+      text: "界".repeat(500),
+    }));
+    const accepted = await post({ ...answer, conversation });
+    const rejected = await post({
+      ...answer,
+      conversation: [...conversation, conversation[0]],
+    });
+    expect(accepted.status).toBe(200);
+    expect(rejected.status).toBe(400);
+    expect(provider.recommendOnboarding).toHaveBeenCalledOnce();
+  });
+
   it("rejects requests from another origin", async () => {
     const { post, provider } = setup();
     const response = await post(answer, "https://elsewhere.example");
@@ -123,7 +139,7 @@ describe("onboarding practice handoff", () => {
     { skills: [] },
     { skills: ["listening", "listening"] },
     { skills: ["unknown"] },
-    { skills: ["listening", "wit", "clear-expression", "smooth-speaking"] },
+    { skills: ["listening", "wit", "clear-expression", "sharing"] },
   ])("rejects invalid goal selections", ({ skills }) => {
     expect(
       practiceSelectionSchema.safeParse({

@@ -4,17 +4,18 @@ import { onboardingCompleteSchema } from "@chitchat/contracts/onboarding";
 import type { GoogleGenAI } from "@google/genai";
 import { describe, expect, it, vi } from "vitest";
 
+import type { DevelopmentLimits } from "../development-limits";
 import type { PracticeProvider } from "./gemini";
 import {
   createOnboardingLiveSession,
   onboardingLiveInstruction,
 } from "./onboarding-live";
-import { createOnboardingLiveRoutes } from "./onboarding-live-routes";
+import { createOnboardingRoutes } from "./onboarding-routes";
 import { createPracticeRoutes } from "./routes";
 
 const origin = "https://amber.cc.local";
 const request = { name: "Dale", language: "English" as const };
-function setup() {
+function setup(limits?: DevelopmentLimits) {
   const createOnboardingSession = vi
     .fn<NonNullable<PracticeProvider["createOnboardingSession"]>>()
     .mockResolvedValue({
@@ -28,7 +29,10 @@ function setup() {
     createSession: vi.fn<PracticeProvider["createSession"]>(),
     createOnboardingSession,
   };
-  return { provider, app: createPracticeRoutes(provider, origin) };
+  return {
+    provider,
+    app: createPracticeRoutes(provider, origin, undefined, undefined, limits),
+  };
 }
 
 describe("onboarding Live sessions", () => {
@@ -101,11 +105,67 @@ describe("onboarding Live sessions", () => {
 
   it("bounds new anonymous visitors independently of the cookie", async () => {
     const { provider } = setup();
-    const app = createOnboardingLiveRoutes(provider);
+    const app = createOnboardingRoutes(provider);
     for (let attempt = 0; attempt < 21; attempt += 1) {
       const response = await app.request("/onboarding-sessions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(request),
+      });
+      expect(response.status).toBe(attempt < 20 ? 200 : 429);
+    }
+    expect(provider.createOnboardingSession).toHaveBeenCalledTimes(20);
+  });
+
+  it("bypasses both hourly voice limits only when enabled in development", async () => {
+    const { app, provider } = setup({
+      environment: "development",
+      bypass: true,
+    });
+    let cookie = "";
+    for (let attempt = 0; attempt < 21; attempt += 1) {
+      const response = await app.request("/onboarding-sessions", {
+        method: "POST",
+        headers: { origin, cookie, "Content-Type": "application/json" },
+        body: JSON.stringify(request),
+      });
+      expect(response.status).toBe(200);
+      cookie = response.headers.get("set-cookie")?.split(";")[0] ?? cookie;
+    }
+    expect(provider.createOnboardingSession).toHaveBeenCalledTimes(21);
+  });
+
+  it.each([
+    { environment: "development", bypass: false },
+    { environment: "production", bypass: true },
+    { environment: "test", bypass: true },
+  ] as const)(
+    "keeps visitor limits with $environment and bypass=$bypass",
+    async (limits) => {
+      const { app, provider } = setup(limits);
+      let cookie = "";
+      for (let attempt = 0; attempt < 4; attempt += 1) {
+        const response = await app.request("/onboarding-sessions", {
+          method: "POST",
+          headers: { origin, cookie, "Content-Type": "application/json" },
+          body: JSON.stringify(request),
+        });
+        expect(response.status).toBe(attempt < 3 ? 200 : 429);
+        cookie = response.headers.get("set-cookie")?.split(";")[0] ?? cookie;
+      }
+      expect(provider.createOnboardingSession).toHaveBeenCalledTimes(3);
+    }
+  );
+
+  it("keeps the global ceiling in production even with the bypass requested", async () => {
+    const { app, provider } = setup({
+      environment: "production",
+      bypass: true,
+    });
+    for (let attempt = 0; attempt < 21; attempt += 1) {
+      const response = await app.request("/onboarding-sessions", {
+        method: "POST",
+        headers: { origin, "Content-Type": "application/json" },
         body: JSON.stringify(request),
       });
       expect(response.status).toBe(attempt < 20 ? 200 : 429);

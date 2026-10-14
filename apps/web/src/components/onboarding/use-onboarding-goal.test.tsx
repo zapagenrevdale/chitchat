@@ -56,6 +56,7 @@ describe("onboarding clarification turns", () => {
     });
     expect(result.current.messages.at(-1)?.text).toBe(ready.reply);
     expect(onReady).not.toHaveBeenCalled();
+    expect(result.current.phase).toBe("reading");
     await act(() => vi.advanceTimersByTimeAsync(1800));
     expect(onReady).toHaveBeenCalledExactlyOnceWith(ready);
   });
@@ -66,7 +67,7 @@ describe("onboarding clarification turns", () => {
     await act(() => {
       void result.current.submit("idk");
     });
-    await act(() => vi.advanceTimersByTimeAsync(1800));
+    expect(result.current.phase).toBe("idle");
     expect(onReady).not.toHaveBeenCalled();
     await act(() => {
       void result.current.submit("Meeting new people");
@@ -99,6 +100,24 @@ describe("onboarding clarification turns", () => {
     expect(
       vi.mocked(replyToOnboarding).mock.calls[1]?.[0].messages
     ).toHaveLength(1);
+  });
+
+  it("guards same-frame duplicate submissions and releases the guard on cancellation", async () => {
+    const pending = Promise.withResolvers<OnboardingTurn>();
+    vi.mocked(replyToOnboarding)
+      .mockReturnValueOnce(pending.promise)
+      .mockResolvedValueOnce(clarify);
+    const { result } = setup();
+    act(() => {
+      void result.current.submit("Meet people");
+      void result.current.submit("Meet people");
+    });
+    expect(replyToOnboarding).toHaveBeenCalledOnce();
+    act(() => result.current.stop());
+    await act(() => result.current.submit("Meet coworkers"));
+    expect(replyToOnboarding).toHaveBeenCalledTimes(2);
+    await act(() => pending.resolve(ready));
+    expect(result.current.messages.at(-1)?.text).toBe(clarify.reply);
   });
 
   it("cancels pending advancement when the user goes back", async () => {
@@ -151,7 +170,7 @@ describe("onboarding clarification turns", () => {
       text: result.current.messages.at(-1)?.text,
       phase: result.current.phase,
       result: result.current.result,
-    }).toStrictEqual({ text: "Got it", phase: "thinking", result: null });
+    }).toStrictEqual({ text: "Got it", phase: "streaming", result: null });
     expect(onReply).not.toHaveBeenCalled();
     await act(() => vi.advanceTimersByTimeAsync(5000));
     expect(onReady).not.toHaveBeenCalled();

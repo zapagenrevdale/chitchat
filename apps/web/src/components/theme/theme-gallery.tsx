@@ -1,5 +1,7 @@
 import { presetPlaces } from "@chitchat/contracts";
 import type { PracticeLanguage } from "@chitchat/contracts";
+import type { ConversationSkill } from "@chitchat/contracts/conversation-goals";
+import { onboardingBenefitIds } from "@chitchat/contracts/onboarding";
 import {
   ArrowRight,
   Check,
@@ -20,11 +22,13 @@ import { RadioGroup } from "radix-ui";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
+import { ConversationMessage } from "@/components/chat/conversation-message";
+import { OnboardingBenefits } from "@/components/onboarding/onboarding-benefits";
+import { OnboardingSkills } from "@/components/onboarding/onboarding-choices";
 import { ConversationMode } from "@/components/practice/conversation-mode";
 import { PersonaAvatar } from "@/components/practice/persona-avatar";
 import { PlaceImage } from "@/components/practice/place-image";
 import { PracticeChoiceNavigation } from "@/components/practice/practice-choice-navigation";
-import { ConversationMessage } from "@/components/practice/practice-conversation";
 import { PracticeLanguagePicker } from "@/components/practice/practice-language";
 import { SelectChoiceButton } from "@/components/practice/select-choice-button";
 import { TalkButton } from "@/components/practice/talk-button";
@@ -55,6 +59,8 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 const sections = [
   "Foundations",
   "Buttons",
+  "Cards",
+  "Skills",
   "Selection",
   "Avatars",
   "Voice",
@@ -221,6 +227,17 @@ function AvatarPreview() {
         </RadioGroup.Item>
       ))}
     </RadioGroup.Root>
+  );
+}
+
+function SkillsPreview() {
+  const [skills, setSkills] = useState<ConversationSkill[]>([]);
+  return (
+    <OnboardingSkills
+      value={skills}
+      suggested={["start-conversations", "listening", "end-conversations"]}
+      onChange={setSkills}
+    />
   );
 }
 
@@ -544,6 +561,18 @@ export function ThemeGallery() {
                 </div>
               ))}
             </div>
+          </Section>
+          <Section
+            title="Cards"
+            description="Illustrated benefit cards introduce what you can practice during onboarding."
+          >
+            <OnboardingBenefits ids={onboardingBenefitIds} />
+          </Section>
+          <Section
+            title="Skills"
+            description="All 11 practice skills with small crayon illustrations. Pick up to three to preview selection states; suggestion badges are examples."
+          >
+            <SkillsPreview />
           </Section>
           <Section
             title="Selection"

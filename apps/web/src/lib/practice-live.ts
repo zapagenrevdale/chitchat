@@ -19,6 +19,7 @@ import type {
   LiveServerMessage,
 } from "@google/genai";
 
+import { constrainedLiveUrl, liveFrameText } from "./gemini-live-protocol";
 import {
   finalizePracticeFeedback,
   speakPracticeFeedback,
@@ -29,27 +30,14 @@ import {
   PracticeApiError,
 } from "./practice-api";
 import { PracticeAudio } from "./practice-audio";
+import type {
+  PracticeMessage,
+  PracticeState,
+  PracticeTranscript,
+} from "./practice-session";
 import { PracticeTraceQueue } from "./practice-tracing";
 import { PracticeTranscription } from "./practice-transcription";
 
-export type PracticeState =
-  | "idle"
-  | "starting"
-  | "listening"
-  | "talking"
-  | "reconnecting"
-  | "reviewing"
-  | "ended";
-export interface PracticeTranscript {
-  user: string;
-  partner: string;
-}
-export interface PracticeMessage {
-  id: number;
-  speaker: "user" | "partner";
-  text: string;
-  suggestionShown?: boolean;
-}
 export interface PracticeSuggestion {
   text: string;
   pending: boolean;
@@ -371,10 +359,7 @@ export class PracticeLive {
     this.ready = false;
     // Native WebSocket allows cancellation during setup and bounded send buffering.
     // The pinned SDK's live.connect() does not expose either capability.
-    const url = new URL(
-      "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContentConstrained"
-    );
-    url.searchParams.set("access_token", this.session.token);
+    const url = constrainedLiveUrl(this.session.token, "v1alpha");
     const socket = new WebSocket(url);
     socket.binaryType = "arraybuffer";
     this.socket = socket;
@@ -406,10 +391,7 @@ export class PracticeLive {
           return;
         }
         try {
-          const raw =
-            typeof event.data === "string"
-              ? event.data
-              : new TextDecoder().decode(event.data);
+          const raw = liveFrameText(event.data);
           this.receive(JSON.parse(raw) as LiveServerMessage);
         } catch {
           this.fail("Couldn't play the live response. Please start again.");

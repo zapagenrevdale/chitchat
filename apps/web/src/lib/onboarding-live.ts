@@ -18,6 +18,7 @@ import type {
   Transcription,
 } from "@google/genai";
 
+import { constrainedLiveUrl, liveFrameText } from "./gemini-live-protocol";
 import { OnboardingTranscript } from "./onboarding-transcript";
 import {
   completeOnboardingVoice,
@@ -76,7 +77,7 @@ interface Callbacks {
     confirmed: OnboardingMessage[]
   ) => void;
   onComplete: (result: OnboardingTurn) => void;
-  onError: (message: string) => void;
+  onError: (message: string, recovery?: "text") => void;
 }
 
 function startError(error: unknown) {
@@ -193,7 +194,14 @@ export class OnboardingLive {
       this.connect(this.session);
     } catch (error) {
       if (!this.closed) {
-        this.fail(startError(error));
+        this.fail(
+          startError(error),
+          false,
+          error instanceof PracticeApiError &&
+            (error.status === 429 || error.status === 503)
+            ? "text"
+            : undefined
+        );
       }
     }
   }
@@ -201,10 +209,7 @@ export class OnboardingLive {
   private connect(session: OnboardingLiveSession) {
     // Native sockets allow setup cancellation and a bounded outgoing buffer.
     // All model, voice, transcription, and tool settings are locked in Hono's token.
-    const url = new URL(
-      "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContentConstrained"
-    );
-    url.searchParams.set("access_token", session.token);
+    const url = constrainedLiveUrl(session.token, "v1beta");
     const socket = new WebSocket(url);
     socket.binaryType = "arraybuffer";
     this.socket = socket;
@@ -221,10 +226,7 @@ export class OnboardingLive {
           return;
         }
         try {
-          const raw =
-            typeof event.data === "string"
-              ? event.data
-              : new TextDecoder().decode(event.data);
+          const raw = liveFrameText(event.data);
           this.receive(JSON.parse(raw) as LiveServerMessage);
         } catch {
           this.fail(
@@ -854,7 +856,7 @@ export class OnboardingLive {
     );
   }
 
-  private fail(message: string, revealTranscript = false) {
+  private fail(message: string, revealTranscript = false, recovery?: "text") {
     if (this.closed) {
       return;
     }
@@ -864,7 +866,11 @@ export class OnboardingLive {
     this.trace?.record({ type: "lifecycle", name: "error", detail: message });
     this.setPhase("idle");
     this.close();
-    this.callbacks.onError(message);
+    if (recovery) {
+      this.callbacks.onError(message, recovery);
+    } else {
+      this.callbacks.onError(message);
+    }
   }
 
   close() {

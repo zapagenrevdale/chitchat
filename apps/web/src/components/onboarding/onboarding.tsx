@@ -34,7 +34,6 @@ import {
   OnboardingGoalStatus,
   OnboardingMicrophone,
   OnboardingModeChoices,
-  OnboardingModeSwitch,
   OnboardingMotivation,
 } from "./onboarding-conversation";
 import {
@@ -84,7 +83,7 @@ function OnboardingHeader({
       {" "}
       {draft.step !== "name" && draft.step !== "motivation" && !voiceScreen && (
         <div className="mb-7 shrink-0 text-center">
-          {draft.step !== "microphone" && (
+          {draft.step !== "microphone" && draft.step !== "benefits" && (
             <ChitAvatar size={80} className="mb-4" />
           )}
           {draft.step === "microphone" ? (
@@ -142,7 +141,7 @@ function OnboardingFooter({
         )}
         {!ownAction && (
           <Button
-            className="onboarding-action ms-auto flex-1 rounded-full"
+            className="onboarding-action mx-auto rounded-full px-8"
             disabled={draft.step === "skills" && draft.skills.length === 0}
             onClick={() => {
               if (draft.step === "skills") {
@@ -180,6 +179,10 @@ function OnboardingFooter({
       )}
     </footer>
   );
+}
+
+function recommendationAttemptKey(sessionId: string, attemptId: number) {
+  return ["onboarding-recommendation", sessionId, String(attemptId)];
 }
 
 function shouldRecommend(
@@ -282,17 +285,14 @@ export function Onboarding({
   const recommendationOptions = onboardingRecommendationQuery({
     name: draft.name.trim(),
     motivation: draft.motivation.trim(),
-    conversation:
-      draft.conversationMode === "voice" ? undefined : draft.conversation,
+    conversation: draft.conversation,
     goalStatus: draft.goalStatus,
     language: draft.language,
   });
   const recommendation = useQuery({
     ...recommendationOptions,
     queryKey: [
-      "onboarding-recommendation",
-      sessionId,
-      String(attemptId),
+      ...recommendationAttemptKey(sessionId, attemptId),
       ...recommendationOptions.queryKey,
     ],
     enabled: shouldRecommend(draft, resolved),
@@ -317,11 +317,7 @@ export function Onboarding({
     attempt.current += 1;
     setAttemptId(attempt.current);
     goal.reset();
-    const queryKey = [
-      "onboarding-recommendation",
-      sessionId,
-      String(oldAttempt),
-    ];
+    const queryKey = recommendationAttemptKey(sessionId, oldAttempt);
     void queryClient.cancelQueries({ queryKey });
     queryClient.removeQueries({ queryKey });
   }
@@ -382,10 +378,6 @@ export function Onboarding({
   const voiceScreen = draft.step === "microphone" && voiceStarted;
   const suggestedSkills =
     resolved?.suggestedSkills ?? recommendation.data?.suggestedSkills ?? [];
-  const acknowledgment =
-    resolved?.reply ??
-    recommendation.data?.acknowledgment ??
-    m.benefits_fallback({}, { locale });
   const benefits = selectedBenefits(resolved, recommendation.data);
   const benefitsPending = !benefits && recommendation.isFetching;
   function content() {
@@ -420,6 +412,7 @@ export function Onboarding({
         if (!voiceStarted) {
           return (
             <OnboardingModeChoices
+              ready={!welcome.speaking}
               restart={draft.conversationMode === "voice"}
               onVoice={() => switchMode("voice")}
               onText={() => switchMode("text")}
@@ -439,7 +432,7 @@ export function Onboarding({
             onResolved={acceptGoal}
             onReady={advanceGoal}
             onRestart={() => switchMode("voice")}
-            onSwitch={() => switchMode("text")}
+            onText={() => switchMode("text")}
           />
         );
       }
@@ -453,28 +446,17 @@ export function Onboarding({
               onChange={(motivation) => update({ motivation })}
               messages={goal.messages}
               busy={typingBusy}
-              onContinue={() => {
-                void goal.submit(answer.current);
-              }}
+              waitingForReply={goal.phase === "thinking"}
+              onContinue={() => goal.submit(answer.current)}
             />
             <OnboardingGoalStatus goal={goal} />
-            <OnboardingModeSwitch
-              mode="text"
-              onSwitch={() => switchMode("voice")}
-            />
           </>
         );
       }
       case "benefits": {
         return (
           <>
-            <p
-              className="text-muted-foreground mx-auto mb-7 max-w-lg text-center text-base leading-relaxed"
-              aria-live="polite"
-            >
-              {acknowledgment}
-            </p>
-            <output className="text-muted-foreground mb-4 text-center text-sm">
+            <output className="text-muted-foreground mx-auto mb-7 max-w-lg text-center text-base leading-relaxed">
               {benefitStatus(benefitsPending, Boolean(benefits?.personalized))(
                 {},
                 { locale }

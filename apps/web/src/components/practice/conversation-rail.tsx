@@ -3,7 +3,7 @@ import type { RefObject } from "react";
 import { useEffect, useRef, useState } from "react";
 
 import { Scrollspy } from "@/components/reui/scrollspy";
-import type { PracticeMessage } from "@/lib/practice-live";
+import type { PracticeMessage } from "@/lib/practice-session";
 
 import "./conversation-rail.css";
 
@@ -27,7 +27,7 @@ export function ConversationRail({
 }: {
   messages: PracticeMessage[];
   transcriptId: string;
-  targetRef: RefObject<HTMLDivElement | null>;
+  targetRef: RefObject<HTMLElement | null>;
   partnerName: string;
   onNavigate: () => void;
 }) {

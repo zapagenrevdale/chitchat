@@ -113,7 +113,7 @@ describe("welcome playback lifecycle", () => {
     );
     const heading = screen.getByRole("heading", { level: 1 });
     expect(heading).toHaveAccessibleName(
-      "Welcome! We'll practice everyday conversations to help you build fluency and confidence. Tell me, what made you want to start practicing?"
+      "Welcome! We'll work on fluency and confidence together. What made you want to start practicing?"
     );
     expect(
       [...heading.querySelectorAll("span")].every(

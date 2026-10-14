@@ -1,5 +1,7 @@
 import { practiceTranscriptionEventSchema } from "@chitchat/contracts";
 
+import { constrainedLiveUrl, liveFrameText } from "./gemini-live-protocol";
+
 interface Callbacks {
   onTurn: (itemId: string) => void;
   onText: (itemId: string, text: string) => void;
@@ -31,10 +33,7 @@ export class PracticeTranscription {
       AbortSignal.timeout(10_000),
     ]);
     const opening = Promise.withResolvers<undefined>();
-    const url = new URL(
-      "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContentConstrained"
-    );
-    url.searchParams.set("access_token", token);
+    const url = constrainedLiveUrl(token, "v1alpha");
     const socket = new WebSocket(url);
     this.socket = socket;
     socket.binaryType = "arraybuffer";
@@ -54,10 +53,7 @@ export class PracticeTranscription {
           return;
         }
         try {
-          const raw =
-            typeof event.data === "string"
-              ? event.data
-              : new TextDecoder().decode(event.data);
+          const raw = liveFrameText(event.data);
           const parsed = practiceTranscriptionEventSchema.safeParse(
             JSON.parse(raw)
           );

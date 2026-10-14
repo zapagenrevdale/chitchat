@@ -22,7 +22,6 @@ const request: OnboardingVoiceCompletionRequest = {
   outcome: {
     status: "ready",
     goal: "Speak clearly at work",
-    suggestedSkills: ["clear-expression"],
   },
   messages: [
     { role: "assistant", text: "What would you like to practice?" },
@@ -36,6 +35,7 @@ function setup() {
     .fn<NonNullable<PracticeProvider["completeOnboarding"]>>()
     .mockResolvedValue({
       ...request.outcome,
+      suggestedSkills: [],
       benefits: { ids: defaultOnboardingBenefits, personalized: false },
     });
   const app = createPracticeRoutes(
@@ -147,7 +147,11 @@ describe("voice goal finalization", () => {
   it("accepts explicit skill choice without inventing a goal", async () => {
     const { post, completeOnboarding } = setup();
     completeOnboarding.mockResolvedValue(choose);
-    const response = await post({ ...request, outcome: choose, messages: [] });
+    const response = await post({
+      ...request,
+      outcome: { status: choose.status, goal: choose.goal },
+      messages: [],
+    });
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toStrictEqual(choose);
   });
@@ -168,6 +172,7 @@ describe("voice completion provider", () => {
     ).completeOnboarding(request, new AbortController().signal);
     expect(result).toStrictEqual({
       ...request.outcome,
+      suggestedSkills: [],
       benefits: { ids: defaultOnboardingBenefits, personalized: false },
     });
     expect(generate).not.toHaveBeenCalled();
@@ -186,7 +191,11 @@ describe("voice completion provider", () => {
     vi.stubGlobal("fetch", fetcher);
     const provider = createOnboardingProvider(ai, "test-key");
     const result = await provider.completeOnboarding(
-      { ...request, outcome: choose, messages: [] },
+      {
+        ...request,
+        outcome: { status: choose.status, goal: choose.goal },
+        messages: [],
+      },
       new AbortController().signal
     );
     expect(result).toStrictEqual(choose);
@@ -260,6 +269,7 @@ describe("production voice completion route", () => {
       expect(response.status).toBe(200);
       await expect(response.json()).resolves.toStrictEqual({
         ...request.outcome,
+        suggestedSkills: [],
         benefits: {
           ids:
             benefitStatus === "ranked"
@@ -268,7 +278,7 @@ describe("production voice completion route", () => {
           personalized: benefitStatus === "ranked",
         },
       });
-      expect(fetcher).toHaveBeenCalledOnce();
+      expect(fetcher).toHaveBeenCalledTimes(2);
       expect(fetcher.mock.calls[0]?.[0]).toBe(
         "https://api.typesafe.ai/v1/systemone"
       );

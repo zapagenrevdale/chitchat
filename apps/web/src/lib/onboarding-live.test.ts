@@ -8,6 +8,7 @@ import type * as ApiModule from "./practice-api";
 import {
   completeOnboardingVoice,
   createOnboardingSession,
+  PracticeApiError,
 } from "./practice-api";
 import type * as AudioModule from "./practice-audio";
 
@@ -115,7 +116,7 @@ const outcome = {
 const completionCall = {
   id: "goal-1",
   name: "complete_onboarding",
-  args: outcome,
+  args: { status: outcome.status, goal: outcome.goal },
 };
 const audioPart = {
   inlineData: { data: "audio", mimeType: "audio/pcm;rate=24000" },
@@ -833,7 +834,7 @@ describe("native Gemini onboarding voice", () => {
     expect(completeOnboardingVoice).toHaveBeenCalledExactlyOnceWith(
       {
         ...learner,
-        outcome,
+        outcome: { status: outcome.status, goal: outcome.goal },
         messages: [
           { role: "user", text: "I want to speak clearly in work meetings." },
         ],
@@ -928,7 +929,14 @@ describe("native Gemini onboarding voice", () => {
     vi.mocked(completeOnboardingVoice).mockResolvedValueOnce(choose);
     const { socket, callbacks } = await connect();
     socket.message({
-      toolCall: { functionCalls: [{ ...completionCall, args: choose }] },
+      toolCall: {
+        functionCalls: [
+          {
+            ...completionCall,
+            args: { status: choose.status, goal: choose.goal },
+          },
+        ],
+      },
     });
     acknowledgment(socket);
     audio.onPlaying?.(true);
@@ -1091,6 +1099,23 @@ describe("native Gemini onboarding voice", () => {
     );
     expect(socket.closed).toBeTruthy();
   });
+
+  it.each([429, 503])(
+    "offers text recovery when voice setup returns %s",
+    async (status) => {
+      vi.mocked(createOnboardingSession).mockRejectedValueOnce(
+        new PracticeApiError("Voice is unavailable", status)
+      );
+      const { live, callbacks } = setup();
+      await live.start(learner);
+      expect(callbacks.onError).toHaveBeenCalledExactlyOnceWith(
+        "Voice is unavailable",
+        "text"
+      );
+      expect(audio.dispose).toHaveBeenCalledOnce();
+      expect(FakeSocket.instances).toHaveLength(0);
+    }
+  );
 
   it("closes setup immediately and ignores a late microphone grant or token", async () => {
     const pending = Promise.withResolvers<OnboardingLiveSession>();

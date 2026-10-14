@@ -5,12 +5,15 @@ import {
   render,
   screen,
 } from "@testing-library/react";
-import { useLayoutEffect, useRef } from "react";
+import { useRef } from "react";
+import * as sticky from "use-stick-to-bottom";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { ConversationRail, sampleMessageIndexes } from "./conversation-rail";
 import { PracticeConversation } from "./practice-conversation";
 import type { usePractice } from "./use-practice";
+
+vi.mock(import("use-stick-to-bottom"), { spy: true });
 
 vi.mock(import("motion/react"), () => ({ useReducedMotion: () => true }));
 
@@ -83,6 +86,7 @@ describe(ConversationRail, () => {
   afterEach(() => {
     cleanup();
     vi.unstubAllGlobals();
+    vi.restoreAllMocks();
   });
 
   it("samples evenly without duplicates while preserving both endpoints", () => {
@@ -193,90 +197,61 @@ describe(ConversationRail, () => {
     ).not.toHaveAttribute("aria-current");
   });
 
-  it("follows appended and streaming messages before queued scroll events observe the new layout", () => {
-    function Conversation({ text }: { text: string }) {
-      useLayoutEffect(() => {
-        // A queued scroll event can arrive after DOM growth, before passive effects.
-        screen.getByRole("log").dispatchEvent(new Event("scroll"));
-      });
-      return (
-        <PracticeConversation
-          practice={{
-            ...practice,
-            messages: text
-              ? [...practice.messages, { id: 3, speaker: "partner", text }]
-              : practice.messages,
-          }}
-          name="Partner"
-          scene="Cafe"
-        />
-      );
-    }
-    const { rerender } = render(<Conversation text="" />);
-    const log = screen.getByRole("log");
-    let height = 1000;
-    let top = 700;
-    Object.defineProperties(log, {
-      scrollTop: {
-        get: () => top,
-        set: (value: number) => {
-          top = Math.max(0, Math.min(value, height - 300));
-        },
-      },
-      scrollHeight: { get: () => height },
-      clientHeight: { value: 300 },
-    });
-    fireEvent.scroll(log, { target: { scrollTop: 700 } });
-    height = 1100;
-    rerender(<Conversation text="Hello, how are you?" />);
-    expect(log.scrollTop).toBe(800);
-    height = 1200;
-    rerender(
-      <Conversation text="Hello, how are you? Tell me about your day." />
+  it("navigates the actual scroll viewport and suspends following through the shared context", () => {
+    const readContext = vi.mocked(sticky.useStickToBottomContext);
+    render(
+      <PracticeConversation practice={practice} name="Partner" scene="Cafe" />
     );
-    expect(log.scrollTop).toBe(900);
+    const log = screen.getByRole("log");
+    const scrollTo = vi.fn<HTMLElement["scrollTo"]>();
+    Object.defineProperty(log, "scrollTo", { value: scrollTo });
+    Object.defineProperty(screen.getByText("Hi").parentElement, "offsetTop", {
+      value: 240,
+    });
+    fireEvent.click(screen.getByRole("button", { name: /Jump to message 2/u }));
+    expect(scrollTo).toHaveBeenCalledExactlyOnceWith({
+      top: 224,
+      left: 0,
+      behavior: "auto",
+    });
+    const context = readContext.mock.results.at(-1)?.value;
+    expect(context.scrollRef.current).toBe(log);
+    expect(context.escapedFromLock).toBeTruthy();
   });
 
-  it("keeps incoming messages from moving the reader until they return to the bottom", () => {
+  it("keeps the viewport and keyboard focus stable as a reply grows", () => {
     const { rerender } = render(
       <PracticeConversation practice={practice} name="Partner" scene="Cafe" />
     );
     const log = screen.getByRole("log");
-    Object.defineProperties(log, {
-      scrollHeight: { value: 1000 },
-      clientHeight: { value: 300 },
-    });
-    Object.defineProperty(log, "scrollTo", { value: vi.fn<() => void>() });
-    fireEvent.scroll(log, { target: { scrollTop: 200 } });
+    log.focus();
     const updated = {
       ...practice,
       messages: [
         ...practice.messages,
-        { id: 3, speaker: "partner" as const, text: "How are you?" },
+        { id: 3, speaker: "partner" as const, text: "How" },
       ],
     };
     rerender(
       <PracticeConversation practice={updated} name="Partner" scene="Cafe" />
     );
-    expect(log.scrollTop).toBe(200);
-    fireEvent.scroll(log, { target: { scrollTop: 700 } });
-    fireEvent.click(screen.getByRole("button", { name: /Jump to message 1/u }));
+    const reply = screen.getByText("How");
     rerender(
       <PracticeConversation
-        practice={{ ...updated, messages: [...updated.messages] }}
+        practice={{
+          ...updated,
+          messages: [
+            ...practice.messages,
+            { id: 3, speaker: "partner", text: "How are you?" },
+          ],
+        }}
         name="Partner"
         scene="Cafe"
       />
     );
-    expect(log.scrollTop).toBe(700);
-    fireEvent.scroll(log, { target: { scrollTop: 700 } });
-    rerender(
-      <PracticeConversation
-        practice={{ ...updated, messages: [...updated.messages] }}
-        name="Partner"
-        scene="Cafe"
-      />
-    );
-    expect(log.scrollTop).toBe(1000);
+    expect(screen.getByRole("log")).toBe(log);
+    expect(log).toHaveFocus();
+    expect(screen.getByText("How are you?")).toBe(reply);
+    expect(screen.getAllByText("How are you?")).toHaveLength(1);
   });
 });

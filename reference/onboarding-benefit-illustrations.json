@@ -1,0 +1,91 @@
+{
+  "tool": "Built-in imagegen",
+  "transparentBackground": true,
+  "styleReferences": [
+    "reference/crayon-style-01-work-and-collaboration.png",
+    "reference/chit-avatar-concepts/13-three-pebbles.png"
+  ],
+  "promptTemplate": "Create one standalone crayon illustration for a friendly adult conversation-practice app's result card. Subject: {subject} Match the reference images' wax-crayon drawing style: rich pigment, visible coarse paper flecks inside strokes, organic uneven edges, simple chunky flat shapes. Cobalt blue, warm vermilion, mustard yellow, leafy green used sparingly. Centered compact recognizable silhouette occupying about 80% of the canvas, square composition, modest even margin. Genuinely transparent background. No text, letters, labels, border, UI, photo, gradients, glow, drop shadow, or decorative clutter. This is a small editorial spot illustration, calm and warm, not a baby cartoon.",
+  "illustrations": [
+    {
+      "id": "start-conversations",
+      "subject": "Two small speech bubbles in cobalt blue and warm red leaning toward each other, with a tiny yellow greeting spark between them.",
+      "file": "apps/web/public/images/onboarding/benefits/start-conversations.png"
+    },
+    {
+      "id": "keep-it-going",
+      "subject": "Three alternating cobalt blue, warm red and leafy green speech bubbles linked by a loose curved yellow conversational thread.",
+      "file": "apps/web/public/images/onboarding/benefits/keep-it-going.png"
+    },
+    {
+      "id": "think-on-your-feet",
+      "subject": "A small cobalt blue speech bubble beside a glowing mustard-yellow lightbulb, with two warm red surprise strokes.",
+      "file": "apps/web/public/images/onboarding/benefits/think-on-your-feet.png"
+    },
+    {
+      "id": "listen-and-connect",
+      "subject": "Two cup-shaped abstract ears facing each other around a tiny warm red heart and a blue speech bubble.",
+      "file": "apps/web/public/images/onboarding/benefits/listen-and-connect.png"
+    },
+    {
+      "id": "tell-stories",
+      "subject": "An open cream-paged book with a cobalt blue cover, a warm red winding path across the pages, and a small mustard yellow sun rising above it.",
+      "file": "apps/web/public/images/onboarding/benefits/tell-stories.png"
+    },
+    {
+      "id": "express-yourself",
+      "subject": "A chunky cobalt blue pencil drawing three short warm red lines inside a large soft cream speech bubble with a blue contour.",
+      "file": "apps/web/public/images/onboarding/benefits/express-yourself.png"
+    },
+    {
+      "id": "speak-smoothly",
+      "subject": "Three gently curved upright sound-wave strokes of different heights in cobalt blue, leafy green and warm red, with a small mustard yellow flowing arc underneath.",
+      "file": "apps/web/public/images/onboarding/benefits/speak-smoothly.png"
+    },
+    {
+      "id": "work-conversations",
+      "subject": "A simple cobalt blue work bag with a mustard yellow handle and a warm red speech bubble beside it.",
+      "file": "apps/web/public/images/onboarding/benefits/work-conversations.png"
+    },
+    {
+      "id": "handle-disagreement",
+      "subject": "Two different-colored speech bubbles, cobalt blue and warm red, on opposite sides of a small simple mustard yellow bridge connecting them. Respectful connection across a difference.",
+      "file": "apps/web/public/images/onboarding/benefits/handle-disagreement.png"
+    },
+    {
+      "id": "playful-conversations",
+      "subject": "Two cheerful small birds, one cobalt blue and one warm red, facing each other on a leafy green twig, with one small mustard yellow playful squiggle above.",
+      "file": "apps/web/public/images/onboarding/benefits/playful-conversations.png"
+    },
+    {
+      "id": "everyday-language",
+      "subject": "A simple cobalt blue and leafy green globe with two small warm red and mustard yellow speech bubbles beside it. No letters or flags.",
+      "file": "apps/web/public/images/onboarding/benefits/everyday-language.png"
+    },
+    {
+      "id": "useful-feedback",
+      "subject": "A cobalt blue stepping stone, then a warm red stepping stone, then a mustard yellow star forming a gentle upward path; three simple chunky elements suggesting a useful next step.",
+      "file": "apps/web/public/images/onboarding/benefits/useful-feedback.png"
+    },
+    {
+      "id": "clear-up-misunderstandings",
+      "subject": "Two chunky speech-bubble-shaped puzzle pieces, one cobalt blue and one warm red, fitting neatly together with a tiny mustard yellow clarity spark above. Simple two-piece interlocking design.",
+      "file": "apps/web/public/images/onboarding/benefits/clear-up-misunderstandings.png"
+    },
+    {
+      "id": "everyday-tasks",
+      "subject": "A cobalt blue shopping tote with a mustard yellow handle, one small leafy green loaf-shaped grocery item peeking out, and a warm red speech bubble beside it.",
+      "file": "apps/web/public/images/onboarding/benefits/everyday-tasks.png"
+    },
+    {
+      "id": "respond-with-care",
+      "subject": "A small warm red heart sheltered beneath a cobalt blue umbrella with a mustard yellow curved handle. Gentle caring composition, no rain, no sad face.",
+      "file": "apps/web/public/images/onboarding/benefits/respond-with-care.png"
+    },
+    {
+      "id": "end-conversations",
+      "subject": "A single friendly waving hand in mustard yellow with a cobalt blue cuff, two small warm red motion strokes beside it and one tiny leafy green speech bubble. No full person.",
+      "file": "apps/web/public/images/onboarding/benefits/end-conversations.png"
+    }
+  ]
+}

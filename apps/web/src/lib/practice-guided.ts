@@ -13,7 +13,7 @@ import type {
   PracticeMessage,
   PracticeState,
   PracticeTranscript,
-} from "./practice-live";
+} from "./practice-session";
 import { PracticeTranscription } from "./practice-transcription";
 
 export interface GuidedProgress {

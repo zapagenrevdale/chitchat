@@ -3,22 +3,15 @@ import type { PracticeLanguage } from "@chitchat/contracts";
 import { conversationSkills } from "@chitchat/contracts/conversation-goals";
 import type { ConversationSkill } from "@chitchat/contracts/conversation-goals";
 import { practiceLanguageLocales } from "@chitchat/contracts/languages";
-import {
-  AudioLines,
-  Check,
-  Ear,
-  HeartHandshake,
-  Lightbulb,
-  MessageCircle,
-  MessagesSquare,
-  Smile,
-  Sparkles,
-} from "lucide-react";
+import { Check } from "lucide-react";
 import { Checkbox, RadioGroup } from "radix-ui";
 
+import { Badge } from "@/components/reui/badge";
 import { Button } from "@/components/ui/button";
 import { languageName, useOnboardingLocale } from "@/lib/onboarding-locale";
 import { m } from "@/paraglide/messages";
+
+import "./onboarding.css";
 
 const firstLanguages: PracticeLanguage[] = [
   "English",
@@ -126,42 +119,54 @@ export function OnboardingLanguages({
 }
 
 const skillMessages = {
-  "smooth-speaking": {
-    title: m.skill_smooth_speaking_title,
-    description: m.skill_smooth_speaking_description,
-  },
-  "thinking-on-your-feet": {
-    title: m.skill_thinking_on_your_feet_title,
-    description: m.skill_thinking_on_your_feet_description,
-  },
-  listening: {
-    title: m.skill_listening_title,
-    description: m.skill_listening_description,
-  },
-  "situational-response": {
-    title: m.skill_situational_response_title,
-    description: m.skill_situational_response_description,
-  },
-  wit: { title: m.skill_wit_title, description: m.skill_wit_description },
-  "clear-expression": {
-    title: m.skill_clear_expression_title,
-    description: m.skill_clear_expression_description,
+  "start-conversations": {
+    title: m.skill_start_conversations_title,
+    description: m.skill_start_conversations_description,
   },
   "conversation-flow": {
     title: m.skill_conversation_flow_title,
     description: m.skill_conversation_flow_description,
   },
-};
-
-const skillIcons = {
-  "smooth-speaking": AudioLines,
-  "thinking-on-your-feet": Lightbulb,
-  listening: Ear,
-  "situational-response": HeartHandshake,
-  wit: Smile,
-  "clear-expression": MessageCircle,
-  "conversation-flow": MessagesSquare,
-};
+  listening: {
+    title: m.skill_listening_title,
+    description: m.skill_listening_description,
+  },
+  sharing: {
+    title: m.skill_sharing_title,
+    description: m.skill_sharing_description,
+  },
+  "clear-expression": {
+    title: m.skill_clear_expression_title,
+    description: m.skill_clear_expression_description,
+  },
+  wit: { title: m.skill_wit_title, description: m.skill_wit_description },
+  "respond-with-care": {
+    title: m.skill_respond_with_care_title,
+    description: m.skill_respond_with_care_description,
+  },
+  "self-advocacy": {
+    title: m.skill_self_advocacy_title,
+    description: m.skill_self_advocacy_description,
+  },
+  disagreement: {
+    title: m.skill_disagreement_title,
+    description: m.skill_disagreement_description,
+  },
+  clarification: {
+    title: m.skill_clarification_title,
+    description: m.skill_clarification_description,
+  },
+  "end-conversations": {
+    title: m.skill_end_conversations_title,
+    description: m.skill_end_conversations_description,
+  },
+} satisfies Record<
+  ConversationSkill,
+  {
+    title: typeof m.skill_listening_title;
+    description: typeof m.skill_listening_description;
+  }
+>;
 
 export function OnboardingSkills({
   value,
@@ -176,18 +181,22 @@ export function OnboardingSkills({
   return (
     <fieldset aria-describedby="skill-count" className="w-full">
       <legend className="sr-only">{m.skills_legend({}, { locale })}</legend>
+      {suggested.length > 0 && (
+        <p className="text-muted-foreground mb-5 text-sm leading-relaxed">
+          {m.skills_suggested_intro({}, { locale })}
+        </p>
+      )}
       <div className="grid gap-3 sm:grid-cols-2">
         {conversationSkills.map(({ id }) => {
           const { title, description } = skillMessages[id];
           const selected = value.includes(id);
-          const Icon = skillIcons[id];
           return (
             <Checkbox.Root
               key={id}
               checked={selected}
               disabled={!selected && value.length >= 3}
               aria-labelledby={`${id}-title`}
-              aria-describedby={`${id}-description`}
+              aria-describedby={`${id}-description${suggested.includes(id) ? ` ${id}-suggested` : ""}`}
               onCheckedChange={(checked) =>
                 onChange(
                   checked
@@ -197,15 +206,18 @@ export function OnboardingSkills({
               }
               className="onboarding-choice flex items-start gap-3 rounded-2xl border p-4 text-start"
             >
-              <Icon
+              <img
+                src={`/images/onboarding/skills/${id}.png`}
+                alt=""
                 aria-hidden="true"
-                className="text-muted-foreground mt-1 size-5 shrink-0"
-                strokeWidth={1.5}
+                width={32}
+                height={32}
+                className="size-8 shrink-0 object-contain"
               />
-              <span className="min-w-0 flex-1">
+              <span className="flex min-w-0 flex-1 flex-col self-stretch">
                 <span
                   id={`${id}-title`}
-                  className="block text-base leading-snug font-medium"
+                  className="text-base leading-snug font-medium"
                 >
                   {title({}, { locale })}
                 </span>
@@ -216,9 +228,14 @@ export function OnboardingSkills({
                   {description({}, { locale })}
                 </span>
                 {suggested.includes(id) && (
-                  <span className="text-primary mt-2 flex items-center gap-1 text-xs font-medium">
-                    <Sparkles aria-hidden="true" className="size-3" />
-                    {m.skill_suggested({}, { locale })}
+                  <span className="mt-auto pt-3">
+                    <Badge
+                      id={`${id}-suggested`}
+                      variant="primary-light"
+                      radius="full"
+                    >
+                      {m.skill_suggested({}, { locale })}
+                    </Badge>
                   </span>
                 )}
               </span>
@@ -236,7 +253,8 @@ export function OnboardingSkills({
       </div>
       <output
         id="skill-count"
-
+        aria-live="polite"
+        aria-atomic="true"
         className="text-muted-foreground mt-4 text-center text-sm"
       >
         {m.skills_count(

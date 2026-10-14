@@ -1,12 +1,157 @@
-import { onboardingBenefitIds } from "@chitchat/contracts/onboarding";
+import { practiceLanguages } from "@chitchat/contracts";
+import {
+  onboardingBenefitIds,
+  onboardingTurnSchema,
+} from "@chitchat/contracts/onboarding";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { createOnboardingProvider } from "./onboarding";
 import {
   textClient,
+  textError,
   textResponse,
   textStreamResponse,
 } from "./text-model.test-helper";
+
+function filteredResponse(partialReply?: string) {
+  return {
+    stream: new ReadableStream({
+      start(controller) {
+        controller.enqueue({ type: "stream-start", warnings: [] });
+        if (partialReply) {
+          controller.enqueue({ type: "text-start", id: "reply" });
+          controller.enqueue({
+            type: "text-delta",
+            id: "reply",
+            delta: JSON.stringify({ reply: partialReply }),
+          });
+          controller.enqueue({ type: "text-end", id: "reply" });
+        }
+        controller.enqueue({
+          type: "finish",
+          finishReason: { unified: "content-filter", raw: "SAFETY" },
+          usage: {
+            inputTokens: {
+              total: 490,
+              noCache: 490,
+              cacheRead: 0,
+              cacheWrite: 0,
+            },
+            outputTokens: { total: 0, text: 0, reasoning: 0 },
+          },
+        });
+        controller.close();
+      },
+    }),
+  } satisfies Awaited<ReturnType<ReturnType<typeof textClient>["stream"]>>;
+}
+
+describe("onboarding content filtering", () => {
+  it("lets the learner choose skills when the provider filters the reply", async () => {
+    const { ai, stream } = textClient();
+    stream.mockResolvedValue(filteredResponse());
+    const result = await createOnboardingProvider(ai).onboardingTurn(
+      {
+        name: "baba",
+        language: "English",
+        messages: [
+          { role: "user", text: "i want to approach girls and get laid" },
+        ],
+      },
+      new AbortController().signal
+    );
+    expect(result).toStrictEqual({
+      status: "choose",
+      reply:
+        "Chit couldn't respond to that message. You can choose the conversation skills you'd like to practice.",
+      goal: "",
+      suggestedSkills: [],
+    });
+    expect(stream).toHaveBeenCalledOnce();
+  });
+
+  it.each(practiceLanguages)(
+    "returns valid recovery in %s",
+    async (language) => {
+      const { ai, stream } = textClient();
+      stream.mockResolvedValue(filteredResponse());
+      const result = await createOnboardingProvider(ai).onboardingTurn(
+        {
+          name: "Alex",
+          language,
+          messages: [{ role: "user", text: "A goal" }],
+        },
+        new AbortController().signal
+      );
+      expect(onboardingTurnSchema.safeParse(result).success).toBeTruthy();
+      expect(result.status).toBe("choose");
+      expect(result.reply.includes("Chit couldn't respond")).toBe(
+        language === "English"
+      );
+    }
+  );
+
+  it("replaces a filtered partial reply with the recovery message", async () => {
+    const { ai, stream } = textClient();
+    stream.mockResolvedValue(filteredResponse("An unfinished reply"));
+    const partial = vi.fn<(reply: string) => void>();
+    const result = await createOnboardingProvider(ai).onboardingTurn(
+      {
+        name: "Alex",
+        language: "English",
+        messages: [{ role: "user", text: "A goal" }],
+      },
+      new AbortController().signal,
+      partial
+    );
+    expect(partial).toHaveBeenCalledWith("An unfinished reply");
+    expect(partial).toHaveBeenLastCalledWith(result.reply);
+    expect(result.status).toBe("choose");
+  });
+
+  it("does not turn an aborted filtered reply into a completed turn", async () => {
+    const { ai, stream } = textClient();
+    const controller = new AbortController();
+    stream.mockImplementation(() => {
+      controller.abort();
+      return Promise.resolve(filteredResponse());
+    });
+    await expect(
+      createOnboardingProvider(ai).onboardingTurn(
+        {
+          name: "Alex",
+          language: "English",
+          messages: [{ role: "user", text: "A goal" }],
+        },
+        controller.signal
+      )
+    ).rejects.toMatchObject({ name: "AbortError" });
+  });
+
+  it.each(["malformed", "provider"])(
+    "keeps %s failures as errors",
+    async (failure) => {
+      const { ai, stream } = textClient();
+      if (failure === "provider") {
+        stream.mockRejectedValue(textError(503));
+      } else {
+        stream.mockResolvedValue(textStreamResponse({ reply: "Incomplete" }));
+      }
+      await expect(
+        createOnboardingProvider(ai).onboardingTurn(
+          {
+            name: "Alex",
+            language: "English",
+            messages: [{ role: "user", text: "A goal" }],
+          },
+          new AbortController().signal
+        )
+      ).rejects.toThrow(
+        /No object generated|No output generated|provider detail/u
+      );
+    }
+  );
+});
 
 describe("localized onboarding recommendations", () => {
   it("asks for the validated practice language while preserving skill IDs", async () => {
@@ -35,7 +180,7 @@ describe("localized onboarding recommendations", () => {
         ]),
       })
     );
-    expect(result.suggestedSkills).toStrictEqual(["listening"]);
+    expect(result.suggestedSkills).toStrictEqual([]);
   });
 });
 
@@ -62,7 +207,7 @@ describe("personalized onboarding benefits", () => {
         answers: Object.fromEntries(
           onboardingBenefitIds.map((id, index) => [
             id,
-            { type: "score", score: index / 4 },
+            { type: "score", score: (index / onboardingBenefitIds.length) * 3 },
           ])
         ),
       })
@@ -76,7 +221,7 @@ describe("personalized onboarding benefits", () => {
       new AbortController().signal
     );
     expect(result.benefits).toStrictEqual({
-      ids: ["useful-feedback", "everyday-language", "playful-conversations"],
+      ids: ["end-conversations", "respond-with-care", "everyday-tasks"],
       personalized: true,
     });
     expect(
@@ -97,16 +242,13 @@ describe("personalized onboarding benefits", () => {
         suggestedSkills: ["clear-expression"],
       })
     );
-    let complete!: (response: Response) => void;
+    const pending = Promise.withResolvers<Response>();
     vi.stubGlobal(
       "fetch",
-      vi.fn<typeof fetch>().mockImplementation(
-        () =>
-          // oxlint-disable-next-line promise/avoid-new -- Hold benefit ranking behind the partial reply.
-          new Promise((resolve) => {
-            complete = resolve;
-          })
-      )
+      vi.fn<typeof fetch>().mockImplementation(async () => {
+        const response = await pending.promise;
+        return response.clone();
+      })
     );
     const partial = vi.fn<(reply: string) => void>();
     const finished = vi.fn<() => void>();
@@ -128,7 +270,7 @@ describe("personalized onboarding benefits", () => {
       expect(partial).toHaveBeenCalledWith("Let's practice talking at work.")
     );
     expect(finished).not.toHaveBeenCalled();
-    complete(
+    pending.resolve(
       Response.json({
         answers: Object.fromEntries(
           onboardingBenefitIds.map((id) => [id, { type: "score", score: 1 }])

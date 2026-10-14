@@ -8,7 +8,6 @@ import {
   practiceScenePreviewSchema,
   practiceOptionsSchema,
   practiceSessionSchema,
-  practiceSetupResponseSchema,
 } from "@chitchat/contracts";
 import type {
   GuidedTurnRequest,
@@ -20,7 +19,6 @@ import type {
   PracticeScenePreviewRequest,
   CustomPlaceSummary,
   PracticeSelection,
-  PracticeSetupRequest,
 } from "@chitchat/contracts";
 import {
   onboardingLiveSessionSchema,
@@ -157,15 +155,6 @@ export async function createCustomSituationSession(
 ) {
   return practiceSessionSchema.parse(
     await request("/situation-sessions", signal, { place })
-  );
-}
-
-export async function resolvePracticeSetup(
-  body: PracticeSetupRequest,
-  signal: AbortSignal
-) {
-  return practiceSetupResponseSchema.parse(
-    await request("/setup", signal, body)
   );
 }
 

@@ -30,6 +30,26 @@ function mockResponse(body: unknown, status = 200) {
 describe("Jev onboarding benefits", () => {
   afterEach(() => vi.unstubAllGlobals());
 
+  it.each([
+    "clear-up-misunderstandings",
+    "everyday-tasks",
+    "respond-with-care",
+    "end-conversations",
+  ])("can recommend %s when it is the most relevant result", async (id) => {
+    const scores = answers();
+    scores[id] = { type: "score", score: 3 };
+    const request = mockResponse({ answers: scores });
+    const result = await selectOnboardingBenefits(
+      "test-key",
+      state,
+      new AbortController().signal
+    );
+    expect(result.ids[0]).toBe(id);
+    expect(result.personalized).toBeTruthy();
+    const body = JSON.parse(String(request.mock.calls[0]?.[1]?.body));
+    expect(body.questions[id].instructions.capability).toBeTruthy();
+  });
+
   it("batches every candidate over the conversation and selects the highest three with stable ties", async () => {
     const scores = answers();
     scores["work-conversations"] = { type: "score", score: 3 };

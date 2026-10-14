@@ -8,7 +8,11 @@ import type { GoogleGenAI } from "@google/genai";
 import { generateText, Output } from "ai";
 
 import { resolveSelection } from "./catalog";
-import { feedbackInstruction, finalizeFeedback } from "./feedback";
+import {
+  conversationScore,
+  feedbackInstruction,
+  finalizeFeedback,
+} from "./feedback";
 import { speakPracticeText } from "./speech";
 import { traceGeneration, textTokenUsage } from "./tracing";
 import type { PracticeTracing } from "./tracing";
@@ -88,15 +92,7 @@ export function createFeedbackProvider(
       const { feedback } = request;
       // Recalculate the total rather than trusting a round-tripped client total.
       const score =
-        feedback.status === "scored"
-          ? Math.round(
-              ((feedback.curiosity.score +
-                feedback.listening.score +
-                feedback.sharing.score) /
-                15) *
-                10
-            )
-          : undefined;
+        feedback.status === "scored" ? conversationScore(feedback) : undefined;
       // Assemble only confirmed feedback. TTS delivers it; it does not reassess.
       const text =
         feedback.status === "scored"

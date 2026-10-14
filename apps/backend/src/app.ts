@@ -4,6 +4,7 @@ import { cors } from "hono/cors";
 import { requestId } from "hono/request-id";
 import { secureHeaders } from "hono/secure-headers";
 
+import type { DevelopmentLimits } from "./development-limits";
 import type { PracticeProvider } from "./practice/gemini";
 import { createPracticeRoutes } from "./practice/routes";
 import type { PracticeTracing } from "./practice/tracing";
@@ -31,6 +32,7 @@ interface AppOptions {
   createTranscriptionSession?: CreateTranscriptionSession;
   practiceProvider?: PracticeProvider;
   practiceTracing?: PracticeTracing;
+  developmentLimits?: DevelopmentLimits;
   webOrigin: string;
   authHandler: (request: Request) => Response | Promise<Response>;
   getUser: (
@@ -52,7 +54,8 @@ export function createApp(options: AppOptions) {
       options.practiceProvider,
       options.webOrigin,
       options.practiceTracing,
-      options.createTranscriptionSession
+      options.createTranscriptionSession,
+      options.developmentLimits
     )
   );
   app.get("/api/scenarios", (c) => c.json(scenarios));

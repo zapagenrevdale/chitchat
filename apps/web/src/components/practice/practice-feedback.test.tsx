@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type * as LiveModule from "@/lib/practice-live";
+import type { PracticeMessage } from "@/lib/practice-session";
 
 import { PracticeConversation } from "./practice-conversation";
 import { usePractice } from "./use-practice";
@@ -42,7 +43,7 @@ const selection = {
   settingId: "casual",
   goal: "Find something in common.",
 };
-const messages: LiveModule.PracticeMessage[] = [
+const messages: PracticeMessage[] = [
   { id: 1, speaker: "partner", text: "I run in the park." },
   {
     id: 2,

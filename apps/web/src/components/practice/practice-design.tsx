@@ -13,12 +13,23 @@ import { PracticeChoicePicker } from "./practice-choice-picker";
 import { PracticeLanguagePicker } from "./practice-language";
 import { PracticePersonaPicker } from "./practice-persona-picker";
 import { PracticeReady } from "./practice-ready";
-import { choicesForStep } from "./setup-choices";
 import { useCustomChoice } from "./use-custom-choice";
 import { usePractice } from "./use-practice";
 
 const spring = { type: "spring", bounce: 0, duration: 0.4 } as const;
 type DesignStep = "place" | "situation" | "persona" | "complete";
+
+function settingsForPlace(
+  settings: PracticeOptions["settings"],
+  placeId: string | undefined
+) {
+  return settings.filter(
+    ({ placeIds }) =>
+      placeIds.length === 0 ||
+      placeId === "custom" ||
+      placeIds.includes(placeId ?? "")
+  );
+}
 
 function profileLanguage(profile?: OnboardingProfile): PracticeLanguage {
   return profile?.language ?? "English";
@@ -87,7 +98,7 @@ export function PracticeDesign({
     : places;
   const selectedPlace = placeChoices[placeIndex];
   const presetSituations = options.data
-    ? choicesForStep(options.data, "setting", { placeId: selectedPlace.id })
+    ? settingsForPlace(options.data.settings, selectedPlace.id)
     : [];
   const situationChoices = customConversation.situationSummary
     ? [

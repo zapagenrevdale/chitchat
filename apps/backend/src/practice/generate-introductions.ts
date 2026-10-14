@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { GoogleGenAI, Modality, ThinkingLevel } from "@google/genai";
 
+import { encodePcmMp3 } from "./encode-pcm-mp3";
 import { personas } from "./personas";
 
 // Run manually from the workspace root: bun run generate:introductions
@@ -127,32 +128,12 @@ async function record(persona: (typeof personas)[number]) {
     );
   }
   const temporary = `${destination}.tmp.mp3`;
-  const encoder = Bun.spawn(
-    [
-      "ffmpeg",
-      "-hide_banner",
-      "-loglevel",
-      "error",
-      "-y",
-      "-f",
-      "s16le",
-      "-ar",
-      String(sampleRate),
-      "-ac",
-      "1",
-      "-i",
-      "pipe:0",
-      "-codec:a",
-      "libmp3lame",
-      "-b:a",
-      "64k",
-      temporary,
-    ],
-    { stdin: pcm, stdout: "ignore", stderr: "pipe" }
+  await encodePcmMp3(
+    pcm,
+    sampleRate,
+    temporary,
+    `MP3 encoding failed for ${persona.name}.`
   );
-  if ((await encoder.exited) !== 0) {
-    throw new Error(`MP3 encoding failed for ${persona.name}.`);
-  }
   await rename(temporary, destination);
   manifest[persona.id] = {
     fingerprint,

@@ -2,6 +2,7 @@ import type { PracticeSession } from "@chitchat/contracts";
 import { practiceOptionsSchema } from "@chitchat/contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import type { DevelopmentLimits } from "../development-limits";
 import type { PracticeProvider } from "./gemini";
 import { createPracticeRoutes } from "./routes";
 
@@ -16,7 +17,7 @@ const session: PracticeSession = {
   model: "gemini-3.1-flash-live-preview",
   expiresAt: 123_456,
 };
-function setup() {
+function setup(limits?: DevelopmentLimits) {
   const provider = {
     generatePlaceImage: vi
       .fn<NonNullable<PracticeProvider["generatePlaceImage"]>>()
@@ -31,7 +32,13 @@ function setup() {
       .fn<PracticeProvider["createSession"]>()
       .mockResolvedValue(session),
   };
-  const app = createPracticeRoutes(provider, origin);
+  const app = createPracticeRoutes(
+    provider,
+    origin,
+    undefined,
+    undefined,
+    limits
+  );
   const start = (body: unknown = selection, from = origin) =>
     app.request("/sessions", {
       method: "POST",
@@ -207,6 +214,58 @@ describe("live practice routes", () => {
     vi.advanceTimersByTime(60_000);
     await expect(start()).resolves.toMatchObject({ status: 201 });
   });
+
+  it("bypasses request and concurrency quotas in development", async () => {
+    const { provider, start } = setup({
+      environment: "development",
+      bypass: true,
+    });
+    const deferred = Promise.withResolvers<PracticeSession>();
+    provider.createSession.mockReturnValue(deferred.promise);
+    const pending = Array.from({ length: 35 }, () => start());
+    await vi.waitFor(() =>
+      expect(provider.createSession).toHaveBeenCalledTimes(35)
+    );
+    deferred.resolve(session);
+    const responses = await Promise.all(pending);
+    expect(responses.every((response) => response.status === 201)).toBeTruthy();
+  });
+
+  it("keeps production quotas even when bypass is requested", async () => {
+    const { provider, start } = setup({
+      environment: "production",
+      bypass: true,
+    });
+    const deferred = Promise.withResolvers<PracticeSession>();
+    provider.createSession.mockReturnValue(deferred.promise);
+    const pending = Array.from({ length: 4 }, () => start());
+    await vi.waitFor(() =>
+      expect(provider.createSession).toHaveBeenCalledTimes(4)
+    );
+    await expect(start()).resolves.toMatchObject({ status: 429 });
+    deferred.resolve(session);
+    await Promise.all(pending);
+  });
+
+  it.each([
+    { body: selection, from: "https://elsewhere.example", status: 403 },
+    { body: {}, from: origin, status: 400 },
+    {
+      body: { ...selection, extra: "x".repeat(5000) },
+      from: origin,
+      status: 413,
+    },
+  ])(
+    "keeps validation and origin checks in bypass mode with $status",
+    async ({ body, from, status }) => {
+      const { provider, start } = setup({
+        environment: "development",
+        bypass: true,
+      });
+      await expect(start(body, from)).resolves.toMatchObject({ status });
+      expect(provider.createSession).not.toHaveBeenCalled();
+    }
+  );
 
   it("provisions Chit without scene choices and rejects cross-origin requests", async () => {
     const { app, provider } = setup();

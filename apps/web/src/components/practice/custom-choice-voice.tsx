@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ChitAvatar } from "@/components/ui/chit-avatar";
 import { LiveWaveform } from "@/components/ui/live-waveform";
-import type { PracticeState } from "@/lib/practice-live";
+import type { PracticeState } from "@/lib/practice-session";
 
 import { TalkButton } from "./talk-button";
 import type { useCustomChoice } from "./use-custom-choice";

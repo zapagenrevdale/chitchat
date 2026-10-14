@@ -1,4 +1,10 @@
 import {
+  conversationSkillSchema,
+  selectedSkillsSchema,
+} from "@chitchat/contracts/conversation-goals";
+import {
+  legacyOnboardingDraftSchema,
+  legacyOnboardingProfileSchema,
   onboardingDraftSchema,
   onboardingProfileSchema,
   onboardingSteps,
@@ -13,9 +19,48 @@ export const onboardingStorageKeys = {
   draft: "chitchat.onboarding.draft.v1",
 };
 
+function retainedSkills(skills: string[]) {
+  return selectedSkillsSchema.parse(
+    skills.filter((skill) => conversationSkillSchema.safeParse(skill).success)
+  );
+}
+
+function migrateDraft(value: unknown) {
+  const current = onboardingDraftSchema.safeParse(value);
+  const parsed = current.success
+    ? current
+    : legacyOnboardingDraftSchema.safeParse(value);
+  if (!parsed.success) {
+    return null;
+  }
+  const saved = parsed.data;
+  const skills = retainedSkills(saved.skills);
+  if (saved.skillRecommendationsVersion === 2) {
+    return onboardingDraftSchema.parse({ ...saved, skills });
+  }
+  const result = saved.resolvedGoal;
+  let { step } = saved;
+  if (result) {
+    step =
+      result.status === "choose" || saved.step === "skills"
+        ? "skills"
+        : "benefits";
+  }
+  return onboardingDraftSchema.parse({
+    ...saved,
+    skills,
+    motivation: result?.goal ?? saved.motivation,
+    goalStatus: result?.status ?? saved.goalStatus,
+    step,
+    resolvedGoal: undefined,
+    skillRecommendationsVersion: 2,
+  });
+}
+
 export function freshOnboardingDraft(): OnboardingDraft {
   return {
     version: 1,
+    skillRecommendationsVersion: 2,
     step: "language",
     language: "English",
     name: "",
@@ -93,32 +138,41 @@ function restoreDraft(saved: OnboardingDraft) {
         resolvedGoal: undefined,
       };
     }
-    if (!draft.conversationMode && draft.conversation) {
-      draft.conversation = [];
-    }
   }
   return draft;
 }
 
 export function readOnboarding() {
   let profile: OnboardingProfile | null = null;
+  let migratedProfile: OnboardingDraft | null = null;
   try {
-    const parsed = onboardingProfileSchema.safeParse(
-      JSON.parse(localStorage.getItem(onboardingStorageKeys.profile) ?? "null")
+    const value: unknown = JSON.parse(
+      localStorage.getItem(onboardingStorageKeys.profile) ?? "null"
     );
+    const parsed = onboardingProfileSchema.safeParse(value);
     if (parsed.success) {
       profile = parsed.data;
+    } else {
+      const legacy = legacyOnboardingProfileSchema.safeParse(value);
+      if (legacy.success) {
+        migratedProfile = {
+          ...freshOnboardingDraft(),
+          ...legacy.data,
+          step: "skills",
+          skills: retainedSkills(legacy.data.skills),
+        };
+      }
     }
   } catch {
     // Storage may be unavailable or contain data from an interrupted write.
   }
-  let draft = freshOnboardingDraft();
+  let draft = migratedProfile ?? freshOnboardingDraft();
   try {
-    const parsed = onboardingDraftSchema.safeParse(
+    const parsed = migrateDraft(
       JSON.parse(localStorage.getItem(onboardingStorageKeys.draft) ?? "null")
     );
-    if (parsed.success) {
-      draft = restoreDraft(parsed.data);
+    if (parsed) {
+      draft = restoreDraft(parsed);
     }
   } catch {
     // Invalid drafts restart at language selection without breaking the page.
@@ -130,7 +184,12 @@ export function saveOnboardingDraft(draft: OnboardingDraft) {
   try {
     localStorage.setItem(
       onboardingStorageKeys.draft,
-      JSON.stringify(onboardingDraftSchema.parse(draft))
+      JSON.stringify(
+        onboardingDraftSchema.parse({
+          ...draft,
+          skillRecommendationsVersion: 2,
+        })
+      )
     );
     return true;
   } catch {

@@ -16,5 +16,9 @@ export const env = z
     TYPESAFE_API_KEY: z.string().trim().optional(),
     GEMINI_API_KEY: z.string().trim().optional(),
     GEMINI_API_KEY_LIVE: z.string().trim().optional(),
+    DEV_BYPASS_LIMITS: z
+      .enum(["true", "false"])
+      .default("false")
+      .transform((value) => value === "true"),
   })
   .parse(process.env);

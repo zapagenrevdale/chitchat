@@ -35,6 +35,14 @@ const capabilities: Record<OnboardingBenefit, string> = {
     "For a learner who explicitly wants to learn or practice using a language: rehearse everyday situations such as ordering food in that language. A goal about making friends or conversation skills alone is not a language-learning goal.",
   "useful-feedback":
     "After a Free talk session, review feedback grounded in that conversation and an idea to try next. Feedback is available in Free talk only.",
+  "clear-up-misunderstandings":
+    "Rehearse asking for repetition or clarification, checking what someone means, and rephrasing when misunderstood. Communication repair does not require disagreement or a language-learning goal.",
+  "everyday-tasks":
+    "Rehearse practical conversations such as ordering food, checking in, making an appointment, or asking for information in a chosen scene. This can support native speakers as well as language learners; do not assume a language-learning goal.",
+  "respond-with-care":
+    "Practice acknowledging a conversation partner's feelings and responding thoughtfully when they share good news or a difficulty. This is conversational rehearsal, not counseling or mental-health treatment.",
+  "end-conversations":
+    "Rehearse bringing a conversation to a polite close, agreeing on a next step where useful, and saying goodbye without feeling stuck continuing the exchange.",
 };
 const criteria = [
   "The learner has stated no goal that this practice capability addresses, or has explicitly ruled it out.",

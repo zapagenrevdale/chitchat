@@ -27,6 +27,7 @@ function liveState(
         : []),
     ],
     error: null,
+    canRetry: true,
     result: null,
     start: vi.fn<() => void>(),
     stop: vi.fn<() => void>(),
@@ -46,7 +47,7 @@ function microphone() {
       onResolved={vi.fn<() => void>()}
       onReady={vi.fn<() => void>()}
       onRestart={vi.fn<() => void>()}
-      onSwitch={vi.fn<() => void>()}
+      onText={vi.fn<() => void>()}
     />
   );
 }
@@ -115,12 +116,7 @@ describe("voice onboarding caption announcements", () => {
     expect(log).toHaveAttribute("aria-live", "off");
 
     await user.tab({ shift: true });
-    expect(
-      screen.getByRole("button", { name: en.mode_switch_text })
-    ).toHaveFocus();
-    await user.tab({ shift: true });
     expect(log).toHaveFocus();
-    await user.tab();
     await user.tab();
     expect(toggle).toHaveFocus();
     await user.keyboard(" ");

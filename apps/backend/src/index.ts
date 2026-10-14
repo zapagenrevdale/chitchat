@@ -20,6 +20,10 @@ const app = createApp({
     ? createGeminiTranscription(liveApiKey)
     : undefined,
   practiceTracing: telemetry?.practice,
+  developmentLimits: {
+    environment: env.NODE_ENV,
+    bypass: env.DEV_BYPASS_LIMITS,
+  },
   webOrigin: env.WEB_ORIGIN,
   authHandler: (request) => auth.handler(request),
   getUser: async (headers) => {

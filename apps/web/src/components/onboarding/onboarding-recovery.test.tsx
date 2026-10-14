@@ -116,7 +116,8 @@ function show() {
 }
 function voice(editing = false) {
   const view = mount({}, editing);
-  fireEvent.click(screen.getByRole("button", { name: en.mode_switch_voice }));
+  fireEvent.click(screen.getByRole("button", { name: en.back_button }));
+  fireEvent.click(screen.getByRole("button", { name: en.voice_answer }));
   return view;
 }
 function latest() {
@@ -190,6 +191,38 @@ describe("onboarding suspension and accepted outcomes", () => {
     expect(
       screen.getByRole("heading", { name: en.heading_benefits })
     ).toBeInTheDocument();
+  });
+
+  it("recovers from unavailable voice by starting fresh text without offering a retry", () => {
+    voice();
+    const old = latest();
+    act(() => {
+      old.callbacks.onMessages(
+        [{ id: 1, role: "user", text: "Old voice answer", final: true }],
+        [{ role: "user", text: "Old voice answer" }]
+      );
+      old.callbacks.onError("Voice setup has reached its limit.", "text");
+    });
+    expect(screen.getByRole("status")).toHaveTextContent(
+      en.voice_unavailable_text
+    );
+    expect(
+      screen.queryByRole("button", { name: en.voice_restart })
+    ).not.toBeInTheDocument();
+    const text = screen.getByRole("button", { name: en.voice_continue_text });
+    expect(text).toHaveAccessibleDescription(en.mode_switch_hint);
+    fireEvent.click(text);
+    expect(
+      screen.getByRole("textbox", { name: en.motivation_label })
+    ).toHaveFocus();
+    expect(raw()).toMatchObject({
+      step: "motivation",
+      conversationMode: "text",
+      conversation: [],
+      motivation: "",
+      name: "Alex",
+      skills: ["wit"],
+    });
   });
 
   it("removes only the unconfirmed message when a pending text turn is suspended", () => {
@@ -271,7 +304,8 @@ describe("onboarding suspension and accepted outcomes", () => {
     mount();
     await act(() => submit());
     hide();
-    fireEvent.click(screen.getByRole("button", { name: en.mode_switch_voice }));
+    fireEvent.click(screen.getByRole("button", { name: en.back_button }));
+    fireEvent.click(screen.getByRole("button", { name: en.voice_answer }));
     show();
     await act(() => vi.advanceTimersByTimeAsync(3000));
     expect(raw().resolvedGoal).toBeUndefined();

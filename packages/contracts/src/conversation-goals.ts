@@ -1,55 +1,77 @@
 import { z } from "zod";
 
 export const conversationSkillIds = [
-  "smooth-speaking",
-  "thinking-on-your-feet",
-  "listening",
-  "situational-response",
-  "wit",
-  "clear-expression",
+  "start-conversations",
   "conversation-flow",
+  "listening",
+  "sharing",
+  "clear-expression",
+  "wit",
+  "respond-with-care",
+  "self-advocacy",
+  "disagreement",
+  "clarification",
+  "end-conversations",
 ] as const;
 export const conversationSkillSchema = z.enum(conversationSkillIds);
 export type ConversationSkill = z.infer<typeof conversationSkillSchema>;
 
 export const conversationSkills = [
   {
-    id: "smooth-speaking",
-    title: "Speak more smoothly",
-    description:
-      "Get your thoughts out with fewer unwanted hesitations and restarts.",
-  },
-  {
-    id: "thinking-on-your-feet",
-    title: "Know what to say next",
-    description: "Find a response when someone asks something unexpected.",
-  },
-  {
-    id: "listening",
-    title: "Listen closely and ask better questions",
-    description: "Pick up on details and ask thoughtful follow-up questions.",
-  },
-  {
-    id: "situational-response",
-    title: "Respond naturally in different situations",
-    description:
-      "Recognize when to be playful, supportive, curious, or serious.",
-  },
-  {
-    id: "wit",
-    title: "Be more playful and witty",
-    description: "Try playful replies that fit the moment.",
-  },
-  {
-    id: "clear-expression",
-    title: "Tell stories and explain myself clearly",
-    description: "Share your point without losing your thread.",
+    id: "start-conversations",
+    title: "Start conversations",
+    description: "Introduce yourself and find something to talk about.",
   },
   {
     id: "conversation-flow",
     title: "Keep conversations going",
+    description: "Build on a topic, add something, or move to another one.",
+  },
+  {
+    id: "listening",
+    title: "Listen and ask thoughtful questions",
+    description: "Follow what someone says and show you understood.",
+  },
+  {
+    id: "sharing",
+    title: "Share more about myself",
     description:
-      "Build on an answer, introduce a topic, or move through a lull.",
+      "Talk about your interests, experiences, and opinions at a level you're comfortable with.",
+  },
+  {
+    id: "clear-expression",
+    title: "Explain my thoughts clearly",
+    description: "Get your point across without losing your thread.",
+  },
+  {
+    id: "wit",
+    title: "Be more playful",
+    description: "Try lighthearted replies and build on a shared joke.",
+  },
+  {
+    id: "respond-with-care",
+    title: "Respond with care",
+    description: "Acknowledge someone's feelings and ask what would help.",
+  },
+  {
+    id: "self-advocacy",
+    title: "Speak up for myself",
+    description: "Make requests, say no, and express what you need.",
+  },
+  {
+    id: "disagreement",
+    title: "Handle disagreements",
+    description: "Explain a different view and understand the other person's.",
+  },
+  {
+    id: "clarification",
+    title: "Clear up misunderstandings",
+    description: "Ask for clarification and rephrase your own meaning.",
+  },
+  {
+    id: "end-conversations",
+    title: "End conversations comfortably",
+    description: "Bring things to a close and say goodbye.",
   },
 ] as const satisfies readonly {
   id: ConversationSkill;

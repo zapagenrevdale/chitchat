@@ -1,8 +1,11 @@
 # Chitchat
 
+Chitchat helps people get comfortable speaking in everyday, social, and professional situations through simulated conversations. The intended experience gives each practice session a setting, a short backstory, a concrete conversational goal, and a time limit. This timed simulation format is planned, not yet implemented. Keep product decisions focused on preparing people for real conversations, and lead product copy with what people can practice. See the [product overview](README.md#product-overview) for context and the distinction between the current experience and planned features.
+
 - `THOUGHTS.md` is a private, human-only scratchpad. Agents must not open, read, search, summarize, quote, interpret, or use it as context. Ignore it completely, including when exploring the repository or determining product direction.
 - Use Bun and the pinned workspace dependencies. Root commands run through Turborepo.
 - Hono owns authentication, database access, and shared product logic. TanStack Start owns web rendering. Never import `@chitchat/db` into the web app.
+- Use the vendored AI Elements primitives in `apps/web/src/components/ai-elements` and shared `chat` components for chat interfaces. Preserve the existing theme and typed streaming transports; see the vendored README for source provenance.
 - ReUI is the primary UI source: https://reui.io/components. Check its registry before building custom components. Use ElevenLabs UI for voice/audio and shadcn primitives where ReUI depends on them.
 - Follow the app’s existing theme for every UI change. Before editing UI, read `apps/web/src/routes/theme.tsx` and the `ThemeGallery` components it renders; use the `/theme` page as the visual source of truth. Reuse its shared components, semantic color tokens, typography, spacing, button variants, border radii, and shadows. Adapt reference screenshots to this theme rather than copying their styling or introducing a separate visual style, unless the user explicitly requests a theme change.
 - Keep Gemini credentials on the backend. Practice uses Gemini 3.1 Flash Live Preview for continuous voice. Hono issues constrained ephemeral tokens; browsers stream audio directly to Gemini. Prefer GEMINI_API_KEY, falling back to GEMINI_API_KEY_LIVE only when missing.

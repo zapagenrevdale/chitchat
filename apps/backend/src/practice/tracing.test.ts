@@ -154,6 +154,46 @@ describe("practice traces", () => {
     expect(tracing.ingest(batch)).toBe("unknown");
   });
 
+  it.each([
+    { environment: "development", bypass: true, expected: "accepted" },
+    { environment: "development", bypass: false, expected: "limited" },
+    { environment: "production", bypass: true, expected: "limited" },
+  ])(
+    "applies tracing quotas with $environment and bypass=$bypass",
+    async ({ environment, bypass, expected }) => {
+      vi.useFakeTimers();
+      tracing = new PracticeTracing({ environment, bypass });
+      const session = await provision();
+      const batch = practiceTraceBatchSchema.parse({
+        tracingToken: session.tracingToken,
+        events: Array.from({ length: 8 }, () => ({
+          type: "lifecycle",
+          name: "connected",
+          sequence: 0,
+          timestamp: Date.now(),
+        })),
+      });
+      const ingestMany = (count: number) =>
+        Array.from({ length: count }, () => tracing.ingest(batch));
+      expect(
+        ingestMany(30).every((result) => result === "accepted")
+      ).toBeTruthy();
+      expect(tracing.ingest(batch)).toBe(expected);
+      await vi.advanceTimersByTimeAsync(60_001);
+      for (let minute = 0; minute < 7; minute += 1) {
+        ingestMany(30);
+        vi.advanceTimersByTime(60_001);
+      }
+      ingestMany(10);
+      expect(tracing.ingest(batch)).toBe(expected);
+      expect(tracing.ingest({ ...batch, tracingToken: "invalid" })).toBe(
+        "unknown"
+      );
+      await vi.advanceTimersByTimeAsync(960_001);
+      expect(tracing.ingest(batch)).toBe("unknown");
+    }
+  );
+
   it("marks abandoned sessions incomplete and removes their capabilities", async () => {
     vi.useFakeTimers();
     const session = await provision();

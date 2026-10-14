@@ -1,4 +1,35 @@
-import type { PracticeLanguage } from "./practice";
+import { z } from "zod";
+
+export const practiceLanguages = [
+  "Arabic",
+  "Chinese",
+  "Danish",
+  "Dutch",
+  "English",
+  "Filipino",
+  "French",
+  "German",
+  "Greek",
+  "Hebrew",
+  "Hindi",
+  "Indonesian",
+  "Italian",
+  "Japanese",
+  "Korean",
+  "Norwegian",
+  "Persian",
+  "Polish",
+  "Portuguese",
+  "Russian",
+  "Spanish",
+  "Swedish",
+  "Thai",
+  "Turkish",
+  "Ukrainian",
+  "Vietnamese",
+] as const;
+export const practiceLanguageSchema = z.enum(practiceLanguages);
+export type PracticeLanguage = z.infer<typeof practiceLanguageSchema>;
 
 export const practiceLanguageLocales = {
   English: "en",

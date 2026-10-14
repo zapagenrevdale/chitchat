@@ -1,6 +1,36 @@
 # Chitchat
 
-A small-talk practice app. This scaffold includes an SSR web frontend, a shared API with authentication, PostgreSQL, and a voice-interface preview.
+Chitchat helps people get comfortable speaking in everyday, social, and professional situations through simulated conversations. People can rehearse meeting someone new, contributing in a meeting, or introducing themselves at a networking event.
+
+## Product overview
+
+The intended experience is a timed simulation with a conversational goal. Each session gives the person:
+
+- A setting, such as a café, a meeting, or a networking event.
+- A short backstory that explains who they are speaking to and what is happening.
+- A concrete goal to work toward during the conversation.
+- A time limit that gives the encounter a clear end.
+
+For the initial version, scenarios and goals are assigned randomly within what the person wants to practice. Sessions last three minutes to keep practice short and add realistic conversational pressure.
+
+Before starting, explain the time limit and that the conversation stops immediately when time runs out. Keep a small countdown visible during practice. At 30 seconds remaining, show "30 seconds left" with a subtle color change. Color must not be the only signal. At zero, stop the conversation immediately and show "Practice finished."
+
+After each encounter, give relevant, helpful feedback that covers:
+
+- What went well.
+- One useful improvement.
+- A concrete example to try next.
+- Progress toward the conversational goal.
+
+"Try again" starts a fresh attempt with the same scenario and goal so the person can apply the feedback. A separate "New scenario" option provides another random scenario within their practice interests.
+
+For example, a café simulation could introduce someone the person is attracted to, with the goal of asking for their number. A meeting simulation could focus on explaining an idea, while a networking simulation could focus on introducing oneself and finding a shared interest.
+
+The purpose is to help people feel more prepared for real conversations through practice. Product copy should focus on the situation and what the person can practice, rather than lead with the technology behind the conversation.
+
+### Current experience and planned direction
+
+The existing app provides voice practice with personas, places, and settings. The timed simulation format described above is agreed product direction, not yet implemented. Three minutes is the initial default to evaluate through actual practice sessions. Detailed feedback presentation and accessibility behavior still need design and validation. Existing voice-session limits are separate from this planned product format.
 
 ## Local development
 

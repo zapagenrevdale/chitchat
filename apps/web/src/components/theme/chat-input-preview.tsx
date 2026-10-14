@@ -1,7 +1,12 @@
 import { useRef, useState } from "react";
 
-import { ConversationMessage } from "@/components/practice/practice-conversation";
-import { ChatInput } from "@/components/ui/chat-input";
+import {
+  Conversation,
+  ConversationContent,
+  ConversationScrollButton,
+} from "@/components/ai-elements/conversation";
+import { ChatInput } from "@/components/chat/chat-input";
+import { ConversationMessage } from "@/components/chat/conversation-message";
 import { ChitAvatar } from "@/components/ui/chit-avatar";
 
 export function ChatInputPreview() {
@@ -20,30 +25,33 @@ export function ChatInputPreview() {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <div
-        role="log"
-        aria-label="Chat preview"
-        className="mb-8 flex max-h-80 flex-col gap-5 overflow-y-auto p-1"
-      >
-        <ConversationMessage
-          transcriptId="theme-chat"
-          name="Chit"
-          avatar={<ChitAvatar size={32} />}
-          message={{
-            id: 0,
-            speaker: "partner",
-            text: "Hey, I’m Chit. What would you like to feel more confident talking about?",
-          }}
-        />
-        {messages.map((text, index) => (
+      <Conversation className="mb-8">
+        <ConversationContent
+          aria-label="Chat preview"
+          className="max-h-80"
+          contentClassName="gap-5 p-1"
+        >
           <ConversationMessage
-            key={index}
             transcriptId="theme-chat"
             name="Chit"
-            message={{ id: index + 1, speaker: "user", text }}
+            avatar={<ChitAvatar size={32} />}
+            message={{
+              id: 0,
+              speaker: "partner",
+              text: "Hey, I’m Chit. What would you like to feel more confident talking about?",
+            }}
           />
-        ))}
-      </div>
+          {messages.map((text, index) => (
+            <ConversationMessage
+              key={index}
+              transcriptId="theme-chat"
+              name="Chit"
+              message={{ id: index + 1, speaker: "user", text }}
+            />
+          ))}
+        </ConversationContent>
+        <ConversationScrollButton />
+      </Conversation>
       <ChatInput
         value={draft}
         onChange={setDraft}

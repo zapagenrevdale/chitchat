@@ -85,6 +85,21 @@ export function checkEnvironmentOverrides(root: string) {
   }
 }
 
+function managedEnvironment(state: State) {
+  return {
+    "apps/backend/.env": {
+      WEB_ORIGIN: state.urls.web,
+      BETTER_AUTH_URL: state.urls.backend,
+      DATABASE_URL: databaseUrl(state),
+    },
+    "apps/web/.env": {
+      VITE_API_URL: state.urls.backend,
+      VITE_SITE_URL: state.urls.web,
+    },
+    "packages/db/.env": { DATABASE_URL: databaseUrl(state) },
+  };
+}
+
 export function configureEnvironment(state: State, secretsFrom?: string) {
   const currentBackend = parse(
     readText(join(state.root, "apps/backend/.env")) ?? ""
@@ -96,10 +111,9 @@ export function configureEnvironment(state: State, secretsFrom?: string) {
   const authSecret = priorBackend
     ? parse(priorBackend).BETTER_AUTH_SECRET
     : randomBytes(48).toString("base64");
+  const managed = managedEnvironment(state);
   const backend: Record<string, string> = {
-    WEB_ORIGIN: state.urls.web,
-    BETTER_AUTH_URL: state.urls.backend,
-    DATABASE_URL: databaseUrl(state),
+    ...managed["apps/backend/.env"],
     BETTER_AUTH_SECRET: authSecret,
   };
   if (secretsFrom) {
@@ -115,12 +129,8 @@ export function configureEnvironment(state: State, secretsFrom?: string) {
     }
   }
   const overrides: Record<string, Record<string, string>> = {
+    ...managed,
     "apps/backend/.env": backend,
-    "apps/web/.env": {
-      VITE_API_URL: state.urls.backend,
-      VITE_SITE_URL: state.urls.web,
-    },
-    "packages/db/.env": { DATABASE_URL: databaseUrl(state) },
   };
   for (const file of environmentFiles) {
     const current = readText(join(state.root, file));
@@ -176,17 +186,16 @@ export function serviceEnvironment(state: State, directory: string) {
 
 export function assertEnvironment(state: State) {
   checkEnvironmentOverrides(state.root);
+  const managed = managedEnvironment(state);
+  const backend = managed["apps/backend/.env"];
   const expected: Record<string, Record<string, string>> = {
     "apps/backend/.env": {
-      DATABASE_URL: databaseUrl(state),
-      WEB_ORIGIN: state.urls.web,
-      BETTER_AUTH_URL: state.urls.backend,
+      DATABASE_URL: backend.DATABASE_URL,
+      WEB_ORIGIN: backend.WEB_ORIGIN,
+      BETTER_AUTH_URL: backend.BETTER_AUTH_URL,
     },
-    "apps/web/.env": {
-      VITE_API_URL: state.urls.backend,
-      VITE_SITE_URL: state.urls.web,
-    },
-    "packages/db/.env": { DATABASE_URL: databaseUrl(state) },
+    "apps/web/.env": managed["apps/web/.env"],
+    "packages/db/.env": managed["packages/db/.env"],
   };
   for (const [file, values] of Object.entries(expected)) {
     const actual = parse(readText(join(state.root, file)) ?? "");

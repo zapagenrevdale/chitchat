@@ -7,7 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { generateGuidedTurn, speakPracticeTurn } from "./practice-api";
 import type { PracticeAudio } from "./practice-audio";
 import { PracticeGuided } from "./practice-guided";
-import type { PracticeMessage } from "./practice-live";
+import type { PracticeMessage } from "./practice-session";
 import type { PracticeTranscription } from "./practice-transcription";
 
 const speech = vi.hoisted(() => ({

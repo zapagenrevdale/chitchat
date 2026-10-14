@@ -6,6 +6,7 @@ import { practiceLanguageLocales } from "@chitchat/contracts/languages";
 import type { WordInfo } from "@google/genai";
 import { GoogleGenAI, Modality } from "@google/genai";
 
+import { encodePcmMp3 } from "./encode-pcm-mp3";
 import { alignIntroduction } from "./introduction-timing";
 
 // --welcome generates the follow-up welcome; --force regenerates aligned clips.
@@ -47,11 +48,14 @@ interface Introduction {
 const manifest: Introduction[] = await manifestFile.json();
 const model = "gemini-3.1-flash-tts-preview";
 const timingModel = "gemini-3.5-transcribe";
+const delivery = welcome
+  ? 'Speak like a friendly person welcoming someone into a conversation. Give "Welcome!" a bright, warm lift. Use a natural conversational pace with brief, unforced pauses. Gently emphasize the idea of togetherness. Ask the final question with genuine curiosity and leave room for an answer. Sound interested and encouraging, without an exaggerated or promotional delivery.'
+  : "Speak warmly and naturally at a relaxed conversational pace, with short pauses between sentences.";
 
 async function synthesize(sample: Introduction, temporary: string) {
   const response = await ai.models.generateContent({
     model,
-    contents: `Read this greeting exactly as written in ${sample.language}. Speak warmly and naturally at a relaxed conversational pace, with short pauses between sentences. No extra words: ${sample.text}`,
+    contents: `Read this greeting exactly as written in ${sample.language}. ${delivery} No extra words: ${sample.text}`,
     config: {
       responseModalities: [Modality.AUDIO],
       speechConfig: {
@@ -73,32 +77,12 @@ async function synthesize(sample: Introduction, temporary: string) {
   if (seconds < 1 || seconds > (welcome ? 40 : 20)) {
     throw new Error(`Unexpected greeting duration: ${seconds}s`);
   }
-  const encoder = Bun.spawn(
-    [
-      "ffmpeg",
-      "-hide_banner",
-      "-loglevel",
-      "error",
-      "-y",
-      "-f",
-      "s16le",
-      "-ar",
-      String(rate),
-      "-ac",
-      "1",
-      "-i",
-      "pipe:0",
-      "-codec:a",
-      "libmp3lame",
-      "-b:a",
-      "64k",
-      temporary,
-    ],
-    { stdin: pcm, stdout: "ignore", stderr: "pipe" }
+  await encodePcmMp3(
+    pcm,
+    rate,
+    temporary,
+    `MP3 encoding failed for ${sample.language}`
   );
-  if ((await encoder.exited) !== 0) {
-    throw new Error(`MP3 encoding failed for ${sample.language}`);
-  }
   return seconds;
 }
 
@@ -110,6 +94,7 @@ async function generate(sample: Introduction) {
         voice: sample.voice,
         model,
         timingModel,
+        delivery,
       })
     )
     .digest("hex")

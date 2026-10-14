@@ -105,6 +105,29 @@ describe("Gemini caption transport", () => {
     captions.close();
   });
 
+  it("decodes binary captions and fails once on malformed binary JSON", async () => {
+    const { captions, socket, callbacks, started } = setup();
+    await started;
+    socket.dispatchEvent(
+      new MessageEvent("message", {
+        data: new TextEncoder().encode(
+          JSON.stringify({
+            serverContent: { inputTranscription: { text: "Café こんにちは" } },
+          })
+        ).buffer,
+      })
+    );
+    expect(callbacks.onText).toHaveBeenCalledWith("1", "Café こんにちは");
+    socket.dispatchEvent(
+      new MessageEvent("message", {
+        data: new TextEncoder().encode("{").buffer,
+      })
+    );
+    expect(callbacks.onFailure).toHaveBeenCalledOnce();
+    expect(socket.close).toHaveBeenCalledOnce();
+    captions.close();
+  });
+
   it("drains all final segments before freezing feedback captions", async () => {
     const { captions, socket, callbacks, started } = setup();
     await started;

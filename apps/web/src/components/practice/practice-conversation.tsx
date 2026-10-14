@@ -1,10 +1,16 @@
 import { Mic, MicOff, PhoneOff } from "lucide-react";
-import { useEffect, useId, useLayoutEffect, useRef } from "react";
-import type { ReactElement } from "react";
+import { useEffect, useId, useRef } from "react";
+import { useStickToBottomContext } from "use-stick-to-bottom";
 
+import {
+  Conversation,
+  ConversationContent,
+  ConversationScrollButton,
+} from "@/components/ai-elements/conversation";
+import { ConversationMessage } from "@/components/chat/conversation-message";
 import { Button } from "@/components/ui/button";
 import { WatercolorWave } from "@/components/ui/watercolor-wave";
-import type { PracticeMessage } from "@/lib/practice-live";
+import type { PracticeMessage } from "@/lib/practice-session";
 
 import { ConversationRail } from "./conversation-rail";
 import { PracticeFeedback } from "./practice-feedback";
@@ -21,53 +27,6 @@ const statusLabels: Record<PracticeState, string> = {
   reviewing: "Your microphone is off",
   ended: "Conversation ended",
 };
-
-export function ConversationMessage({
-  message,
-  transcriptId,
-  name,
-  avatar,
-}: {
-  message: PracticeMessage;
-  transcriptId: string;
-  name: string;
-  avatar?: string | ReactElement;
-}) {
-  return (
-    <div
-      id={`${transcriptId}-${message.id}`}
-      className={`flex max-w-[85%] items-end gap-2 ${message.speaker === "user" ? "self-end" : "self-start"}`}
-    >
-      {message.speaker === "partner" &&
-        (typeof avatar === "string" ? (
-          <img
-            src={avatar}
-            alt=""
-            width={32}
-            height={32}
-            className="bg-card size-8 shrink-0 rounded-full"
-          />
-        ) : (
-          (avatar ?? (
-            <span
-              aria-hidden="true"
-              className="bg-muted flex size-8 shrink-0 items-center justify-center rounded-full text-sm"
-            >
-              {name[0]}
-            </span>
-          ))
-        ))}
-      <p
-        className={`rounded-3xl px-4 py-3 text-lg leading-relaxed wrap-anywhere whitespace-pre-wrap ${message.speaker === "user" ? "bg-primary text-primary-foreground rounded-br-md" : "bg-muted rounded-bl-md"}`}
-      >
-        <span className="sr-only">
-          {message.speaker === "user" ? "You" : name}:{" "}
-        </span>
-        {message.text}
-      </p>
-    </div>
-  );
-}
 
 function conversationStatus(practice: Practice) {
   const { state, muted } = practice;
@@ -124,6 +83,71 @@ function ConversationRecap({
   );
 }
 
+function PracticeTranscriptRail({
+  messages,
+  transcriptId,
+  name,
+}: {
+  messages: PracticeMessage[];
+  transcriptId: string;
+  name: string;
+}) {
+  const { scrollRef, stopScroll } = useStickToBottomContext();
+  return (
+    <ConversationRail
+      messages={messages}
+      transcriptId={transcriptId}
+      partnerName={name}
+      targetRef={scrollRef}
+      onNavigate={stopScroll}
+    />
+  );
+}
+
+function PracticeTranscript({
+  messages,
+  transcriptId,
+  name,
+  avatar,
+  showRecap,
+}: {
+  messages: PracticeMessage[];
+  transcriptId: string;
+  name: string;
+  avatar?: string;
+  showRecap: boolean;
+}) {
+  return (
+    <Conversation className="flex min-w-0 gap-2">
+      <PracticeTranscriptRail
+        messages={messages}
+        transcriptId={transcriptId}
+        name={name}
+      />
+      <div
+        className={`relative min-w-0 flex-1 ${showRecap ? "h-72" : "h-[max(10rem,calc(100dvh-34rem))]"}`}
+      >
+        <ConversationContent
+          aria-label="Conversation messages"
+          className="[scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          contentClassName="gap-3 px-1 py-4"
+        >
+          {messages.map((message) => (
+            <ConversationMessage
+              key={message.id}
+              message={message}
+              transcriptId={transcriptId}
+              name={name}
+              avatar={avatar}
+            />
+          ))}
+        </ConversationContent>
+        <ConversationScrollButton />
+      </div>
+    </Conversation>
+  );
+}
+
 export function PracticeConversation({
   practice,
   name,
@@ -137,8 +161,6 @@ export function PracticeConversation({
 }) {
   const { state, messages, muted } = practice;
   const transcriptId = useId();
-  const followLatest = useRef(true);
-  const transcript = useRef<HTMLDivElement>(null);
   const section = useRef<HTMLElement>(null);
   const endButton = useRef<HTMLButtonElement>(null);
   const connected = state === "listening" || state === "talking";
@@ -153,53 +175,14 @@ export function PracticeConversation({
     endButton.current?.focus({ preventScroll: true });
   }, []);
 
-  // Follow the new layout before queued scroll events can mistake message growth
-  // for the reader scrolling away from the bottom.
-  useLayoutEffect(() => {
-    const element = transcript.current;
-    if (element && messages.length > 0 && followLatest.current) {
-      element.scrollTop = element.scrollHeight;
-    }
-  }, [messages]);
-
   const conversationLog = (
-    <div className="flex min-w-0 gap-2">
-      <ConversationRail
-        messages={messages}
-        transcriptId={transcriptId}
-        targetRef={transcript}
-        partnerName={name}
-        onNavigate={() => {
-          followLatest.current = false;
-        }}
-      />
-      <div
-        ref={transcript}
-        onScroll={(event) => {
-          const element = event.currentTarget;
-          followLatest.current =
-            element.scrollHeight - element.scrollTop - element.clientHeight <=
-            2;
-        }}
-        role="log"
-        aria-label="Conversation messages"
-        aria-live="polite"
-        // The scrollable message log must be reachable for keyboard scrolling.
-        // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-        tabIndex={0}
-        className={`relative flex min-w-0 flex-1 [scrollbar-width:none] flex-col gap-3 overflow-y-auto overscroll-contain px-1 py-4 [&::-webkit-scrollbar]:hidden ${showRecap ? "h-72" : "h-[max(10rem,calc(100dvh-34rem))]"}`}
-      >
-        {messages.map((message) => (
-          <ConversationMessage
-            key={message.id}
-            message={message}
-            transcriptId={transcriptId}
-            name={name}
-            avatar={avatar}
-          />
-        ))}
-      </div>
-    </div>
+    <PracticeTranscript
+      messages={messages}
+      transcriptId={transcriptId}
+      name={name}
+      avatar={avatar}
+      showRecap={showRecap}
+    />
   );
 
   return (

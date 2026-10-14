@@ -34,7 +34,10 @@ export function useOnboardingLive({
     "idle"
   );
   const [messages, setMessages] = useState<OnboardingLiveMessage[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<{
+    message: string;
+    recovery: "retry" | "text";
+  } | null>(null);
   const [result, setResult] = useState<OnboardingTurn | null>(null);
   const session = useRef<OnboardingLive | null>(null);
   const completed = useRef(false);
@@ -89,9 +92,9 @@ export function useOnboardingLive({
             reportResolved.current({ ...turn, status: turn.status });
           }
         },
-        onError: (message) => {
+        onError: (message, recovery) => {
           if (session.current === live && !completed.current) {
-            setError(message);
+            setError({ message, recovery: recovery ?? "retry" });
             setPhase("idle");
           }
         },
@@ -100,9 +103,11 @@ export function useOnboardingLive({
       void live.start({ name, language });
     } catch {
       close();
-      setError(
-        "Couldn't start voice. Check your microphone and connection, then restart voice or switch to text."
-      );
+      setError({
+        message:
+          "Couldn't start voice. Check your microphone and connection, then restart voice or switch to text.",
+        recovery: "retry",
+      });
       setPhase("idle");
     }
   }
@@ -126,7 +131,8 @@ export function useOnboardingLive({
   return {
     phase,
     messages,
-    error,
+    error: error?.message ?? null,
+    canRetry: error?.recovery !== "text",
     result,
     start,
     stop,

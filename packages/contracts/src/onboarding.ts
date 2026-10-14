@@ -4,7 +4,7 @@ import {
   learnerContextSchema,
   selectedSkillsSchema,
 } from "./conversation-goals";
-import { practiceLanguageSchema } from "./practice";
+import { practiceLanguageSchema } from "./languages";
 
 export const onboardingBenefitIds = [
   "start-conversations",
@@ -19,6 +19,10 @@ export const onboardingBenefitIds = [
   "playful-conversations",
   "everyday-language",
   "useful-feedback",
+  "clear-up-misunderstandings",
+  "everyday-tasks",
+  "respond-with-care",
+  "end-conversations",
 ] as const;
 export type OnboardingBenefit = (typeof onboardingBenefitIds)[number];
 export const defaultOnboardingBenefits: OnboardingBenefit[] = [
@@ -83,7 +87,7 @@ export const onboardingRecommendationRequestSchema = z
     language: practiceLanguageSchema,
     motivation: z.string().trim().max(500),
     goalStatus: onboardingGoalStatusSchema.optional(),
-    conversation: z.array(onboardingMessageSchema).max(6).optional(),
+    conversation: z.array(onboardingMessageSchema).max(24).optional(),
   })
   .refine(hasValidGoal, "Add a goal or explicitly choose your own skills.");
 export type OnboardingRecommendationRequest = z.infer<
@@ -116,19 +120,27 @@ export const onboardingTurnRequestSchema = z.object({
     ),
 });
 export type OnboardingTurnRequest = z.infer<typeof onboardingTurnRequestSchema>;
+const onboardingOutcomeShape = {
+  goal: z.string().trim().max(500),
+  suggestedSkills: selectedSkillsSchema,
+};
+function hasValidOutcome(outcome: {
+  status: "clarify" | "ready" | "choose";
+  goal: string;
+  suggestedSkills: readonly unknown[];
+}) {
+  return outcome.status === "ready"
+    ? Boolean(outcome.goal)
+    : outcome.goal === "" && outcome.suggestedSkills.length === 0;
+}
 export const onboardingTurnSchema = z
   .object({
     status: z.enum(["clarify", "ready", "choose"]),
     reply: z.string().trim().min(1).max(240),
-    goal: z.string().trim().max(500),
-    suggestedSkills: selectedSkillsSchema,
+    ...onboardingOutcomeShape,
     benefits: onboardingBenefitsSchema.optional(),
   })
-  .refine((turn) =>
-    turn.status === "ready"
-      ? Boolean(turn.goal)
-      : turn.goal === "" && turn.suggestedSkills.length === 0
-  );
+  .refine(hasValidOutcome);
 export type OnboardingTurn = z.infer<typeof onboardingTurnSchema>;
 
 export const onboardingTurnEventSchema = z.discriminatedUnion("type", [
@@ -140,6 +152,7 @@ export type OnboardingTurnEvent = z.infer<typeof onboardingTurnEventSchema>;
 
 export const onboardingDraftSchema = z.object({
   version: z.literal(1),
+  skillRecommendationsVersion: z.literal(2).optional(),
   step: z.enum(onboardingSteps),
   conversation: z.array(onboardingMessageSchema).max(24).optional(),
   conversationMode: onboardingConversationModeSchema.optional(),
@@ -172,15 +185,12 @@ export const onboardingLiveSessionSchema = z.object({
 export type OnboardingLiveSession = z.infer<typeof onboardingLiveSessionSchema>;
 export const onboardingCompleteToolName = "complete_onboarding";
 export const onboardingCompleteSchema = z
-  .object({
+  .strictObject({
     status: z.enum(["ready", "choose"]),
     goal: z.string().trim().max(500),
-    suggestedSkills: selectedSkillsSchema,
   })
-  .refine((turn) =>
-    turn.status === "ready"
-      ? Boolean(turn.goal)
-      : turn.goal === "" && turn.suggestedSkills.length === 0
+  .refine((outcome) =>
+    outcome.status === "ready" ? Boolean(outcome.goal) : outcome.goal === ""
   );
 export type OnboardingComplete = z.infer<typeof onboardingCompleteSchema>;
 
@@ -200,10 +210,44 @@ export const onboardingVoiceCompletionRequestSchema = z
 export type OnboardingVoiceCompletionRequest = z.infer<
   typeof onboardingVoiceCompletionRequestSchema
 >;
-export const onboardingVoiceCompletionSchema =
-  onboardingCompleteSchema.safeExtend({
+export const onboardingVoiceCompletionSchema = onboardingCompleteSchema
+  .safeExtend({
+    suggestedSkills: selectedSkillsSchema,
     benefits: onboardingBenefitsSchema.optional(),
-  });
+  })
+  .refine(hasValidOutcome);
 export type OnboardingVoiceCompletion = z.infer<
   typeof onboardingVoiceCompletionSchema
 >;
+
+const legacySkillsSchema = z
+  .array(
+    z.enum([
+      "smooth-speaking",
+      "thinking-on-your-feet",
+      "listening",
+      "situational-response",
+      "wit",
+      "clear-expression",
+      "conversation-flow",
+    ])
+  )
+  .max(3)
+  .refine((skills) => new Set(skills).size === skills.length);
+export const legacyOnboardingProfileSchema = z
+  .object({
+    ...onboardingProfileSchema.shape,
+    skills: legacySkillsSchema.min(1),
+  })
+  .refine(hasValidGoal);
+export const legacyOnboardingDraftSchema = onboardingDraftSchema.extend({
+  skills: legacySkillsSchema,
+  resolvedGoal: z
+    .object({
+      ...onboardingTurnSchema.shape,
+      suggestedSkills: legacySkillsSchema,
+    })
+    .refine(hasValidOutcome)
+    .refine((turn) => turn.status !== "clarify")
+    .optional(),
+});

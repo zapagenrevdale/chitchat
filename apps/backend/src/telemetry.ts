@@ -9,6 +9,7 @@ export function createTelemetry(config: {
   LANGFUSE_SECRET_KEY?: string;
   LANGFUSE_BASE_URL: string;
   NODE_ENV: string;
+  DEV_BYPASS_LIMITS?: boolean;
 }) {
   if (!config.LANGFUSE_PUBLIC_KEY || !config.LANGFUSE_SECRET_KEY) {
     return;
@@ -27,7 +28,10 @@ export function createTelemetry(config: {
     ],
   });
   setLangfuseTracerProvider(provider);
-  const practice = new PracticeTracing();
+  const practice = new PracticeTracing({
+    environment: config.NODE_ENV,
+    bypass: config.DEV_BYPASS_LIMITS ?? false,
+  });
   return {
     practice,
     async shutdown() {

@@ -1,0 +1,67 @@
+{
+  "tool": "Built-in imagegen",
+  "transparentBackground": true,
+  "displaySize": 32,
+  "assetSize": 128,
+  "styleReferences": [
+    "apps/web/public/images/onboarding/benefits/start-conversations.png"
+  ],
+  "promptTemplate": "Create ONE standalone small UI icon for Chitchat's {id} skill. Subject: {subject} Reference image is STYLE reference only, do not repeat its subject. Rich textured wax crayon pigment, organic uneven edges, coarse paper flecks inside colored strokes. Square TRUE transparent canvas, compact centered silhouette filling 80%, even padding. Designed to read at 32x32 CSS pixels, very few chunky elements and no fine detail. Cobalt blue, vermilion red, mustard yellow only. Calm friendly adult editorial style. No text, letters, numbers, labels, shadows, gradients, glow, paper background, UI, border, decorative clutter.",
+  "illustrations": [
+    {
+      "id": "start-conversations",
+      "subject": "A compact pair of overlapping speech bubbles, one cobalt blue and one warm vermilion, with one tiny mustard yellow greeting spark.",
+      "file": "apps/web/public/images/onboarding/skills/start-conversations.png"
+    },
+    {
+      "id": "conversation-flow",
+      "subject": "Three simple overlapping speech bubbles, cobalt blue, vermilion red, mustard yellow, forming a gentle flowing diagonal.",
+      "file": "apps/web/public/images/onboarding/skills/conversation-flow.png"
+    },
+    {
+      "id": "listening",
+      "subject": "One bold cobalt blue ear silhouette beside a small warm red speech bubble. Minimal friendly abstract ear, no realistic body.",
+      "file": "apps/web/public/images/onboarding/skills/listening.png"
+    },
+    {
+      "id": "sharing",
+      "subject": "A warm red heart inside a chunky cobalt blue speech bubble, with a small mustard yellow accent. Sharing something personal.",
+      "file": "apps/web/public/images/onboarding/skills/sharing.png"
+    },
+    {
+      "id": "clear-expression",
+      "subject": "One chunky cobalt blue speech bubble with three bold neatly aligned mustard yellow strokes inside, and one small warm red clarity spark.",
+      "file": "apps/web/public/images/onboarding/skills/clear-expression.png"
+    },
+    {
+      "id": "wit",
+      "subject": "Two simple rounded four-point sparkles, a larger cobalt blue one and a smaller warm red one, playfully tilted, with a mustard yellow curved smile beneath. Cheerful playfulness without a cartoon face.",
+      "file": "apps/web/public/images/onboarding/skills/wit.png"
+    },
+    {
+      "id": "respond-with-care",
+      "subject": "One warm red heart held above a simple curved cobalt blue cupped hand, with a small mustard yellow thumb accent. Simple caring gesture.",
+      "file": "apps/web/public/images/onboarding/skills/respond-with-care.png"
+    },
+    {
+      "id": "self-advocacy",
+      "subject": "A small bold cobalt blue megaphone with warm red mouthpiece and two chunky mustard yellow sound rays. Calm assertive speaking up, not shouting.",
+      "file": "apps/web/public/images/onboarding/skills/self-advocacy.png"
+    },
+    {
+      "id": "disagreement",
+      "subject": "Two small speech bubbles, cobalt blue and vermilion red, joined underneath by one short mustard yellow arch like a bridge. Respectful differing views.",
+      "file": "apps/web/public/images/onboarding/skills/disagreement.png"
+    },
+    {
+      "id": "clarification",
+      "subject": "Two large interlocking chunky puzzle pieces, one cobalt blue and one vermilion red, with a single small mustard yellow spark above. Clear simple connected silhouette.",
+      "file": "apps/web/public/images/onboarding/skills/clarification.png"
+    },
+    {
+      "id": "end-conversations",
+      "subject": "A single simple mustard yellow waving hand with cobalt blue cuff and two chunky warm red wave marks beside it. Friendly goodbye, no person.",
+      "file": "apps/web/public/images/onboarding/skills/end-conversations.png"
+    }
+  ]
+}

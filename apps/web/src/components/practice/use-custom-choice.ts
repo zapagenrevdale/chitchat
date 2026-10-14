@@ -5,7 +5,7 @@ import type {
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { PracticeLive } from "@/lib/practice-live";
-import type { PracticeState, PracticeTranscript } from "@/lib/practice-live";
+import type { PracticeState, PracticeTranscript } from "@/lib/practice-session";
 
 type ChoiceContext =
   | { kind: "place" }

@@ -13,6 +13,8 @@ import type {
 import { NoObjectGeneratedError } from "ai";
 import type { LanguageModelUsage } from "ai";
 
+import { bypassDevelopmentLimits } from "../development-limits";
+import type { DevelopmentLimits } from "../development-limits";
 import { providerErrorStatus } from "./provider-error";
 
 interface TurnTrace {
@@ -151,6 +153,11 @@ function record(session: LiveTrace, event: PracticeTraceEvent) {
 
 export class PracticeTracing {
   private sessions = new Map<string, LiveTrace>();
+  private readonly limitsDisabled: boolean;
+
+  constructor(limits?: DevelopmentLimits) {
+    this.limitsDisabled = bypassDevelopmentLimits(limits);
+  }
 
   async provision<Session extends { model: string; expiresAt: number }>(
     input: {
@@ -232,8 +239,9 @@ export class PracticeTracing {
       session.windowEvents = 0;
     }
     if (
-      session.events + batch.events.length > 2000 ||
-      session.windowEvents + batch.events.length > 240
+      !this.limitsDisabled &&
+      (session.events + batch.events.length > 2000 ||
+        session.windowEvents + batch.events.length > 240)
     ) {
       return "limited";
     }

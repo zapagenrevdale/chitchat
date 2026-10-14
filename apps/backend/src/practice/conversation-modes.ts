@@ -9,8 +9,7 @@ import type { GoogleGenAI } from "@google/genai";
 import { generateText, Output } from "ai";
 import type { z } from "zod";
 
-import { resolveSelection } from "./catalog";
-import { learnerPracticeInstruction } from "./onboarding";
+import { learnerPracticeInstruction, resolveSelection } from "./catalog";
 import { providerErrorStatus } from "./provider-error";
 import { speakPracticeText } from "./speech";
 

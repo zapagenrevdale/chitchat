@@ -43,7 +43,9 @@ export function useOnboardingGoal({
 }) {
   const [messages, setMessages] = useState(initialMessages);
   const history = useRef(initialMessages);
-  const [phase, setPhase] = useState<"idle" | "thinking">("idle");
+  const [phase, setPhase] = useState<
+    "idle" | "thinking" | "streaming" | "reading"
+  >("idle");
   const [error, setError] = useState(false);
   const [result, setResult] = useState<OnboardingTurn | null>(null);
   const active = useRef<AbortController | null>(null);
@@ -65,8 +67,6 @@ export function useOnboardingGoal({
   useEffect(() => {
     function suspend() {
       stop();
-      setMessages(history.current);
-      setPhase("idle");
     }
     function restore(event: PageTransitionEvent) {
       if (event.persisted) {
@@ -88,7 +88,6 @@ export function useOnboardingGoal({
     stop();
     history.current = [];
     setMessages([]);
-    setPhase("idle");
     setResult(null);
     setError(false);
   }
@@ -119,6 +118,7 @@ export function useOnboardingGoal({
         signal,
         (reply) => {
           if (!signal.aborted && active.current === controller) {
+            setPhase(reply ? "streaming" : "thinking");
             setMessages(
               reply ? [...next, { role: "assistant", text: reply }] : next
             );
@@ -138,7 +138,10 @@ export function useOnboardingGoal({
       onReply(conversation, turn);
       setResult(turn);
       pendingNavigation.current = turn.status === "clarify" ? null : turn;
-      await leaveTimeToRead(signal);
+      if (turn.status !== "clarify") {
+        setPhase("reading");
+        await leaveTimeToRead(signal);
+      }
       signal.throwIfAborted();
       if (active.current === controller && pendingNavigation.current === turn) {
         pendingNavigation.current = null;
